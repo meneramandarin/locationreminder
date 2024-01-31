@@ -5,8 +5,8 @@
 //  Created by Marlene on 29.01.24.
 //
 
-import Foundation
 import CoreData
+import Foundation
 import CoreLocation
 
 class ReminderStorage {
@@ -19,7 +19,7 @@ class ReminderStorage {
 
     // Function to save a new reminder
     func saveReminder(_ reminder: Reminder) {
-        let newReminder = ReminderEntity(context: context)
+        let newReminder = ReminderItem(context: context)
         newReminder.locationLatitude = reminder.location.latitude
         newReminder.locationLongitude = reminder.location.longitude
         newReminder.message = reminder.message
@@ -34,7 +34,7 @@ class ReminderStorage {
 
     // Function to fetch all reminders to display them in the UI and also to keep on checking which ones to trigger
     func fetchReminders() -> [Reminder] {
-        let request: NSFetchRequest<ReminderEntity> = ReminderEntity.fetchRequest()
+        let request: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest()
 
         do {
             let results = try context.fetch(request)
@@ -51,7 +51,7 @@ class ReminderStorage {
 
     // Function to delete a reminder
     func deleteReminder(_ reminder: Reminder) {
-        let request: NSFetchRequest<ReminderEntity> = ReminderEntity.fetchRequest()
+        let request: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest()
         request.predicate = NSPredicate(format: "message == %@ AND date == %@", reminder.message, reminder.date as CVarArg)
 
         do {

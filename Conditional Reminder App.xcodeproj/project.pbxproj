@@ -16,12 +16,12 @@
 		1A4245F32B55D4CE004157B5 /* Conditional_Reminder_AppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4245F22B55D4CE004157B5 /* Conditional_Reminder_AppTests.swift */; };
 		1A4245FD2B55D4CE004157B5 /* Conditional_Reminder_AppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4245FC2B55D4CE004157B5 /* Conditional_Reminder_AppUITests.swift */; };
 		1A4245FF2B55D4CE004157B5 /* Conditional_Reminder_AppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4245FE2B55D4CE004157B5 /* Conditional_Reminder_AppUITestsLaunchTests.swift */; };
-		1AD5470B2B6888BC00284D3E /* Location Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD5470A2B6888BC00284D3E /* Location Logic.swift */; };
+		1A62B19E2B69B55E0037B695 /* locationservice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A62B19D2B69B55E0037B695 /* locationservice.swift */; };
 		1AD5470D2B688A3F00284D3E /* ReminderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD5470C2B688A3F00284D3E /* ReminderModel.swift */; };
 		1AD5470F2B688B8300284D3E /* reminderstorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD5470E2B688B8300284D3E /* reminderstorage.swift */; };
 		1AD547122B688FAC00284D3E /* ReminderModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1AD547102B688FAC00284D3E /* ReminderModel.xcdatamodeld */; };
-		1AD547152B68916500284D3E /* ReminderEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD547132B68916500284D3E /* ReminderEntity+CoreDataClass.swift */; };
-		1AD547162B68916500284D3E /* ReminderEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD547142B68916500284D3E /* ReminderEntity+CoreDataProperties.swift */; };
+		1AD547152B68916500284D3E /* ReminderItem +CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD547132B68916500284D3E /* ReminderItem +CoreDataClass.swift */; };
+		1AD547162B68916500284D3E /* ReminderItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD547142B68916500284D3E /* ReminderItem+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,12 +55,12 @@
 		1A4245F82B55D4CE004157B5 /* Conditional Reminder AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Conditional Reminder AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A4245FC2B55D4CE004157B5 /* Conditional_Reminder_AppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conditional_Reminder_AppUITests.swift; sourceTree = "<group>"; };
 		1A4245FE2B55D4CE004157B5 /* Conditional_Reminder_AppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conditional_Reminder_AppUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		1AD5470A2B6888BC00284D3E /* Location Logic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location Logic.swift"; sourceTree = "<group>"; };
+		1A62B19D2B69B55E0037B695 /* locationservice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = locationservice.swift; sourceTree = "<group>"; };
 		1AD5470C2B688A3F00284D3E /* ReminderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderModel.swift; sourceTree = "<group>"; };
 		1AD5470E2B688B8300284D3E /* reminderstorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reminderstorage.swift; sourceTree = "<group>"; };
 		1AD547112B688FAC00284D3E /* ReminderModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ReminderModel.xcdatamodel; sourceTree = "<group>"; };
-		1AD547132B68916500284D3E /* ReminderEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReminderEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
-		1AD547142B68916500284D3E /* ReminderEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReminderEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		1AD547132B68916500284D3E /* ReminderItem +CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReminderItem +CoreDataClass.swift"; sourceTree = "<group>"; };
+		1AD547142B68916500284D3E /* ReminderItem+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReminderItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,8 +91,8 @@
 		1A4245D42B55D4C7004157B5 = {
 			isa = PBXGroup;
 			children = (
-				1AD547132B68916500284D3E /* ReminderEntity+CoreDataClass.swift */,
-				1AD547142B68916500284D3E /* ReminderEntity+CoreDataProperties.swift */,
+				1AD547132B68916500284D3E /* ReminderItem +CoreDataClass.swift */,
+				1AD547142B68916500284D3E /* ReminderItem+CoreDataProperties.swift */,
 				1A4245DF2B55D4C7004157B5 /* Conditional Reminder App */,
 				1A4245F12B55D4CE004157B5 /* Conditional Reminder AppTests */,
 				1A4245FB2B55D4CE004157B5 /* Conditional Reminder AppUITests */,
@@ -118,9 +118,9 @@
 				1A421D762B58E455008040CA /* SetReminderView.swift */,
 				1A421D782B59008E008040CA /* ReminderDetailView.swift */,
 				1AD5470C2B688A3F00284D3E /* ReminderModel.swift */,
+				1A62B19D2B69B55E0037B695 /* locationservice.swift */,
 				1AD5470E2B688B8300284D3E /* reminderstorage.swift */,
 				1AD547102B688FAC00284D3E /* ReminderModel.xcdatamodeld */,
-				1AD5470A2B6888BC00284D3E /* Location Logic.swift */,
 				1A4245E42B55D4CD004157B5 /* Assets.xcassets */,
 				1A4245E62B55D4CD004157B5 /* Conditional_Reminder_App.entitlements */,
 				1A4245E72B55D4CD004157B5 /* Preview Content */,
@@ -283,13 +283,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1AD547162B68916500284D3E /* ReminderEntity+CoreDataProperties.swift in Sources */,
-				1AD5470B2B6888BC00284D3E /* Location Logic.swift in Sources */,
-				1AD547152B68916500284D3E /* ReminderEntity+CoreDataClass.swift in Sources */,
+				1AD547162B68916500284D3E /* ReminderItem+CoreDataProperties.swift in Sources */,
+				1AD547152B68916500284D3E /* ReminderItem +CoreDataClass.swift in Sources */,
 				1AD547122B688FAC00284D3E /* ReminderModel.xcdatamodeld in Sources */,
 				1AD5470F2B688B8300284D3E /* reminderstorage.swift in Sources */,
 				1A4245E32B55D4C7004157B5 /* ContentView.swift in Sources */,
 				1A421D772B58E455008040CA /* SetReminderView.swift in Sources */,
+				1A62B19E2B69B55E0037B695 /* locationservice.swift in Sources */,
 				1A4245E12B55D4C7004157B5 /* Conditional_Reminder_AppApp.swift in Sources */,
 				1A421D792B59008E008040CA /* ReminderDetailView.swift in Sources */,
 				1AD5470D2B688A3F00284D3E /* ReminderModel.swift in Sources */,

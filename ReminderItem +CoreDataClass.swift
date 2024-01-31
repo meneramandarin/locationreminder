@@ -1,5 +1,5 @@
 //
-//  ReminderEntity+CoreDataClass.swift
+//  ReminderItem+CoreDataClass.swift
 //  Conditional Reminder App
 //
 //  Created by Marlene on 29.01.24.
@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-@objc(ReminderEntity)
-public class ReminderEntity: NSManagedObject {
+@objc(ReminderItem)
+public class ReminderItem: NSManagedObject {
 
 }
