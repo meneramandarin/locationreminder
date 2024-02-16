@@ -16,10 +16,12 @@ extension ReminderItem {
         return NSFetchRequest<ReminderItem>(entityName: "ReminderItem")
     }
 
+    @NSManaged public var uuid: UUID?
     @NSManaged public var date: Date?
     @NSManaged public var locationLatitude: Double
     @NSManaged public var locationLongitude: Double
     @NSManaged public var message: String?
+    @NSManaged public var snoozeUntil: Date?
 
 }
 

@@ -16,7 +16,15 @@
 		1A4245F32B55D4CE004157B5 /* Conditional_Reminder_AppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4245F22B55D4CE004157B5 /* Conditional_Reminder_AppTests.swift */; };
 		1A4245FD2B55D4CE004157B5 /* Conditional_Reminder_AppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4245FC2B55D4CE004157B5 /* Conditional_Reminder_AppUITests.swift */; };
 		1A4245FF2B55D4CE004157B5 /* Conditional_Reminder_AppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4245FE2B55D4CE004157B5 /* Conditional_Reminder_AppUITestsLaunchTests.swift */; };
+		1A48CDD42B716F5C005C6585 /* APIcaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A48CDD32B716F5C005C6585 /* APIcaller.swift */; };
 		1A62B19E2B69B55E0037B695 /* locationservice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A62B19D2B69B55E0037B695 /* locationservice.swift */; };
+		1A62B1A02B69CFF00037B695 /* AppLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A62B19F2B69CFF00037B695 /* AppLogic.swift */; };
+		1A62B1A22B69DDEA0037B695 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A62B1A12B69DDEA0037B695 /* PersistenceController.swift */; };
+		1A73407F2B6B0DC0005247B7 /* ReminderDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A73407E2B6B0DC0005247B7 /* ReminderDetailViewModel.swift */; };
+		1A78C4642B7EF50B00884E00 /* colorextension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A78C4632B7EF50B00884E00 /* colorextension.swift */; };
+		1A78C4682B7EFFF400884E00 /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A78C4672B7EFFF400884E00 /* FontExtension.swift */; };
+		1A825F1A2B73134D00D57C76 /* AIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A825F192B73134D00D57C76 /* AIController.swift */; };
+		1A825F1C2B73139300D57C76 /* AImodel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A825F1B2B73139300D57C76 /* AImodel.swift */; };
 		1AD5470D2B688A3F00284D3E /* ReminderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD5470C2B688A3F00284D3E /* ReminderModel.swift */; };
 		1AD5470F2B688B8300284D3E /* reminderstorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD5470E2B688B8300284D3E /* reminderstorage.swift */; };
 		1AD547122B688FAC00284D3E /* ReminderModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1AD547102B688FAC00284D3E /* ReminderModel.xcdatamodeld */; };
@@ -55,7 +63,15 @@
 		1A4245F82B55D4CE004157B5 /* Conditional Reminder AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Conditional Reminder AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A4245FC2B55D4CE004157B5 /* Conditional_Reminder_AppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conditional_Reminder_AppUITests.swift; sourceTree = "<group>"; };
 		1A4245FE2B55D4CE004157B5 /* Conditional_Reminder_AppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conditional_Reminder_AppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		1A48CDD32B716F5C005C6585 /* APIcaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIcaller.swift; sourceTree = "<group>"; };
 		1A62B19D2B69B55E0037B695 /* locationservice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = locationservice.swift; sourceTree = "<group>"; };
+		1A62B19F2B69CFF00037B695 /* AppLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogic.swift; sourceTree = "<group>"; };
+		1A62B1A12B69DDEA0037B695 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		1A73407E2B6B0DC0005247B7 /* ReminderDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailViewModel.swift; sourceTree = "<group>"; };
+		1A78C4632B7EF50B00884E00 /* colorextension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = colorextension.swift; sourceTree = "<group>"; };
+		1A78C4672B7EFFF400884E00 /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
+		1A825F192B73134D00D57C76 /* AIController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIController.swift; sourceTree = "<group>"; };
+		1A825F1B2B73139300D57C76 /* AImodel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AImodel.swift; sourceTree = "<group>"; };
 		1AD5470C2B688A3F00284D3E /* ReminderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderModel.swift; sourceTree = "<group>"; };
 		1AD5470E2B688B8300284D3E /* reminderstorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reminderstorage.swift; sourceTree = "<group>"; };
 		1AD547112B688FAC00284D3E /* ReminderModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ReminderModel.xcdatamodel; sourceTree = "<group>"; };
@@ -115,9 +131,17 @@
 			children = (
 				1A4245E02B55D4C7004157B5 /* Conditional_Reminder_AppApp.swift */,
 				1A4245E22B55D4C7004157B5 /* ContentView.swift */,
+				1A78C4632B7EF50B00884E00 /* colorextension.swift */,
+				1A78C4672B7EFFF400884E00 /* FontExtension.swift */,
 				1A421D762B58E455008040CA /* SetReminderView.swift */,
 				1A421D782B59008E008040CA /* ReminderDetailView.swift */,
+				1A73407E2B6B0DC0005247B7 /* ReminderDetailViewModel.swift */,
+				1A62B19F2B69CFF00037B695 /* AppLogic.swift */,
+				1A62B1A12B69DDEA0037B695 /* PersistenceController.swift */,
 				1AD5470C2B688A3F00284D3E /* ReminderModel.swift */,
+				1A48CDD32B716F5C005C6585 /* APIcaller.swift */,
+				1A825F192B73134D00D57C76 /* AIController.swift */,
+				1A825F1B2B73139300D57C76 /* AImodel.swift */,
 				1A62B19D2B69B55E0037B695 /* locationservice.swift */,
 				1AD5470E2B688B8300284D3E /* reminderstorage.swift */,
 				1AD547102B688FAC00284D3E /* ReminderModel.xcdatamodeld */,
@@ -169,6 +193,8 @@
 			dependencies = (
 			);
 			name = "Conditional Reminder App";
+			packageProductDependencies = (
+			);
 			productName = "Conditional Reminder App";
 			productReference = 1A4245DD2B55D4C7004157B5 /* Conditional Reminder App.app */;
 			productType = "com.apple.product-type.application";
@@ -241,6 +267,8 @@
 				Base,
 			);
 			mainGroup = 1A4245D42B55D4C7004157B5;
+			packageReferences = (
+			);
 			productRefGroup = 1A4245DE2B55D4C7004157B5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -286,11 +314,19 @@
 				1AD547162B68916500284D3E /* ReminderItem+CoreDataProperties.swift in Sources */,
 				1AD547152B68916500284D3E /* ReminderItem +CoreDataClass.swift in Sources */,
 				1AD547122B688FAC00284D3E /* ReminderModel.xcdatamodeld in Sources */,
+				1A48CDD42B716F5C005C6585 /* APIcaller.swift in Sources */,
+				1A62B1A22B69DDEA0037B695 /* PersistenceController.swift in Sources */,
+				1A78C4642B7EF50B00884E00 /* colorextension.swift in Sources */,
+				1A78C4682B7EFFF400884E00 /* FontExtension.swift in Sources */,
 				1AD5470F2B688B8300284D3E /* reminderstorage.swift in Sources */,
 				1A4245E32B55D4C7004157B5 /* ContentView.swift in Sources */,
 				1A421D772B58E455008040CA /* SetReminderView.swift in Sources */,
 				1A62B19E2B69B55E0037B695 /* locationservice.swift in Sources */,
+				1A62B1A02B69CFF00037B695 /* AppLogic.swift in Sources */,
+				1A825F1C2B73139300D57C76 /* AImodel.swift in Sources */,
+				1A825F1A2B73134D00D57C76 /* AIController.swift in Sources */,
 				1A4245E12B55D4C7004157B5 /* Conditional_Reminder_AppApp.swift in Sources */,
+				1A73407F2B6B0DC0005247B7 /* ReminderDetailViewModel.swift in Sources */,
 				1A421D792B59008E008040CA /* ReminderDetailView.swift in Sources */,
 				1AD5470D2B688A3F00284D3E /* ReminderModel.swift in Sources */,
 			);
@@ -447,6 +483,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOL_FRAMEWORKS = SwiftUI;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Conditional Reminder App/Conditional_Reminder_App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -456,17 +493,21 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Memory;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
@@ -474,10 +515,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "xyz.playbyear.Conditional-Reminder-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -485,6 +527,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOL_FRAMEWORKS = SwiftUI;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Conditional Reminder App/Conditional_Reminder_App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -494,17 +537,21 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Memory;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
@@ -512,10 +559,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "xyz.playbyear.Conditional-Reminder-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -659,6 +707,7 @@
 			currentVersion = 1AD547112B688FAC00284D3E /* ReminderModel.xcdatamodel */;
 			path = ReminderModel.xcdatamodeld;
 			sourceTree = "<group>";
+			usesTabs = 0;
 			versionGroupType = wrapper.xcdatamodel;
 		};
 /* End XCVersionGroup section */
