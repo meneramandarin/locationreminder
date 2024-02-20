@@ -10,11 +10,20 @@ import SwiftUI
 @main
 struct Conditional_Reminder_AppApp: App {
     let persistenceController = PersistenceController.shared
+    
+    // Initialize AppLogic with the ReminderStorage instance
+        @StateObject var appLogic = AppLogic
+    
+    init() { //maybe kill this whole initializer if it doesn't help lol 
+         let reminderStorage = ReminderStorage(context: persistenceController.container.viewContext)
+         _appLogic = StateObject(wrappedValue: AppLogic(reminderStorage: reminderStorage))
+     }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environmentObject(appLogic)
         }
     }
 }

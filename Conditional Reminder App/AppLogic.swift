@@ -8,8 +8,9 @@
 import Foundation
 import CoreLocation
 import UserNotifications
+import Combine
 
-class AppLogic {
+class AppLogic: ObservableObject {
     private let locationService = LocationService.shared
     private let reminderStorage: ReminderStorage
     private let notificationCenter = UNUserNotificationCenter.current()
@@ -17,6 +18,7 @@ class AppLogic {
     init(reminderStorage: ReminderStorage) {
         self.reminderStorage = reminderStorage
         configureLocationService()
+        requestNotificationPermission()
     }
     
     private func configureLocationService() {
@@ -32,6 +34,16 @@ class AppLogic {
     func stop() {
         locationService.stopMonitoringLocation()
     }
+    
+    private func requestNotificationPermission() {
+            notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+                if granted {
+                    print("Notification permission granted.")
+                } else if let error = error {
+                    print("Notification permission error: \(error)")
+                }
+            }
+        }
     
     private func checkRemindersNearLocation(_ currentLocation: CLLocation) {
         let reminders = reminderStorage.fetchReminders()

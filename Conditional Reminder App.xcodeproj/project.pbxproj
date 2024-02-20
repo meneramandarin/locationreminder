@@ -50,6 +50,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A01FEDB2B84321F006E8C72 /* Conditional-Reminder-App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Conditional-Reminder-App-Info.plist"; sourceTree = SOURCE_ROOT; };
 		1A421D762B58E455008040CA /* SetReminderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetReminderView.swift; sourceTree = "<group>"; };
 		1A421D782B59008E008040CA /* ReminderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailView.swift; sourceTree = "<group>"; };
 		1A4245DD2B55D4C7004157B5 /* Conditional Reminder App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Conditional Reminder App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -129,6 +130,7 @@
 		1A4245DF2B55D4C7004157B5 /* Conditional Reminder App */ = {
 			isa = PBXGroup;
 			children = (
+				1A01FEDB2B84321F006E8C72 /* Conditional-Reminder-App-Info.plist */,
 				1A4245E02B55D4C7004157B5 /* Conditional_Reminder_AppApp.swift */,
 				1A4245E22B55D4C7004157B5 /* ContentView.swift */,
 				1A78C4632B7EF50B00884E00 /* colorextension.swift */,
@@ -493,8 +495,14 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Conditional-Reminder-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Memory;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Memory needs to access your location at all times to provide timely reminders based on where you are, even when the app is not open. Location data is used in an approximate manner to preserve battery life.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "meow 2 ";
+				INFOPLIST_KEY_NSLocationUsageDescription = "meow 3";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "meow 1";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -537,8 +545,14 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Conditional-Reminder-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Memory;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Memory needs to access your location at all times to provide timely reminders based on where you are, even when the app is not open. Location data is used in an approximate manner to preserve battery life.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "meow 2 ";
+				INFOPLIST_KEY_NSLocationUsageDescription = "meow 3";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "meow 1";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

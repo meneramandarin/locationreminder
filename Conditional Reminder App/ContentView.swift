@@ -26,6 +26,7 @@ struct MapView: UIViewRepresentable {
 }
 
 struct ContentView: View {
+    @EnvironmentObject var appLogic: AppLogic
     @State private var reminders: [Reminder] = [] // State variable for reminders
     private let reminderStorage = ReminderStorage(
         context: PersistenceController.shared.container.viewContext)
@@ -95,6 +96,8 @@ struct ContentView: View {
             }
             .onAppear {
                 loadReminders()
+                LocationService.shared.startMonitoringLocation()
+                appLogic.start()
             }
         }
     }
