@@ -12,9 +12,9 @@ struct Conditional_Reminder_AppApp: App {
     let persistenceController = PersistenceController.shared
     
     // Initialize AppLogic with the ReminderStorage instance
-        @StateObject var appLogic = AppLogic
+    @StateObject var appLogic: AppLogic
     
-    init() { //maybe kill this whole initializer if it doesn't help lol 
+    init() {
          let reminderStorage = ReminderStorage(context: persistenceController.container.viewContext)
          _appLogic = StateObject(wrappedValue: AppLogic(reminderStorage: reminderStorage))
      }
