@@ -11,6 +11,7 @@ import SwiftUI
 
 struct ReminderDetailView: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var appLogic: AppLogic // Add AppLogic as an EnvironmentObject
     @ObservedObject var viewModel: ReminderDetailViewModel
     @State private var isEditing = false
 
@@ -65,6 +66,12 @@ struct ReminderDetailView: View {
                 Spacer()
             }
         }
+        .onAppear {
+            // Check if there's a selectedReminderID when the view appears
+            if let selectedReminderID = appLogic.selectedReminderID {
+                viewModel.loadReminder(withId: selectedReminderID)
+            }
+        }
     }
 
     private func region(for reminder: Reminder) -> MKCoordinateRegion {
@@ -94,4 +101,3 @@ struct ActionButtonStyle: ButtonStyle {
             .padding(.horizontal)
     }
 }
-
