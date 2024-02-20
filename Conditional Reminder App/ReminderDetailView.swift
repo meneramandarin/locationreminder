@@ -95,8 +95,3 @@ struct ActionButtonStyle: ButtonStyle {
     }
 }
 
-
-
-//activate code below for when testing on iphone
-//.navigationDestination(isPresented: $isEditing) {
-//  SetReminderView()
