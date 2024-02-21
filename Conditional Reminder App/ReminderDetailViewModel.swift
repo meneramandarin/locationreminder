@@ -10,38 +10,38 @@ import CoreLocation
 import Foundation
 
 public class ReminderDetailViewModel: ObservableObject {
-  var reminderStorage: ReminderStorage
-  @Published var reminder: Reminder
+    var reminderStorage: ReminderStorage
+    @Published var reminder: Reminder
 
-  init(reminder: Reminder, context: NSManagedObjectContext) {
-    self.reminder = reminder
-    self.reminderStorage = ReminderStorage(context: context)
-  }
-
-  func acknowledgeReminder() {
-    reminderStorage.deleteReminder(reminder)
-    // Additional logic if needed
-  }
-
-  func snoozeReminder() {
-    let snoozeEndDate = Calendar.current.date(byAdding: .hour, value: 24, to: Date())
-    reminder.snoozeUntil = snoozeEndDate
-    // Update the reminder in the storage
-    reminderStorage.updateReminder(reminder)
-  }
-
-  func editReminder() {
-    // Implement edit logic
-    // This might involve navigating to SetReminderView with the current reminder details
-  }
-
-  func loadReminder(withId id: UUID) {
-    // TODO: Optimize reminder fetching by ID
-    let allReminders = reminderStorage.fetchReminders()
-    if let fetchedReminder = allReminders.first(where: { $0.id == id }) {
-      self.reminder = fetchedReminder
+    init(reminder: Reminder, context: NSManagedObjectContext) {
+        self.reminder = reminder
+        self.reminderStorage = ReminderStorage(context: context)
     }
-  }
+
+    func loadReminder(withId id: UUID) {
+        // Assuming fetchReminders() fetches all reminders and then filters them to find the one with the matching ID.
+        let allReminders = reminderStorage.fetchReminders()
+        if let fetchedReminder = allReminders.first(where: { $0.id == id }) {
+            self.reminder = fetchedReminder
+        }
+    }
+
+    func acknowledgeReminder() {
+        reminderStorage.deleteReminder(reminder)
+        // Additional logic if needed
+    }
+
+    func snoozeReminder() {
+        let snoozeEndDate = Calendar.current.date(byAdding: .hour, value: 24, to: Date())
+        reminder.snoozeUntil = snoozeEndDate
+        // Update the reminder in the storage
+        reminderStorage.updateReminder(reminder)
+    }
+
+    func editReminder() {
+        // Implement edit logic
+        // This might involve navigating to SetReminderView with the current reminder details
+    }
 }
         
       // TODO: Optimize reminder fetching by ID

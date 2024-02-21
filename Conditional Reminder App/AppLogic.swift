@@ -15,7 +15,8 @@ class AppLogic: NSObject, ObservableObject {
     private let reminderStorage: ReminderStorage
     private let notificationCenter = UNUserNotificationCenter.current()
     
-    @Published var selectedReminderID: UUID? // For navigating to the specific reminder detail view
+    @Published var selectedReminderID: UUID? // For navigating to the specific reminder detail view or would we rather use: @Published var DetailContentView?
+    @Published var showingDetail = false
     
      init(reminderStorage: ReminderStorage) {
             self.reminderStorage = reminderStorage
@@ -90,6 +91,12 @@ class AppLogic: NSObject, ObservableObject {
             self.selectedReminderID = reminderID
         }
     }
+    
+    func checkForNotificationTrigger() {
+            if selectedReminderID != nil {
+                showingDetail = true
+            }
+        }
 }
 
 extension AppLogic: UNUserNotificationCenterDelegate {

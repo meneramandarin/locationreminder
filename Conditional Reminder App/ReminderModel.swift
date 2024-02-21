@@ -30,3 +30,21 @@ struct Reminder: Identifiable {
         self.snoozeUntil = snoozeUntil
       }
     }
+
+extension ReminderItem {
+    var asReminderStruct: Reminder {
+        // Adjusted to use locationLatitude and locationLongitude
+        let locationCoordinate = CLLocationCoordinate2D(
+            latitude: self.locationLatitude,
+            longitude: self.locationLongitude
+        )
+        
+        return Reminder(
+            id: self.uuid ?? UUID(), // Provide a new UUID if nil
+            location: locationCoordinate,
+            message: self.message ?? "No message", // Provide a default message if nil
+            date: self.date ?? Date(), // Provide the current date if nil
+            snoozeUntil: self.snoozeUntil // Directly use snoozeUntil, it's already an optional Date
+        )
+    }
+}

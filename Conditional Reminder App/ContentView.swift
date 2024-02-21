@@ -7,6 +7,7 @@
 
 import MapKit
 import SwiftUI
+import CoreData
 
 struct MapView: UIViewRepresentable {
   var region: MKCoordinateRegion
@@ -26,8 +27,11 @@ struct MapView: UIViewRepresentable {
 }
 
 struct ContentView: View {
+  @Environment(\.managedObjectContext) var managedObjectContext
   @EnvironmentObject var appLogic: AppLogic
   @State private var reminders: [Reminder] = []  // State variable for reminders
+  @State private var showingDetail = false
+  @State private var selectedReminderUUID: UUID?
   private let reminderStorage = ReminderStorage(
     context: PersistenceController.shared.container.viewContext)
 
@@ -96,17 +100,21 @@ struct ContentView: View {
           }
         }
       }
+      .sheet(isPresented: $showingDetail) {
+          if let uuid = selectedReminderUUID, let reminder = fetchReminder(by: uuid, using: managedObjectContext) {
+              ReminderDetailView(viewModel: ReminderDetailViewModel(reminder: reminder, context: managedObjectContext))
+          } else {
+              // Handle the case where the reminder could not be fetched
+              // This could be an empty view or some error message
+              Text("Reminder not found")
+          }
+      }
       .onAppear {
         loadReminders()
         LocationService.shared.startMonitoringLocation()
         appLogic.start()
-      }
-      // Conditionally navigate to ReminderDetailView based on selectedReminderID
-      .onChange(of: appLogic.selectedReminderID) { _ in
-        if appLogic.selectedReminderID != nil {
-          // Code to present ReminderDetailView
-          // This could be a sheet or a full-screen cover, depending on your design
-        }
+        // Additionally check for any notification trigger
+        appLogic.checkForNotificationTrigger()
       }
     }
   }
@@ -128,6 +136,21 @@ struct ContentView: View {
     annotation.title = reminder.message
     return annotation
   }
+    
+    func fetchReminder(by uuid: UUID, using context: NSManagedObjectContext) -> Reminder? {
+        let fetchRequest: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "uuid == %@", uuid as CVarArg)
+        fetchRequest.fetchLimit = 1
+
+        do {
+            let results = try context.fetch(fetchRequest)
+            return results.first?.asReminderStruct // Assuming you have a conversion method or property
+        } catch {
+            print("Error fetching reminder: \(error)")
+            return nil
+        }
+    }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
