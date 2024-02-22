@@ -15,6 +15,7 @@ struct Conditional_Reminder_AppApp: App {
     @StateObject var appLogic: AppLogic
     
     init() {
+         print("Initializing Conditional_Reminder_AppApp") 
          let reminderStorage = ReminderStorage(context: persistenceController.container.viewContext)
          _appLogic = StateObject(wrappedValue: AppLogic(reminderStorage: reminderStorage))
      }

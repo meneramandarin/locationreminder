@@ -18,10 +18,10 @@ public class ReminderDetailViewModel: ObservableObject {
         self.reminderStorage = ReminderStorage(context: context)
     }
 
-    func loadReminder(withId id: UUID) {
+    func loadReminder(withId id: IdentifiableUUID) {
         // Assuming fetchReminders() fetches all reminders and then filters them to find the one with the matching ID.
         let allReminders = reminderStorage.fetchReminders()
-        if let fetchedReminder = allReminders.first(where: { $0.id == id }) {
+        if let fetchedReminder = allReminders.first(where: { $0.id == id.id }) { // We now compare $0.id (which is a UUID) with id.id (which extracts the underlying UUID from the IdentifiableUUID).
             self.reminder = fetchedReminder
         }
     }

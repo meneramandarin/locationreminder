@@ -15,7 +15,7 @@ class AppLogic: NSObject, ObservableObject {
     private let reminderStorage: ReminderStorage
     private let notificationCenter = UNUserNotificationCenter.current()
     
-    @Published var selectedReminderID: UUID? // For navigating to the specific reminder detail view or would we rather use: @Published var DetailContentView?
+    @Published var selectedReminderID: IdentifiableUUID? = nil
     @Published var showingDetail = false
     
      init(reminderStorage: ReminderStorage) {
@@ -86,9 +86,8 @@ class AppLogic: NSObject, ObservableObject {
     }
     
     private func handleNotificationResponse(with reminderID: UUID) {
-        // Update the selectedReminderID to trigger navigation in your SwiftUI view hierarchy
         DispatchQueue.main.async {
-            self.selectedReminderID = reminderID
+            self.selectedReminderID = IdentifiableUUID(reminderID) // Wrap the UUID
         }
     }
     
@@ -107,5 +106,13 @@ extension AppLogic: UNUserNotificationCenterDelegate {
         }
         
         completionHandler()
+    }
+}
+
+struct IdentifiableUUID: Identifiable {
+    let id: UUID
+    
+    init(_ uuid: UUID = UUID()) {
+        self.id = uuid
     }
 }

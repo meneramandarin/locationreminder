@@ -30,7 +30,6 @@ struct ContentView: View {
   @Environment(\.managedObjectContext) var managedObjectContext
   @EnvironmentObject var appLogic: AppLogic
   @State private var reminders: [Reminder] = []  // State variable for reminders
-  @State private var showingDetail = false
   @State private var selectedReminderUUID: UUID?
   private let reminderStorage = ReminderStorage(
     context: PersistenceController.shared.container.viewContext)
@@ -100,20 +99,17 @@ struct ContentView: View {
           }
         }
       }
-      .sheet(isPresented: $showingDetail) {
-          if let uuid = selectedReminderUUID, let reminder = fetchReminder(by: uuid, using: managedObjectContext) {
-              ReminderDetailView(viewModel: ReminderDetailViewModel(reminder: reminder, context: managedObjectContext))
-          } else {
-              // Handle the case where the reminder could not be fetched
-              // This could be an empty view or some error message
-              Text("Reminder not found")
-          }
-      }
+      .sheet(item: $appLogic.selectedReminderID) { reminderId in // Update to .sheet(item:)
+                  if let reminder = fetchReminder(by: reminderId, using: managedObjectContext) {
+                      ReminderDetailView(viewModel: ReminderDetailViewModel(reminder: reminder, context: managedObjectContext))
+                  } else {
+                      Text("Reminder not found")
+                  }
+              }
       .onAppear {
         loadReminders()
         LocationService.shared.startMonitoringLocation()
         appLogic.start()
-        // Additionally check for any notification trigger
         appLogic.checkForNotificationTrigger()
       }
     }
@@ -137,14 +133,13 @@ struct ContentView: View {
     return annotation
   }
     
-    func fetchReminder(by uuid: UUID, using context: NSManagedObjectContext) -> Reminder? {
+    func fetchReminder(by reminderId: IdentifiableUUID, using context: NSManagedObjectContext) -> Reminder? {
         let fetchRequest: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "uuid == %@", uuid as CVarArg)
-        fetchRequest.fetchLimit = 1
+        fetchRequest.predicate = NSPredicate(format: "uuid == %@", reminderId.id as CVarArg) // Update predicate to use reminderId.id
 
         do {
             let results = try context.fetch(fetchRequest)
-            return results.first?.asReminderStruct // Assuming you have a conversion method or property
+            return results.first?.asReminderStruct // Assuming you have a conversion method
         } catch {
             print("Error fetching reminder: \(error)")
             return nil
