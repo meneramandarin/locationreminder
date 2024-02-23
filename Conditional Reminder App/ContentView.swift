@@ -102,6 +102,9 @@ struct ContentView: View {
         appLogic.start()
       }
       .sheet(isPresented: $appLogic.showReminderDetail) {
+          Text("Test Sheet") // doesn't show 
+      }
+   /*   .sheet(isPresented: $appLogic.showReminderDetail) {
           if let reminderId = appLogic.selectedReminderID,
             let selectedReminder = appLogic.reminders.first(where: { $0.id == reminderId }) {
 
@@ -113,7 +116,7 @@ struct ContentView: View {
           } else {
               Text("Error: Could not load reminder detail")
           }
-      }
+      } */
 
     }
   }
