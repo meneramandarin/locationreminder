@@ -7,6 +7,7 @@
 
 import MapKit
 import SwiftUI
+import Combine // just for testing the timer function
 
 struct MapView: UIViewRepresentable {
   var region: MKCoordinateRegion
@@ -27,7 +28,9 @@ struct MapView: UIViewRepresentable {
 
 struct ContentView: View {
   @EnvironmentObject var appLogic: AppLogic
+  @State private var showLocalAlert: Bool = false
   @State private var reminders: [Reminder] = []  // State variable for reminders
+  let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect() // Adding a timer here for testing - delete later
   private let reminderStorage = ReminderStorage(
     context: PersistenceController.shared.container.viewContext)
 
@@ -40,8 +43,7 @@ struct ContentView: View {
           ScrollView {
             VStack {
               Spacer().frame(height: geometry.size.height / 5)
-
-              NavigationLink(destination: SetReminderView()) {
+                NavigationLink(destination: SetReminderView()) {
                 Text("New Memory")
                   .padding()
                   .padding(.vertical, 10)
@@ -100,24 +102,34 @@ struct ContentView: View {
         loadReminders()
         LocationService.shared.startMonitoringLocation()
         appLogic.start()
+        print("ContentView appeared")
       }
-      .sheet(isPresented: $appLogic.showReminderDetail) {
-          Text("Test Sheet") // doesn't show 
-      }
-   /*   .sheet(isPresented: $appLogic.showReminderDetail) {
-          if let reminderId = appLogic.selectedReminderID,
-            let selectedReminder = appLogic.reminders.first(where: { $0.id == reminderId }) {
+        // TESTING A TIMER FOR THE SHEET STATE
+        
+      .onReceive(timer) { _ in
+                  // Print the current state of showReminderDetail every 3 seconds
+                  print("Current state of showReminderDetail: \(self.appLogic.showReminderDetail)")
+              }
+        
+        // END OF TEST TIMER
+        
+        
+        // MY BEST FRIEND THE SHEET STARTS HERE
+       .sheet(isPresented: $appLogic.showReminderDetail) {
+                         if let reminderId = appLogic.selectedReminderID,
+                           let selectedReminder = appLogic.reminders.first(where: { $0.id == reminderId }) {
 
-              ReminderDetailView(viewModel: ReminderDetailViewModel(reminder: selectedReminder, context: PersistenceController.shared.container.viewContext))
-                  .onDisappear {
-                      appLogic.showReminderDetail = false
-                  }
+                             ReminderDetailView(viewModel: ReminderDetailViewModel(reminder: selectedReminder, context: PersistenceController.shared.container.viewContext))
+                                 .onDisappear {
+                                     appLogic.showReminderDetail = false
+                                 }
 
-          } else {
-              Text("Error: Could not load reminder detail")
-          }
-      } */
-
+                         } else {
+                             Text("Error: Could not load reminder detail") // that's what i currently get when i force the sheet with a button
+                         }
+                     }
+         // MY BEST FRIEND THE SHEET ENDS HERE
+        
     }
   }
 

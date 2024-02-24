@@ -16,7 +16,7 @@ class AppLogic: NSObject, ObservableObject {
     private let reminderStorage: ReminderStorage
     private let notificationCenter = UNUserNotificationCenter.current()
     
-    @Published var showReminderDetail = false // New property to trigger sheet
+    @Published var showReminderDetail = false // property to trigger sheet
     @Published var selectedReminderID: UUID? = nil
     @Published var reminders: [Reminder] = []
     
@@ -90,14 +90,14 @@ class AppLogic: NSObject, ObservableObject {
         }
     }
     
-    private func handleNotificationResponse(with reminderID: UUID) {
-        print("Notification received for reminder with ID: \(reminderID)")
+     func handleNotificationResponse(with reminderID: UUID) {
+        print("Notification received for reminder with ID: \(reminderID)") // works
         if let existingReminder = reminders.first(where: { $0.id == reminderID }) {
             DispatchQueue.main.async {
                 self.selectedReminderID = reminderID
                 self.showReminderDetail = true
-                print("selectedReminderID is now: \(self.selectedReminderID)")
-                print("showReminderDetail set to: \(self.showReminderDetail)")
+                print("selectedReminderID is now: \(self.selectedReminderID)") // works
+                print("showReminderDetail set to: \(self.showReminderDetail)") // works - sheet
             }
         } else {
             print("Reminder with ID \(reminderID) not found locally")
@@ -107,10 +107,14 @@ class AppLogic: NSObject, ObservableObject {
 
 extension AppLogic: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        print("Notification received")
         if let reminderIdString = response.notification.request.content.userInfo["reminderId"] as? String,
            let reminderId = UUID(uuidString: reminderIdString) {
+           print("Handling notification for reminder ID: \(reminderId)") // works 
             handleNotificationResponse(with: reminderId)
-        }
+        } else {
+                    print("Could not find reminderId in notification userInfo")
+                }
         
         completionHandler()
     }
