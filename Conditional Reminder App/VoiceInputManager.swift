@@ -12,6 +12,7 @@ class VoiceInputManager: NSObject, AVAudioRecorderDelegate {
     static let shared = VoiceInputManager()
     
     private var audioRecorder: AVAudioRecorder?
+    private var isRecording = false
 
     private override init() {
             super.init()
@@ -61,8 +62,39 @@ class VoiceInputManager: NSObject, AVAudioRecorderDelegate {
             audioRecorder = nil
         }
         
-        private func getDocumentsDirectory() -> URL {
+         func getDocumentsDirectory() -> URL {
             let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
             return paths[0]
         }
+    
+    func toggleRecording() {
+            if isRecording {
+                stopListeningAndTranscribe()
+            } else {
+                startListening()
+            }
+            isRecording.toggle()
+        }
+        
+        private func stopListeningAndTranscribe() {
+            audioRecorder?.stop()
+            audioRecorder = nil
+            transcribeAudio()
+        }
+        
+    private func transcribeAudio() {
+        let whisperService = WhisperAPIService()
+        whisperService.transcribeAudio { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let transcription):
+                    print("API Transcription: \(transcription)")
+                    // Handle the transcription, e.g., update the UI
+                case .failure(let error):
+                    print("Error transcribing audio: \(error.localizedDescription)")
+                    // Handle the error, e.g., show an error message
+                }
+            }
+        }
     }
+}

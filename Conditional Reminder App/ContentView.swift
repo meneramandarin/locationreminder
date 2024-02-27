@@ -57,7 +57,7 @@ struct ContentView: View {
               // Record Button
               Button(action: {
                 // Call to VoiceInputManager to start listening
-                VoiceInputManager.shared.startListening()
+                  VoiceInputManager.shared.toggleRecording()
               }) {
                 Text("Record")
                   .padding()
