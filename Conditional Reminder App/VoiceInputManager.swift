@@ -57,6 +57,7 @@ class VoiceInputManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
                 audioRecorder?.record()
                 isRecording = true
                 print("Recording started")
+                print("Audio file path: \(audioFilename)")
             } catch {
                 print("Failed to start recording: \(error.localizedDescription)")
             }
@@ -67,9 +68,15 @@ class VoiceInputManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
             audioRecorder.stop()
             isRecording = false
             print("Recording stopped")
+            
+            // Debugging:
+            print("Recording completed? \(audioRecorder.isRecording)")
+            print("File URL: \(audioRecorder.url)")
+            print("File exists before transcription:", FileManager.default.fileExists(atPath: audioRecorder.url.path))
 
-            // Transcribe and process result
-            transcribeAudioAndProcess()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 20) {
+                    self.transcribeAudioAndProcess()
+                }
         }
 
         func toggleRecording() {
