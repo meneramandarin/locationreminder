@@ -27,10 +27,11 @@ struct MapView: UIViewRepresentable {
 }
 
 struct ContentView: View {
+  @ObservedObject private var voiceInputManager = VoiceInputManager.shared
   @EnvironmentObject var appLogic: AppLogic
   @State private var showLocalAlert: Bool = false
   @State private var reminders: [Reminder] = []  // State variable for reminders
-  let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()  // Adding a timer here for testing - delete later
+  //let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()  // Adding a timer here for testing - delete later
   private let reminderStorage = ReminderStorage(
     context: PersistenceController.shared.container.viewContext)
 
@@ -55,19 +56,19 @@ struct ContentView: View {
               }
 
               // Record Button
-              Button(action: {
-                // Call to VoiceInputManager to start listening
-                  VoiceInputManager.shared.toggleRecording()
-              }) {
-                Text("Record")
-                  .padding()
-                  .padding(.vertical, 10)
-                  .frame(width: UIScreen.main.bounds.width * 0.5)
-                  .adaptiveFont(name: "Times New Roman", style: .headline)
-                  .background(Color(hex: "FEEBCC"))  // Use the same color as the "New Memory" button
-                  .foregroundColor(Color(hex: "023020"))  // Text color
-                  .cornerRadius(110)  // Rounded corners
-              }
+                Button(action: {
+                            // Toggle recording
+                            voiceInputManager.toggleRecording()
+                        }) {
+                            Text("Record")
+                                .padding()
+                                .padding(.vertical, 10)
+                                .frame(width: UIScreen.main.bounds.width * 0.5)
+                                .adaptiveFont(name: "Times New Roman", style: .headline)
+                                .background(voiceInputManager.isRecording ? Color(hex: "#F4C2C2") : Color(hex: "FEEBCC")) // Change color based on isRecording - not visible 
+                                .foregroundColor(Color(hex: "023020")) // Text color
+                                .cornerRadius(110) // Rounded corners
+                        }
 
               Spacer().frame(height: geometry.size.height / 4)
 
@@ -121,11 +122,11 @@ struct ContentView: View {
       }
       // TESTING A TIMER FOR THE SHEET STATE
 
-      .onReceive(timer) { _ in
+      /* .onReceive(timer) { _ in
         // Print the current state of showReminderDetail every 3 seconds
         print("Current state of showReminderDetail: \(self.appLogic.showReminderDetail)")
       }
-
+       */
       // END OF TEST TIMER
 
       // TODO: the sheet still doesn't show because selectedReminderID is set to false by @main - i've no idea how to solve it.
