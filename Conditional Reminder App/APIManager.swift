@@ -10,8 +10,8 @@ import Foundation
 class APIManager {
     static let shared = APIManager()
     
-    private let openAIURL = "https://eofusffqsjbr92r.m.pipedream.net" // "https://api.openai.com/v1"
-    private let apiKey = "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"
+    private let openAIURL = "https://api.openai.com/v1" // "https://eofusffqsjbr92r.m.pipedream.net"
+    private let apiKey = "meowmeow"
     
     private init() {}
     
@@ -98,6 +98,7 @@ class APIManager {
         httpBody.append("whisper-1".data(using: .utf8)!)
         httpBody.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
         
+        print("httpBody:", httpBody)
         request.httpBody = httpBody
         
         print("Content-Length:", request.value(forHTTPHeaderField: "Content-Length"))
