@@ -26,6 +26,7 @@
 		1A73407F2B6B0DC0005247B7 /* ReminderDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A73407E2B6B0DC0005247B7 /* ReminderDetailViewModel.swift */; };
 		1A78C4642B7EF50B00884E00 /* colorextension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A78C4632B7EF50B00884E00 /* colorextension.swift */; };
 		1A78C4682B7EFFF400884E00 /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A78C4672B7EFFF400884E00 /* FontExtension.swift */; };
+		1A79367B2B90155600C71BA4 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A79367A2B90155600C71BA4 /* test.swift */; };
 		1AD5470D2B688A3F00284D3E /* ReminderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD5470C2B688A3F00284D3E /* ReminderModel.swift */; };
 		1AD5470F2B688B8300284D3E /* reminderstorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD5470E2B688B8300284D3E /* reminderstorage.swift */; };
 		1AD547122B688FAC00284D3E /* ReminderModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1AD547102B688FAC00284D3E /* ReminderModel.xcdatamodeld */; };
@@ -73,6 +74,7 @@
 		1A73407E2B6B0DC0005247B7 /* ReminderDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailViewModel.swift; sourceTree = "<group>"; };
 		1A78C4632B7EF50B00884E00 /* colorextension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = colorextension.swift; sourceTree = "<group>"; };
 		1A78C4672B7EFFF400884E00 /* FontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtension.swift; sourceTree = "<group>"; };
+		1A79367A2B90155600C71BA4 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
 		1AD5470C2B688A3F00284D3E /* ReminderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderModel.swift; sourceTree = "<group>"; };
 		1AD5470E2B688B8300284D3E /* reminderstorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reminderstorage.swift; sourceTree = "<group>"; };
 		1AD547112B688FAC00284D3E /* ReminderModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ReminderModel.xcdatamodel; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				1A01FEDB2B84321F006E8C72 /* Conditional-Reminder-App-Info.plist */,
 				1A4245E02B55D4C7004157B5 /* Conditional_Reminder_AppApp.swift */,
 				1A6E885D2B8E83C500D6337A /* APIManager.swift */,
+				1A79367A2B90155600C71BA4 /* test.swift */,
 				1A4245E22B55D4C7004157B5 /* ContentView.swift */,
 				1A78C4632B7EF50B00884E00 /* colorextension.swift */,
 				1A78C4672B7EFFF400884E00 /* FontExtension.swift */,
@@ -331,6 +334,7 @@
 				1A62B1A02B69CFF00037B695 /* AppLogic.swift in Sources */,
 				1A4245E12B55D4C7004157B5 /* Conditional_Reminder_AppApp.swift in Sources */,
 				1A6E885E2B8E83C500D6337A /* APIManager.swift in Sources */,
+				1A79367B2B90155600C71BA4 /* test.swift in Sources */,
 				1A73407F2B6B0DC0005247B7 /* ReminderDetailViewModel.swift in Sources */,
 				1A6E88572B8D70D100D6337A /* VoiceInputManager.swift in Sources */,
 				1A421D792B59008E008040CA /* ReminderDetailView.swift in Sources */,
