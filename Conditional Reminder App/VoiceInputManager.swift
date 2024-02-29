@@ -57,6 +57,11 @@ class VoiceInputManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
             try session.setActive(true)
 
             audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
+            if let recorder = audioRecorder {
+                print("Recorder created with ID:", ObjectIdentifier(recorder))
+            } else {
+                print("Failed to create the recorder")
+            }
             audioRecorder?.delegate = self
             audioRecorder?.record()
             isRecording = true
@@ -68,9 +73,12 @@ class VoiceInputManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
     }
 
         func stopRecording() {
+            print("Entering stopRecording")
             guard let audioRecorder = audioRecorder else { return }
+            print("Stopping recorder with ID:", ObjectIdentifier(audioRecorder))
             print("Recording duration: \(audioRecorder.currentTime)") // Check duration
             audioRecorder.stop()
+            print("After stop(), isRecording:", audioRecorder.isRecording)
             isRecording = false
             print("Recording stopped")
             
@@ -78,9 +86,11 @@ class VoiceInputManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
             print("Recording completed? \(audioRecorder.isRecording)")
             print("File URL: \(audioRecorder.url)")
             print("File exists before transcription:", FileManager.default.fileExists(atPath: audioRecorder.url.path))
+            print("Exiting stopRecording")
         }
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        print("Entering audioRecorderDidFinishRecording")
         isRecording = false
         print("Recording finished: \(flag)")
 
@@ -90,6 +100,7 @@ class VoiceInputManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
             print("Recording failed")
             // Handle the failed recording scenario
         }
+        print("Exiting audioRecorderDidFinishRecording")
     }
     
         func toggleRecording() {
@@ -115,6 +126,10 @@ class VoiceInputManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
     private func transcribeAudioAndProcess() {
         let audioFilePath = getDocumentsDirectory().appendingPathComponent("recording.m4a").path
         let fileURL = URL(fileURLWithPath: audioFilePath)
+
+        // 1. File Size Check
+        print("File size:", try? FileManager.default.attributesOfItem(atPath: fileURL.path)[.size])
+
         apiManager.transcribeAudio(fileURL: fileURL) { result in
             DispatchQueue.main.async {
                 switch result {
@@ -125,7 +140,8 @@ class VoiceInputManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
                     if let networkError = error as? URLError {
                         print("Network Error: \(networkError.localizedDescription)")
                     } else {
-                        print("API Error: \(error.localizedDescription)")
+                        // 2. Detailed API Error
+                        print("API Error:", error)
                     }
                 }
             }

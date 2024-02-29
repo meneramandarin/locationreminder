@@ -10,8 +10,8 @@ import Foundation
 class APIManager {
     static let shared = APIManager()
     
-    private let openAIURL = "https://api.openai.com/v1"
-    private let apiKey = "meowmeowmeow"
+    private let openAIURL = "https://eofusffqsjbr92r.m.pipedream.net" // "https://api.openai.com/v1"
+    private let apiKey = "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"
     
     private init() {}
     
@@ -82,12 +82,15 @@ class APIManager {
         httpBody.append("--\(boundary)\r\n".data(using: .utf8)!)
         httpBody.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(fileURL.lastPathComponent)\"\r\n".data(using: .utf8)!)
         httpBody.append("Content-Type: audio/mpeg\r\n\r\n".data(using: .utf8)!)
+        
         do {
-            httpBody.append(try Data(contentsOf: fileURL))
+          let fileData = try Data(contentsOf: fileURL) // Load entire file data
+          httpBody.append(fileData) // Append in one step
         } catch {
-            completion(.failure(error))
-            return
+          completion(.failure(error)) // Pass the error to your completion handler
+          return // Exit the function if file loading fails
         }
+        
         httpBody.append("\r\n".data(using: .utf8)!)
         
         httpBody.append("--\(boundary)\r\n".data(using: .utf8)!)
@@ -96,6 +99,8 @@ class APIManager {
         httpBody.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
         
         request.httpBody = httpBody
+        
+        print("Content-Length:", request.value(forHTTPHeaderField: "Content-Length"))
         
         self.performRequest(with: request) { result in
             switch result {
