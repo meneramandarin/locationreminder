@@ -73,11 +73,20 @@ class VoiceInputManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
             print("Recording completed? \(audioRecorder.isRecording)")
             print("File URL: \(audioRecorder.url)")
             print("File exists before transcription:", FileManager.default.fileExists(atPath: audioRecorder.url.path))
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 20) {
-                    self.transcribeAudioAndProcess()
-                }
         }
+    
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        isRecording = false
+        print("Recording finished: \(flag)")
+
+        if flag {
+            transcribeAudioAndProcess()
+        } else {
+            print("Recording failed")
+            // Handle the failed recording scenario
+        }
+    }
+
 
         func toggleRecording() {
             checkMicrophonePermission { granted in
@@ -99,22 +108,23 @@ class VoiceInputManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
     }
 
     // MARK: - API Interaction
-        private func transcribeAudioAndProcess() {
-            let audioFilePath = getDocumentsDirectory().appendingPathComponent("recording.m4a").path
-            let fileURL = URL(fileURLWithPath: audioFilePath)
-
-            apiManager.transcribeAudio(fileURL: fileURL) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let transcription):
-                        // Process transcription further if desired:
-                        // self.apiManager.summarizeToBulletPoints...
-                        print("API Transcription: \(transcription)")
-                    case .failure(let error):
-                        print("Error transcribing audio: \(error.localizedDescription)")
+    private func transcribeAudioAndProcess() {
+        let audioFilePath = getDocumentsDirectory().appendingPathComponent("recording.m4a").path
+        let fileURL = URL(fileURLWithPath: audioFilePath)
+        apiManager.transcribeAudio(fileURL: fileURL) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let transcription):
+                    print("API Transcription: \(transcription)")
+                case .failure(let error):
+                    // Consider using custom errors here:
+                    if let networkError = error as? URLError {
+                        print("Network Error: \(networkError.localizedDescription)")
+                    } else {
+                        print("API Error: \(error.localizedDescription)")
                     }
                 }
             }
         }
     }
-
+}
