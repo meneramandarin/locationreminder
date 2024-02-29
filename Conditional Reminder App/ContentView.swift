@@ -55,7 +55,9 @@ struct ContentView: View {
                   .cornerRadius(110)
               }
 
+              
               // Record Button
+                
                 Button(action: {
                             // Toggle recording
                             voiceInputManager.toggleRecording()

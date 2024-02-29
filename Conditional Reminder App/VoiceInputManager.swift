@@ -43,28 +43,33 @@ class VoiceInputManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
     }
 
     func startRecording() {
-            let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
-            let settings = [
-                AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-                AVSampleRateKey: 12000,
-                AVNumberOfChannelsKey: 1,
-                AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-            ]
+        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+        let settings = [
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            AVSampleRateKey: 12000,
+            AVNumberOfChannelsKey: 1,
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+        ]
+        
+        do {
+            let session = AVAudioSession.sharedInstance()
+            try session.setCategory(.playAndRecord)
+            try session.setActive(true)
 
-            do {
-                audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
-                audioRecorder?.delegate = self
-                audioRecorder?.record()
-                isRecording = true
-                print("Recording started")
-                print("Audio file path: \(audioFilename)")
-            } catch {
-                print("Failed to start recording: \(error.localizedDescription)")
-            }
+            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
+            audioRecorder?.delegate = self
+            audioRecorder?.record()
+            isRecording = true
+            print("Recording started")
+            print("Audio file path: \(audioFilename)")
+        } catch {
+            print("Failed to start recording: \(error.localizedDescription)")
         }
+    }
 
         func stopRecording() {
             guard let audioRecorder = audioRecorder else { return }
+            print("Recording duration: \(audioRecorder.currentTime)") // Check duration
             audioRecorder.stop()
             isRecording = false
             print("Recording stopped")
@@ -86,8 +91,7 @@ class VoiceInputManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
             // Handle the failed recording scenario
         }
     }
-
-
+    
         func toggleRecording() {
             checkMicrophonePermission { granted in
                 if granted {

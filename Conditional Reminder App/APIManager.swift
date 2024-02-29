@@ -11,7 +11,7 @@ class APIManager {
     static let shared = APIManager()
     
     private let openAIURL = "https://api.openai.com/v1"
-    private let apiKey = "meowmeowmeow"
+    private let apiKey = "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"
     
     private init() {}
     
@@ -19,9 +19,7 @@ class APIManager {
     private let maxRetries = 3
     private let initialDelay = 1.0
     private let backoffFactor = 2.0
-    
-    // NEW FUNCTION
-    
+        
     // Helper function to handle retries
     private func performRequest(with urlRequest: URLRequest, currentRetry: Int = 0, completion: @escaping (Result<Data, Error>) -> Void) {
         URLSession.shared.dataTask(with: urlRequest) { data, response, error in
@@ -56,9 +54,7 @@ class APIManager {
             completion(.failure(NSError(domain: "com.yourappdomain", code: -1, userInfo: ["message": "Unexpected error"])))
         }.resume()
     }
-    
-    // NEW FUNCTION ENDS
-    
+        
     func transcribeAudio(fileURL: URL, completion: @escaping (Result<String, Error>) -> Void) {
         let headers: [String: String] = [
             "Authorization": "Bearer \(apiKey)"
