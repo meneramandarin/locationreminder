@@ -14,7 +14,7 @@ class GPTapiManager {
   static let shared = GPTapiManager()
 
   private let openAIURL = "https://api.openai.com/v1/completions"
-  private let apiKey = "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"
+  private let apiKey = "meow meow meow"
 
   private init() {}
 
@@ -28,6 +28,7 @@ class GPTapiManager {
     with urlRequest: URLRequest, currentRetry: Int = 0,
     completion: @escaping (Result<Data, Error>) -> Void
   ) {
+
     URLSession.shared.dataTask(with: urlRequest) { data, response, error in
       if let error = error {
         completion(.failure(error))
@@ -62,7 +63,7 @@ class GPTapiManager {
       // Handle other non-success error codes or unexpected scenarios
       completion(
         .failure(
-          NSError(domain: "com.yourappdomain", code: -1, userInfo: ["message": "Unexpected error"]))
+          NSError(domain: "com.yourappdomain", code: -1, userInfo: ["message": "Unexpected error"]))  //TODO: replace domain
       )
     }.resume()
   }
@@ -96,7 +97,8 @@ class GPTapiManager {
   ) {
     let requestBody: [String: Any] = [
       "model": "text-davinci-003",
-      "prompt": text,  // prompt goes here
+      "prompt":
+        "Please extract the following information from the provided instruction, providing the output in a specific format: \n*text of user's instruction*\n* Message:\n* Date:\n* Location Coordinates: ",
       "temperature": 0.5,  // Adjust as desired
       "max_tokens": 100,
       "top_p": 1.0,
@@ -107,7 +109,7 @@ class GPTapiManager {
     guard let url = URL(string: "\(openAIURL)") else {
       completion(
         .failure(
-          NSError(domain: "com.yourappdomain", code: -1, userInfo: ["message": "Invalid URL"])))
+          NSError(domain: "com.yourappdomain", code: -1, userInfo: ["message": "Invalid URL"]))) //TODO: proper error handling
       return
     }
 
@@ -129,43 +131,50 @@ class GPTapiManager {
         do {
           let decoder = JSONDecoder()
           let response = try decoder.decode(ChatGPTResponse.self, from: data)
+            
+          print("API Response: \(response)") // Print the full response
 
           if let choice = response.choices.first {
             let lines = choice.text.split(separator: "\n")
-            var address: String?
-            var task: String?
-            var date: String?
+            var message: String?
+            var date: Date?
             var location: CLLocationCoordinate2D?
 
             for line in lines {
-              if line.starts(with: "Address: ") {
-                address = line.replacingOccurrences(of: "Address: ", with: "").trimmingCharacters(
+              if line.starts(with: "Message: ") {
+                message = line.replacingOccurrences(of: "Message: ", with: "").trimmingCharacters(
                   in: .whitespacesAndNewlines)
-              } else if line.starts(with: "Task: ") {
-                task = line.replacingOccurrences(of: "Task: ", with: "").trimmingCharacters(
-                  in: .whitespacesAndNewlines)
-                  if line.starts(with: "Date: ") {
-                      let dateString = line.replacingOccurrences(of: "Date: ", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
-                      if let date = formatDate(from: dateString) {
-                          var date: Date?
-                      } else {
-                          // Handle the potential error if the date is not in the correct format
-                      }
+                if line.starts(with: "Date: ") {
+                  let dateString = line.replacingOccurrences(of: "Date: ", with: "")
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                    if let formattedDate = self.formatDate(from: dateString) {
+                    date = formattedDate  // Assign the formatted date directly
+                  } else {
+                    // Handle the potential error if the date is not in the correct format
                   }
+                }
               } else if line.starts(with: "Location Coordinates: ") {
-                  let coordinatesString = line.replacingOccurrences(of: "Location Coordinates: ", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
-                  location = parseCoordinates(from: String(coordinatesString)) // Convert to String
+                let coordinatesString = line.replacingOccurrences(
+                  of: "Location Coordinates: ", with: ""
+                ).trimmingCharacters(in: .whitespacesAndNewlines)
+                  location = self.parseCoordinates(from: String(coordinatesString))  // Convert to String
               }
             }
-
+            print("Message: \(message ?? "nil")")
+            print("Date: \(date?.description ?? "nil")")
+            print("Location: \(location != nil ? "(\(location!.latitude), \(location!.longitude))" : "nil")")
             completion(
-              .success(
-                StructuredChatResponse(address: address, task: task, date: date, location: location)
-              ))
+              .success(StructuredChatResponse(message: message, date: date, location: location)))  // Pass the response on success
           } else {
-            completion(.failure(error))
+            completion(.failure(APIError.invalidResponse))
           }
+        } catch {
+            print("Parsing Error: \(error)")
+            completion(.failure(error))  // Pass any parsing errors
         }
+      case .failure(let error):
+          print("Network Error: \(error)")
+          completion(.failure(error))  // Pass network errors
       }
     }
 
@@ -175,6 +184,10 @@ class GPTapiManager {
 
     struct Choice: Decodable {
       let text: String
+    }
+
+    enum APIError: Error {
+      case invalidResponse  // TODO: Or other specific error cases
     }
 
   }
