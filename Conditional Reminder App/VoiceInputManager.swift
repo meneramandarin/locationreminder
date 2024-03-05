@@ -15,10 +15,16 @@ class VoiceInputManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
 
     private var audioRecorder: AVAudioRecorder?
     private let apiManager = APIManager.shared // Use the shared API manager
+    private let gptApiManager: GPTapiManager // Chat GPT API
 
-    private override init() {
-        super.init()
-    }
+        init(gptApiManager: GPTapiManager) {
+            self.gptApiManager = gptApiManager
+        }
+
+    convenience override init() {
+          // Initialize with a default or shared GPTapiManager instance
+            self.init(gptApiManager: GPTapiManager.shared)
+        }
     
     func checkMicrophonePermission(completion: @escaping (Bool) -> Void) {
         switch AVAudioSession.sharedInstance().recordPermission {
@@ -135,6 +141,15 @@ class VoiceInputManager: NSObject, ObservableObject, AVAudioRecorderDelegate {
                 switch result {
                 case .success(let transcription):
                     print("API Transcription: \(transcription)")
+
+                    // CALLING CHAT GPT API
+                    
+                    self.gptApiManager.processInstruction(text: "Some initial text", transcription: transcription, completion: { result in
+                        // ... handle the result of your Chat GPT API call ...
+                    })
+                    
+                    // ENDS
+
                 case .failure(let error):
                     // Consider using custom errors here:
                     if let networkError = error as? URLError {
