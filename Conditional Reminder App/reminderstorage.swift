@@ -17,10 +17,10 @@ class ReminderStorage {
     self.context = context
   }
 
-  // Function to save a new reminder
+  // Function to save a new reminder via the UI
   func saveReminder(_ reminder: Reminder) {
     let newReminder = ReminderItem(context: context)
-    newReminder.uuid = UUID() //or reminder.id COME BACK TO THIS IF NOTHING WORKS NOW ARGH
+    newReminder.uuid = UUID()
     newReminder.locationLatitude = reminder.location.latitude
     newReminder.locationLongitude = reminder.location.longitude
     newReminder.message = reminder.message
@@ -34,7 +34,7 @@ class ReminderStorage {
       print("Failed to save reminder: \(error), \(error.userInfo)")
     }
   }
-
+    
   // Function to update a reminder through Snooze
   func updateReminder(_ reminder: Reminder) {
     // Fetch the ReminderItem from Core Data
