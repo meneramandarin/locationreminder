@@ -14,7 +14,7 @@ class GPTapiManager {
   static let shared = GPTapiManager()
 
   private let openAIURL = "https://api.openai.com/v1/chat/completions"
-  private let apiKey = "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"
+  private let apiKey = "meow meow meow"
 
   private init() {}
 
@@ -125,111 +125,96 @@ class GPTapiManager {
     return dateFormatter.date(from: dateString)
   }
 
-  func processInstruction(
-    text: String, transcription: String,
-    completion: @escaping (Result<StructuredChatResponse, Error>) -> Void
-  ) {
-    let requestBody: [String: Any] = [
-      "model": "gpt-3.5-turbo",
-      "messages": [
-        [
-          "role": "user",
-          "content":
-            "Please extract the following information from the provided instruction, providing the output in a specific format: \n*text of user's instruction*\n* Message:\n* Date:\n* Location Coordinates: \(transcription)",
+    func processInstruction(
+        text: String, transcription: String,
+        completion: @escaping (Result<StructuredChatResponse, Error>) -> Void
+      ) {
+        let requestBody: [String: Any] = [
+          "model": "gpt-3.5-turbo",
+          "messages": [
+            [
+              "role": "user",
+              "content":
+                "Please extract the following information from the provided instruction, providing the output in a specific format: \n*text of user's instruction*\n* Message:\n* Date:\n* Location Coordinates: \(transcription)",
+            ]
+          ],  // my prompt
+          "temperature": 0.5,  // Adjust as desired
+          "max_tokens": 100,
+          "top_p": 1.0,
+          "frequency_penalty": 0.0,
+          "presence_penalty": 0.0,
         ]
-      ],  // my prompt
-      "temperature": 0.5,  // Adjust as desired
-      "max_tokens": 100,
-      "top_p": 1.0,
-      "frequency_penalty": 0.0,
-      "presence_penalty": 0.0,
-    ]
 
-    guard let url = URL(string: "\(openAIURL)") else {
-      completion(
-        .failure(
-          NSError(domain: "com.yourappdomain", code: -1, userInfo: ["message": "Invalid URL"])))
-      return
-    }
-
-    var request = URLRequest(url: url)
-    request.httpMethod = "POST"
-    request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
-    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-    do {
-      request.httpBody = try JSONSerialization.data(withJSONObject: requestBody, options: [])
-    } catch {
-      completion(.failure(error))
-      return
-    }
-
-    self.performRequest(with: request) { (result: Result<Data, Error>) in
-      switch result {
-      case .success(let data):
-        print("Raw API Response: \(String(data: data ?? Data(), encoding: .utf8) ?? "No data")")  // Print for debugging
-        do {
-          let decoder = JSONDecoder()
-          let response = try decoder.decode(ChatGPTResponse.self, from: data)
-
-          print("API Response: \(response)")  // Print the full response
-
-          if let firstChoice = response.choices.first,
-            let message = firstChoice.message, // error here
-            message.role == "assistant",
-            let content = message.content // DO WE NEED THIS LINE?
-          {
-
-            // Parse 'content' string for message, date, and location
-            let lines = message.content?.split(separator: "\n") ?? []
-            var message: String?
-            var date: Date?
-            var location: CLLocationCoordinate2D?
-
-            for line in lines {
-              if line.starts(with: "Message: ") {
-                message = line.replacingOccurrences(of: "Message: ", with: "").trimmingCharacters(
-                  in: .whitespacesAndNewlines)
-                if line.starts(with: "Date: ") {
-                  let dateString = line.replacingOccurrences(of: "Date: ", with: "")
-                    .trimmingCharacters(in: .whitespacesAndNewlines)
-                  if let formattedDate = self.formatDate(from: dateString) {
-                    date = formattedDate  // Assign the formatted date directly
-                  } else {
-                    // Handle the potential error if the date is not in the correct format
-                  }
-                }
-              } else if line.starts(with: "Location Coordinates: ") {
-                let coordinatesString = line.replacingOccurrences(
-                  of: "Location Coordinates: ", with: ""
-                ).trimmingCharacters(in: .whitespacesAndNewlines)
-                location = self.parseCoordinates(from: String(coordinatesString))  // Convert to String
-              }
-            }
-            print("Message: \(message ?? "nil")")
-            print("Date: \(date?.description ?? "nil")")
-            print(
-              "Location: \(location != nil ? "(\(location!.latitude), \(location!.longitude))" : "nil")"
-            )
-            completion(
-              .success(StructuredChatResponse(message: message, date: date, location: location)))  // Pass the response on success
-          } else {
-            completion(.failure(APIError.invalidResponse))
-          }
-        } catch {
-          print("Parsing Error: \(error)")
-          completion(.failure(error))  // Pass any parsing errors
+        guard let url = URL(string: "\(openAIURL)") else {
+          completion(
+            .failure(
+              NSError(domain: "com.yourappdomain", code: -1, userInfo: ["message": "Invalid URL"])))
+          return
         }
-      case .failure(let error):
-        print("Network Error: \(error)")
-        completion(.failure(error))  // Pass network errors
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        do {
+          request.httpBody = try JSONSerialization.data(withJSONObject: requestBody, options: [])
+        } catch {
+          completion(.failure(error))
+          return
+        }
+
+        self.performRequest(with: request) { (result: Result<Data, Error>) in
+          switch result {
+          case .success(let data):
+            do {
+              let decoder = JSONDecoder()
+              let response = try decoder.decode(ChatGPTResponse.self, from: data)
+
+              if let firstChoice = response.choices.first {
+                let message = firstChoice.message // Directly use it as it's non-optional.
+
+                if message.role == "assistant",
+                   let content = message.content // Safely unwrap content as it's optional.
+                {
+                  // Parse 'content' string for message, date, and location
+                  let lines = content.split(separator: "\n")
+                  var structuredMessage: String?
+                  var date: Date?
+                  var location: CLLocationCoordinate2D?
+
+                  for line in lines {
+                    if line.starts(with: "Message: ") {
+                      structuredMessage = String(line.dropFirst("Message: ".count)).trimmingCharacters(in: .whitespacesAndNewlines)
+                    } else if line.starts(with: "Date: ") {
+                      let dateString = String(line.dropFirst("Date: ".count)).trimmingCharacters(in: .whitespacesAndNewlines)
+                      date = self.formatDate(from: dateString)
+                    } else if line.starts(with: "Location Coordinates: ") {
+                      let coordinatesString = String(line.dropFirst("Location Coordinates: ".count)).trimmingCharacters(in: .whitespacesAndNewlines)
+                      location = self.parseCoordinates(from: coordinatesString)
+                    }
+                  }
+
+                  completion(.success(StructuredChatResponse(message: structuredMessage, date: date, location: location)))
+                } else {
+                  completion(.failure(APIError.invalidResponse))
+                }
+              } else {
+                completion(.failure(APIError.invalidResponse))
+              }
+            } catch {
+              completion(.failure(error))  // Pass any parsing errors
+            }
+          case .failure(let error):
+            completion(.failure(error))  // Pass network errors
+          }
+        }
+      }
+
+      enum APIError: Error {
+        case invalidResponse  // TODO: Or other specific error cases
       }
     }
 
-    enum APIError: Error {
-      case invalidResponse  // TODO: Or other specific error cases
-    }
 
-  }
-}
 
