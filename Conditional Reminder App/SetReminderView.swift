@@ -31,6 +31,7 @@ struct SetReminderView: View {
     @State private var locationQuery: String = ""
     @State private var showConfirmationAlert = false
     @State private var annotations = [MKPointAnnotation]() // Added annotations state
+    //@State private var confirmationMessage: String = "" // new to have different messages after saving / editing reminder
     @Environment(\.presentationMode) var presentationMode
 
     var reminderToEdit: Reminder?

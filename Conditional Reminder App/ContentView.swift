@@ -31,6 +31,7 @@ struct MapView: UIViewRepresentable {
 }
 
 struct ContentView: View {
+  @State private var selectedReminderForEditing: Reminder? // NEW
   @ObservedObject private var voiceInputManager = VoiceInputManager.shared
   @EnvironmentObject var appLogic: AppLogic
   @State private var showLocalAlert: Bool = false
@@ -113,6 +114,9 @@ struct ContentView: View {
                         .frame(height: 200)
                         .cornerRadius(10)
                     }
+                    .onTapGesture(count: 2) {
+                            selectedReminderForEditing = reminder // NEW EDITING
+                    }
                     .padding()
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(10)
@@ -128,14 +132,13 @@ struct ContentView: View {
         appLogic.start()
         print("ContentView appeared")
       }
-      // TESTING A TIMER FOR THE SHEET STATE
-
-      /* .onReceive(timer) { _ in
-        // Print the current state of showReminderDetail every 3 seconds
-        print("Current state of showReminderDetail: \(self.appLogic.showReminderDetail)")
+      
+      // sheet to edit reminder 
+          
+      .sheet(item: $selectedReminderForEditing) { reminder in
+          SetReminderView(reminderToEdit: reminder)
       }
-       */
-      // END OF TEST TIMER
+
 
       // TODO: the sheet still doesn't show because selectedReminderID is set to false by @main - i've no idea how to solve it.
       .sheet(isPresented: $appLogic.showReminderDetail) {
