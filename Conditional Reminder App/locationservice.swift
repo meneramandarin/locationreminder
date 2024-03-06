@@ -6,6 +6,7 @@
 //
 
 import CoreLocation
+import MapKit
 import Foundation
 
 extension Notification.Name {
@@ -66,4 +67,19 @@ class LocationService: NSObject, CLLocationManagerDelegate {
   }
 
   // Implement other delegate methods as necessary
+    
+    // Add the searchLocation function
+        func searchLocation(query: String, completion: @escaping (CLLocationCoordinate2D?) -> Void) {
+            let request = MKLocalSearch.Request()
+            request.naturalLanguageQuery = query
+            
+            let search = MKLocalSearch(request: request)
+            search.start { response, _ in
+                guard let coordinate = response?.mapItems.first?.placemark.coordinate else {
+                    completion(nil)
+                    return
+                }
+                completion(coordinate)
+            }
+        }
 }

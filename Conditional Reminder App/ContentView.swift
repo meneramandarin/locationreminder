@@ -12,12 +12,16 @@ import SwiftUI
 struct MapView: UIViewRepresentable {
   var region: MKCoordinateRegion
   var annotations: [MKPointAnnotation]
+  var gestures: Bool = false
 
-  func makeUIView(context: Context) -> MKMapView {
-    let mapView = MKMapView()
-    mapView.setRegion(region, animated: true)
-    return mapView
-  }
+    func makeUIView(context: Context) -> MKMapView {
+        let mapView = MKMapView()
+        mapView.setRegion(region, animated: false)
+        mapView.isZoomEnabled = gestures // Add this line
+        mapView.isScrollEnabled = gestures // Add this line
+        mapView.isRotateEnabled = gestures // Add this line
+        return mapView
+    }
 
   func updateUIView(_ uiView: MKMapView, context: Context) {
     uiView.setRegion(region, animated: true)
@@ -67,7 +71,7 @@ struct ContentView: View {
                                 .padding(.vertical, 10)
                                 .frame(width: UIScreen.main.bounds.width * 0.5)
                                 .adaptiveFont(name: "Times New Roman", style: .headline)
-                                .background(voiceInputManager.isRecording ? Color(hex: "#F4C2C2") : Color(hex: "FEEBCC")) // Change color based on isRecording - not visible 
+                                .background(voiceInputManager.isRecording ? Color(hex: "#F4C2C2") : Color(hex: "FEEBCC")) // Change color based on isRecording - not visible
                                 .foregroundColor(Color(hex: "023020")) // Text color
                                 .cornerRadius(110) // Rounded corners
                         }
@@ -80,38 +84,40 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
 
-              ForEach(reminders, id: \.id) { reminder in
-                VStack(alignment: .leading) {
-                  HStack {
+                ForEach(reminders, id: \.id) { reminder in
                     VStack(alignment: .leading) {
-                      Text(reminder.message)
-                        .font(.headline)
-                        .foregroundColor(Color(hex: "FEEBCC"))
-                      Text(reminder.date, style: .date)
-                        .font(.subheadline)
-                        .foregroundColor(Color(hex: "FEEBCC"))
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(reminder.message)
+                                    .font(.headline)
+                                    .foregroundColor(Color(hex: "FEEBCC"))
+                                Text(reminder.date, style: .date)
+                                    .font(.subheadline)
+                                    .foregroundColor(Color(hex: "FEEBCC"))
+                            }
+                            Spacer()
+                            Button(action: {
+                                reminderStorage.deleteReminder(reminder)
+                                loadReminders()
+                            }) {
+                                Image(systemName: "xmark.circle")
+                                    .foregroundColor(Color(hex: "#F4C2C2"))
+                            }
+                        }
+                        
+                        MapView(
+                            region: region(for: reminder),
+                            annotations: [createAnnotation(for: reminder)],
+                            gestures: false
+                        )
+                        .frame(height: 200)
+                        .cornerRadius(10)
                     }
-                    Spacer()
-                    Button(action: {
-                      reminderStorage.deleteReminder(reminder)
-                      loadReminders()
-                    }) {
-                      Image(systemName: "xmark.circle")
-                        .foregroundColor(Color(hex: "#F4C2C2"))
-                    }
-                  }
-
-                  MapView(
-                    region: region(for: reminder), annotations: [createAnnotation(for: reminder)]
-                  )
-                  .frame(height: 200)
-                  .cornerRadius(10)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+                    .padding(.horizontal)
                 }
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-                .padding(.horizontal)
-              }
             }
           }
         }

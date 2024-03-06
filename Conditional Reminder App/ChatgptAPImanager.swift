@@ -15,7 +15,7 @@ class GPTapiManager {
   var reminderStorage: ReminderStorage?  // to save reminder
 
   private let openAIURL = "https://api.openai.com/v1/chat/completions"
-  private let apiKey = "meow meow meow"
+  private let apiKey = "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"
 
   private init() {}
 
@@ -136,7 +136,7 @@ class GPTapiManager {
                 [
                     "role": "user",
                     "content":
-                        "Please extract the following information from the provided instruction, providing the output in a specific format: \n*text of user's instruction*\n* Message:\n* Date:\n* Location Coordinates: \(transcription)",
+                        "Please extract the following information from the provided instruction, providing the output in a specific format: \n*text of user's instruction*\n* Message:\n* Date (format: YYYY-MM-DD):\n* Location Coordinates: \(transcription)",
                 ]
             ],
             "temperature": 0.5,
@@ -195,38 +195,50 @@ class GPTapiManager {
                                     print("Parsed Date: \(date != nil ? String(describing: date!) : "nil")")
                                 } else if line.starts(with: "* Location Coordinates:") {
                                     let coordinatesString = String(line.dropFirst("* Location Coordinates:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
-                                    location = self.parseCoordinates(from: coordinatesString)
-                                    print("Extracted Coordinates String: \(coordinatesString)")
-                                    print("Parsed Location: \(location != nil ? String(describing: location!) : "nil")")
+                                    
+                                    // Call the searchLocation function from the LocationService class
+                                    LocationService.shared.searchLocation(query: coordinatesString) { coordinate in
+                                        if let coordinate = coordinate {
+                                            location = coordinate
+                                            print("Parsed Location: \(location)")
+                                            
+                                            // Check if all components are successfully parsed and save the reminder
+                                            if let structuredMessage = structuredMessage, let date = date {
+                                                print("structuredMessage: \(structuredMessage)")
+                                                print("date: \(date)")
+                                                print("location: \(location)")
+                                                
+                                                guard let location = location else {
+                                                    completion(.failure(APIError.incompleteData))
+                                                    return
+                                                }
+                                                
+                                                let newReminder = Reminder(
+                                                    id: UUID(), location: location, message: structuredMessage, date: date
+                                                )
+                                                
+                                                if let reminderStorage = self.reminderStorage {
+                                                    reminderStorage.saveReminder(newReminder)
+                                                    completion(
+                                                        .success(
+                                                            StructuredChatResponse(
+                                                                message: structuredMessage, date: date, location: location)))
+                                                } else {
+                                                    if structuredMessage == nil {
+                                                        print("Error: Message not found in API response")
+                                                    }
+                                                    if date == nil {
+                                                        print("Error: Date not found or failed to parse")
+                                                    }
+                                                    completion(.failure(APIError.incompleteData))
+                                                }
+                                            }
+                                        } else {
+                                            print("Error: Failed to retrieve location coordinates")
+                                            completion(.failure(APIError.incompleteData))
+                                        }
+                                    }
                                 }
-                            }
-
-                            // If all components are successfully parsed, save the reminder.
-                            if let structuredMessage = structuredMessage, let date = date, let location = location {
-                                print("structuredMessage: \(structuredMessage)")
-                                print("date: \(date)")
-                                print("location: \(location)")
-
-                                let newReminder = Reminder(
-                                    id: UUID(), location: location, message: structuredMessage, date: date
-                                )
-
-                                self.reminderStorage?.saveReminder(newReminder)
-                                completion(
-                                    .success(
-                                        StructuredChatResponse(
-                                            message: structuredMessage, date: date, location: location)))
-                            } else {
-                                if structuredMessage == nil {
-                                    print("Error: Message not found in API response")
-                                }
-                                if date == nil {
-                                    print("Error: Date not found or failed to parse")
-                                }
-                                if location == nil {
-                                    print("Error: Location not found or failed to parse")
-                                }
-                                completion(.failure(APIError.incompleteData))
                             }
                         } else {
                             completion(.failure(APIError.invalidResponse))

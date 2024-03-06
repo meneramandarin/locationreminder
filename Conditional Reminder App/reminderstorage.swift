@@ -17,7 +17,7 @@ class ReminderStorage {
     self.context = context
   }
 
-  // Function to save a new reminder via the UI
+  // Function to save a new reminder
   func saveReminder(_ reminder: Reminder) {
     let newReminder = ReminderItem(context: context)
     newReminder.uuid = UUID()
@@ -26,6 +26,12 @@ class ReminderStorage {
     newReminder.message = reminder.message
     newReminder.date = reminder.date
     newReminder.snoozeUntil = reminder.snoozeUntil
+      
+    print("Saving reminder:")
+    print("- Message: \(reminder.message)")
+    print("- Date: \(reminder.date)")
+    print("- Location: \(reminder.location)")
+    print("- Snooze Until: \(reminder.snoozeUntil ?? Date())")
 
     do {
       try context.save()

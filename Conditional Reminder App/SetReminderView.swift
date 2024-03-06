@@ -116,7 +116,7 @@ struct SetReminderView: View {
         }
     }
 
-    // we've this function twice and eventually it needs to move into a class
+    // TODO: call this function from locationservice 
     func searchLocation() {
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = locationQuery
