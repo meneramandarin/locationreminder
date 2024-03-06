@@ -31,17 +31,19 @@ struct SetReminderView: View {
     @State private var locationQuery: String = ""
     @State private var showConfirmationAlert = false
     @State private var annotations = [MKPointAnnotation]() // Added annotations state
-    //@State private var confirmationMessage: String = "" // new to have different messages after saving / editing reminder
+    @State private var confirmationMessage: String = "" // to have different messages after saving / editing reminder
+    @Binding var reminders: [Reminder]
     @Environment(\.presentationMode) var presentationMode
 
     var reminderToEdit: Reminder?
     var isEditing: Bool
 
-    init(reminderToEdit: Reminder? = nil) {
+    init(reminderToEdit: Reminder? = nil, reminders: Binding<[Reminder]>) {
         _reminderText = State(initialValue: reminderToEdit?.message ?? "")
         _selectedDate = State(initialValue: reminderToEdit?.date ?? Date())
         self.reminderToEdit = reminderToEdit
         self.isEditing = (reminderToEdit != nil)
+        self._reminders = reminders
     }
 
     var body: some View {
@@ -82,16 +84,34 @@ struct SetReminderView: View {
 
                     Button("Set Memory") {
                         let selectedLocation = region.center
-                        // Create a new Reminder struct with a new UUID, regardless of editing
-                        let newReminder = Reminder(
-                            id: UUID(),
-                            location: selectedLocation,
-                            message: reminderText,
-                            date: selectedDate,
-                            snoozeUntil: nil // Set this if you have it
-                        )
-                        reminderStorage.saveReminder(newReminder)
-                        showConfirmationAlert = true
+                        
+                        if isEditing, let reminderToEdit = reminderToEdit {
+                            // Update the existing reminder
+                            let updatedReminder = Reminder(
+                                id: reminderToEdit.id,
+                                location: selectedLocation,
+                                message: reminderText,
+                                date: selectedDate,
+                                snoozeUntil: nil // Set this if you have it
+                            )
+                            reminderStorage.updateReminder(updatedReminder)
+                            confirmationMessage = "Your Memory has been updated."
+                            // Update the reminders array
+                                    if let index = reminders.firstIndex(where: { $0.id == updatedReminder.id }) {
+                                        reminders[index] = updatedReminder
+                                    }
+                        } else {
+                            // Create a new reminder
+                            let newReminder = Reminder(
+                                id: UUID(),
+                                location: selectedLocation,
+                                message: reminderText,
+                                date: selectedDate,
+                                snoozeUntil: nil // Set this if you have it
+                            )
+                            reminderStorage.saveReminder(newReminder)
+                            confirmationMessage = "Your Memory has been set."
+                        }
                     }
                     .adaptiveFont(name: "Times New Roman", style: .headline)
                     .padding()
@@ -106,10 +126,12 @@ struct SetReminderView: View {
         }
         .navigationTitle("Set a Memory")
         .navigationBarTitleDisplayMode(.inline)
-        .alert(isPresented: $showConfirmationAlert) {
+        .alert(isPresented: Binding(
+            get: { !confirmationMessage.isEmpty },
+            set: { _ in confirmationMessage = "" }
+        )) {
             Alert(
-                title: Text("Memory Set"),
-                message: Text("Your Memory has been set."),
+                title: Text(confirmationMessage),
                 dismissButton: .default(Text("OK")) {
                     presentationMode.wrappedValue.dismiss() // Dismiss the view to go back
                 }
@@ -137,6 +159,6 @@ struct SetReminderView: View {
 
 struct SetReminderView_Previews: PreviewProvider {
     static var previews: some View {
-        SetReminderView()
+        SetReminderView(reminders: .constant([]))
     }
 }

@@ -5,7 +5,7 @@
 //  Created by Marlene on 15.01.24.
 //
 
-import Combine  // just for testing the timer function
+// import Combine  // just for testing the timer function
 import MapKit
 import SwiftUI
 
@@ -36,7 +36,6 @@ struct ContentView: View {
   @EnvironmentObject var appLogic: AppLogic
   @State private var showLocalAlert: Bool = false
   @State private var reminders: [Reminder] = []  // State variable for reminders
-  //let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()  // Adding a timer here for testing - delete later
   private let reminderStorage = ReminderStorage(
     context: PersistenceController.shared.container.viewContext)
 
@@ -49,7 +48,7 @@ struct ContentView: View {
           ScrollView {
             VStack {
               Spacer().frame(height: geometry.size.height / 5)
-              NavigationLink(destination: SetReminderView()) {
+                NavigationLink(destination: SetReminderView(reminders: $reminders)) {
                 Text("New Memory")
                   .padding()
                   .padding(.vertical, 10)
@@ -136,7 +135,7 @@ struct ContentView: View {
       // sheet to edit reminder 
           
       .sheet(item: $selectedReminderForEditing) { reminder in
-          SetReminderView(reminderToEdit: reminder)
+          SetReminderView(reminderToEdit: reminder, reminders: $reminders)
       }
 
 

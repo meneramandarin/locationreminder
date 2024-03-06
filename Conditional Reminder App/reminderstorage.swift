@@ -41,24 +41,26 @@ class ReminderStorage {
     }
   }
     
-  // Function to update a reminder through Snooze
   func updateReminder(_ reminder: Reminder) {
-    // Fetch the ReminderItem from Core Data
-   let request: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest()
-   request.predicate = NSPredicate(format: "uuid == %@", reminder.id as NSUUID)
-
-    do {
-      let results = try context.fetch(request)
-      if let reminderToUpdate = results.first {
-        // Update properties
-        reminderToUpdate.snoozeUntil = reminder.snoozeUntil
-        // Other properties...
-
-        try context.save()
+      // Fetch the ReminderItem from Core Data
+      let request: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest()
+      request.predicate = NSPredicate(format: "uuid == %@", reminder.id as NSUUID)
+      
+      do {
+          let results = try context.fetch(request)
+          if let reminderToUpdate = results.first {
+              // Update properties
+              reminderToUpdate.message = reminder.message
+              reminderToUpdate.date = reminder.date
+              //reminderToUpdate.latitude = reminder.location.latitude
+              //reminderToUpdate.longitude = reminder.location.longitude
+              reminderToUpdate.snoozeUntil = reminder.snoozeUntil
+              
+              try context.save()
+          }
+      } catch {
+          print("Failed to update reminder: \(error)")
       }
-    } catch {
-      print("Failed to update reminder: \(error)")
-    }
   }
 
   // Function to fetch all reminders to display them in the UI and also to keep on checking which ones to trigger

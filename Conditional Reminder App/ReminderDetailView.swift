@@ -29,7 +29,6 @@ struct ReminderDetailView: View {
                     Text(viewModel.reminder.message)
                         .font(.title)
                     Text(viewModel.reminder.date, style: .date)
-
                     // Updated map view with annotation
                     MapView(region: region(for: viewModel.reminder), annotations: [createAnnotation(for: viewModel.reminder)])
                         .frame(height: 200)
@@ -59,9 +58,6 @@ struct ReminderDetailView: View {
                 }
                 .buttonStyle(ActionButtonStyle())
                 .padding(.bottom, 30)
-                .sheet(isPresented: $isEditing) {
-                    SetReminderView(reminderToEdit: viewModel.reminder)
-                }
 
                 Spacer()
             }
