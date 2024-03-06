@@ -66,7 +66,16 @@ struct SetReminderView: View {
                     TextField(
                         "Search", text: $locationQuery,
                         onCommit: {
-                            searchLocation()
+                            LocationService.shared.searchLocation(query: locationQuery) { coordinate in
+                                if let coordinate = coordinate {
+                                    self.region.center = coordinate
+                                    
+                                    // Create and update annotation for this location
+                                    let annotation = MKPointAnnotation()
+                                    annotation.coordinate = coordinate
+                                    self.annotations = [annotation] // Reset or set annotations for the map
+                                }
+                            }
                         }
                     )
                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -136,23 +145,6 @@ struct SetReminderView: View {
                     presentationMode.wrappedValue.dismiss() // Dismiss the view to go back
                 }
             )
-        }
-    }
-
-    // TODO: call this function from locationservice 
-    func searchLocation() {
-        let request = MKLocalSearch.Request()
-        request.naturalLanguageQuery = locationQuery
-
-        let search = MKLocalSearch(request: request)
-        search.start { response, _ in
-            guard let coordinate = response?.mapItems.first?.placemark.coordinate else { return }
-            self.region.center = coordinate
-
-            // Create and update annotation for this location
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = coordinate
-            self.annotations = [annotation] // Reset or set annotations for the map
         }
     }
 }

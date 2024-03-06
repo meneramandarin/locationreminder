@@ -134,28 +134,6 @@ struct ContentView: View {
       .sheet(item: $selectedReminderForEditing) { reminder in
           SetReminderView(reminderToEdit: reminder, reminders: $reminders)
       }
-
-      // TODO: the sheet still doesn't show because selectedReminderID is set to false by @main - i've no idea how to solve it.
-      .sheet(isPresented: $appLogic.showReminderDetail) {
-        if let reminderId = appLogic.selectedReminderID,
-          let selectedReminder = appLogic.reminders.first(where: { $0.id == reminderId })
-        {
-
-          ReminderDetailView(
-            viewModel: ReminderDetailViewModel(
-              reminder: selectedReminder,
-              context: PersistenceController.shared.container.viewContext)
-          )
-          .onDisappear {
-            appLogic.showReminderDetail = false
-          }
-
-        } else {
-          Text("Error: Could not load reminder detail")  // that's what i currently get when i force the sheet with a button
-        }
-      }
-      // MY BEST FRIEND THE SHEET ENDS HERE
-
     }
   }
 
