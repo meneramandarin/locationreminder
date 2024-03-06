@@ -5,7 +5,6 @@
 //  Created by Marlene on 15.01.24.
 //
 
-// import Combine  // just for testing the timer function
 import MapKit
 import SwiftUI
 
@@ -17,21 +16,21 @@ struct MapView: UIViewRepresentable {
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
         mapView.setRegion(region, animated: false)
-        mapView.isZoomEnabled = gestures // Add this line
-        mapView.isScrollEnabled = gestures // Add this line
-        mapView.isRotateEnabled = gestures // Add this line
+        mapView.isZoomEnabled = gestures
+        mapView.isScrollEnabled = gestures
+        mapView.isRotateEnabled = gestures
         return mapView
     }
 
   func updateUIView(_ uiView: MKMapView, context: Context) {
     uiView.setRegion(region, animated: true)
-    uiView.removeAnnotations(uiView.annotations)  // Clear existing annotations
-    uiView.addAnnotations(annotations)  // Add new annotations
+    uiView.removeAnnotations(uiView.annotations)
+    uiView.addAnnotations(annotations)
   }
 }
 
 struct ContentView: View {
-  @State private var selectedReminderForEditing: Reminder? // NEW
+  @State private var selectedReminderForEditing: Reminder?
   @ObservedObject private var voiceInputManager = VoiceInputManager.shared
   @EnvironmentObject var appLogic: AppLogic
   @State private var showLocalAlert: Bool = false
@@ -63,7 +62,6 @@ struct ContentView: View {
               // Record Button
                 
                 Button(action: {
-                            // Toggle recording
                             voiceInputManager.toggleRecording()
                         }) {
                             Text("Record")
@@ -73,7 +71,7 @@ struct ContentView: View {
                                 .adaptiveFont(name: "Times New Roman", style: .headline)
                                 .background(voiceInputManager.isRecording ? Color(hex: "#F4C2C2") : Color(hex: "FEEBCC")) // Change color based on isRecording - not visible
                                 .foregroundColor(Color(hex: "023020")) // Text color
-                                .cornerRadius(110) // Rounded corners
+                                .cornerRadius(110)
                         }
 
               Spacer().frame(height: geometry.size.height / 4)
@@ -114,7 +112,7 @@ struct ContentView: View {
                         .cornerRadius(10)
                     }
                     .onTapGesture(count: 2) {
-                            selectedReminderForEditing = reminder // NEW EDITING
+                            selectedReminderForEditing = reminder
                     }
                     .padding()
                     .background(Color.gray.opacity(0.2))
@@ -133,11 +131,9 @@ struct ContentView: View {
       }
       
       // sheet to edit reminder 
-          
       .sheet(item: $selectedReminderForEditing) { reminder in
           SetReminderView(reminderToEdit: reminder, reminders: $reminders)
       }
-
 
       // TODO: the sheet still doesn't show because selectedReminderID is set to false by @main - i've no idea how to solve it.
       .sheet(isPresented: $appLogic.showReminderDetail) {

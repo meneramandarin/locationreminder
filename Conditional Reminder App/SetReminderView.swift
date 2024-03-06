@@ -14,7 +14,7 @@ struct ReminderMapView: UIViewRepresentable {
     func updateUIView(_ uiView: MKMapView, context: Context) {
         uiView.setRegion(region, animated: true)
         uiView.removeAnnotations(uiView.annotations) // Clear existing annotations
-        uiView.addAnnotations(annotations) // Add new annotations
+        uiView.addAnnotations(annotations)
     }
 }
 
@@ -30,7 +30,7 @@ struct SetReminderView: View {
     @State private var selectedDate = Date()
     @State private var locationQuery: String = ""
     @State private var showConfirmationAlert = false
-    @State private var annotations = [MKPointAnnotation]() // Added annotations state
+    @State private var annotations = [MKPointAnnotation]()
     @State private var confirmationMessage: String = "" // to have different messages after saving / editing reminder
     @Binding var reminders: [Reminder]
     @Environment(\.presentationMode) var presentationMode
