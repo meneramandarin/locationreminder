@@ -11,17 +11,18 @@ import MapKit
 struct SettingsView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) var presentationMode
-    let reminderStorage: ReminderStorage
-                
-        init(reminderStorage: ReminderStorage) {
-            self.reminderStorage = reminderStorage
-        }
-    
     @State private var locationQuery: String = ""
     @State private var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
         span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))
     @State private var annotations = [MKPointAnnotation]()
+    @State private var hotspots: [Hotspot] = []
+    
+    let reminderStorage: ReminderStorage
+                
+        init(reminderStorage: ReminderStorage) {
+            self.reminderStorage = reminderStorage
+        }
     
     var body: some View {
         VStack {
@@ -60,7 +61,33 @@ struct SettingsView: View {
             .padding()
             
             Spacer()
+            
+            Text("Your Hotspots")
+                .font(.headline)
+            
+            List {
+                ForEach(hotspots) { hotspot in
+                    HStack {
+                        Text(hotspot.name)
+                        Spacer()
+                        Button(action: {
+                            reminderStorage.deleteHotspot(hotspot)
+                            loadHotspots()
+                        }) {
+                            Image(systemName: "xmark.circle")
+                                .foregroundColor(.red)
+                        }
+                    }
+                }
+            }
         }
         .navigationBarTitle("Settings")
+        .onAppear {
+                    loadHotspots()
+    }
+}
+
+private func loadHotspots() {
+        hotspots = reminderStorage.fetchHotspots()
     }
 }

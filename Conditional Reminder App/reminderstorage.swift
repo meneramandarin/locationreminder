@@ -133,5 +133,20 @@ class ReminderStorage {
         }
     }
     
+    func deleteHotspot(_ hotspot: Hotspot) {
+        let request: NSFetchRequest<HotspotItem> = HotspotItem.fetchRequest()
+        request.predicate = NSPredicate(format: "uuid == %@", hotspot.id as CVarArg)
+        
+        do {
+            let results = try context.fetch(request)
+            for object in results {
+                context.delete(object)
+            }
+            try context.save()
+            print("Hotspot '\(hotspot.name)' deleted successfully.")
+        } catch {
+            print("Failed to delete hotspot: \(error)")
+        }
+    }
 
 }
