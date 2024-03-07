@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A11C2362B9A874500843B74 /* ConceptOfTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A11C2352B9A874500843B74 /* ConceptOfTime.swift */; };
 		1A1E68712B915A5B00F53AF4 /* ChatgptAPImanager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1E68702B915A5B00F53AF4 /* ChatgptAPImanager.swift */; };
 		1A421D772B58E455008040CA /* SetReminderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A421D762B58E455008040CA /* SetReminderView.swift */; };
 		1A421D792B59008E008040CA /* ReminderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A421D782B59008E008040CA /* ReminderDetailView.swift */; };
@@ -55,6 +56,7 @@
 
 /* Begin PBXFileReference section */
 		1A01FEDB2B84321F006E8C72 /* Conditional-Reminder-App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Conditional-Reminder-App-Info.plist"; sourceTree = SOURCE_ROOT; };
+		1A11C2352B9A874500843B74 /* ConceptOfTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConceptOfTime.swift; sourceTree = "<group>"; };
 		1A1E68702B915A5B00F53AF4 /* ChatgptAPImanager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatgptAPImanager.swift; sourceTree = "<group>"; };
 		1A421D762B58E455008040CA /* SetReminderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetReminderView.swift; sourceTree = "<group>"; };
 		1A421D782B59008E008040CA /* ReminderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailView.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 				1A4245E02B55D4C7004157B5 /* Conditional_Reminder_AppApp.swift */,
 				1A6E885D2B8E83C500D6337A /* APIManager.swift */,
 				1A1E68702B915A5B00F53AF4 /* ChatgptAPImanager.swift */,
+				1A11C2352B9A874500843B74 /* ConceptOfTime.swift */,
 				1A4245E22B55D4C7004157B5 /* ContentView.swift */,
 				1A78C4632B7EF50B00884E00 /* colorextension.swift */,
 				1A78C4672B7EFFF400884E00 /* FontExtension.swift */,
@@ -327,6 +330,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A11C2362B9A874500843B74 /* ConceptOfTime.swift in Sources */,
 				1AD547162B68916500284D3E /* ReminderItem+CoreDataProperties.swift in Sources */,
 				1AD547152B68916500284D3E /* ReminderItem +CoreDataClass.swift in Sources */,
 				1AD547122B688FAC00284D3E /* ReminderModel.xcdatamodeld in Sources */,

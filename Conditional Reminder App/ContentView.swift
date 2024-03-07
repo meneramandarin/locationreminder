@@ -48,8 +48,9 @@ struct ContentView: View {
           ScrollView {
             VStack {
               Spacer().frame(height: geometry.size.height / 5)
-                
+              
                 /*
+                
                 NavigationLink(destination: SetReminderView(reminders: $reminders)) {
                 Text("New Memo")
                   .padding()
@@ -60,8 +61,9 @@ struct ContentView: View {
                   .foregroundColor(Color(hex: "023020"))
                   .cornerRadius(110)
               }
-                 */
-                
+                 
+               */
+                 
               // Record Button only
                 
                 Button(action: {
