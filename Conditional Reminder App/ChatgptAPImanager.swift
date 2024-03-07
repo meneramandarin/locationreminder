@@ -15,7 +15,7 @@ class GPTapiManager {
   var reminderStorage: ReminderStorage?  // to save reminder
 
   private let openAIURL = "https://api.openai.com/v1/chat/completions"
-  private let apiKey = "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"
+  private let apiKey = "meow"
 
   private init() {}
 
@@ -131,12 +131,12 @@ class GPTapiManager {
         completion: @escaping (Result<StructuredChatResponse, Error>) -> Void
     ) {
         let requestBody: [String: Any] = [
-            "model": "gpt-3.5-turbo",
+            "model": "gpt-4",
             "messages": [
                 [
                     "role": "user",
-                    "content":
-                        "Please extract the following information from the provided instruction, providing the output in a specific format: \n*text of user's instruction*\n* Message:\n* Date (format: YYYY-MM-DD):\n* Location Coordinates: \(transcription)",
+                    "content":"Extract the task, date, and location from this transcript: \(transcription)\nProvide them in the following format:\n* Message:\n* Date: (format: YYYY-MM-DD), convert things like “tomorrow”, “tonight” into  into YYYY-MM-DD \n* Location Coordinates: either an address or names like 'home', 'work'.",
+                        //"Please extract the following information from the provided instruction, providing the output in a specific format: \n*text of user's instruction*\n* Message:\n* Date (format: YYYY-MM-DD):\n* Location Coordinates: \(transcription)",
                 ]
             ],
             "temperature": 0.5,

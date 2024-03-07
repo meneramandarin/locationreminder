@@ -47,8 +47,10 @@ struct ContentView: View {
           ScrollView {
             VStack {
               Spacer().frame(height: geometry.size.height / 5)
+                
+                /*
                 NavigationLink(destination: SetReminderView(reminders: $reminders)) {
-                Text("New Memory")
+                Text("New Memo")
                   .padding()
                   .padding(.vertical, 10)
                   .frame(width: UIScreen.main.bounds.width * 0.5)
@@ -58,12 +60,14 @@ struct ContentView: View {
                   .cornerRadius(110)
               }
 
-              // Record Button
+                 */
+                
+              // Record Button only
                 
                 Button(action: {
                             voiceInputManager.toggleRecording()
                         }) {
-                            Text("Record")
+                            Text("Record Memo")
                                 .padding()
                                 .padding(.vertical, 10)
                                 .frame(width: UIScreen.main.bounds.width * 0.5)
@@ -75,7 +79,7 @@ struct ContentView: View {
 
               Spacer().frame(height: geometry.size.height / 4)
 
-              Text("Your Memories:")
+              Text("Your Memos:")
                 .adaptiveFont(name: "Times New Roman", style: .headline)
                 .foregroundColor(Color(hex: "FEEBCC"))
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -136,8 +140,9 @@ struct ContentView: View {
         // settings
       .navigationBarItems(trailing:
                   NavigationLink(destination: SettingsView(reminderStorage: reminderStorage)) {
-                      Text("Settings")
+                      Text("Hotspots")
                   }
+              .accentColor(Color(hex: "#FEEBCC"))
               )
     }
   }

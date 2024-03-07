@@ -32,7 +32,7 @@ struct SettingsView: View {
             
             ScrollView {
                 VStack {
-                    Text("Define your hot spots")
+                    Text("Set a new Hotspot like your home or work")
                         .adaptiveFont(name: "Times New Roman", style: .headline)
                         .foregroundColor(Color(hex: "FEEBCC"))
                     

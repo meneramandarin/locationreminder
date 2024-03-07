@@ -91,7 +91,7 @@ struct SetReminderView: View {
                         .padding()
                         .labelsHidden()
 
-                    Button("Set Memory") {
+                    Button("Set Memo") {
                         let selectedLocation = region.center
                         
                         if isEditing, let reminderToEdit = reminderToEdit {
@@ -104,7 +104,7 @@ struct SetReminderView: View {
                                 snoozeUntil: nil // Set this if you have it
                             )
                             reminderStorage.updateReminder(updatedReminder)
-                            confirmationMessage = "Your Memory has been updated."
+                            confirmationMessage = "Your Memo has been updated."
                             // Update the reminders array
                                     if let index = reminders.firstIndex(where: { $0.id == updatedReminder.id }) {
                                         reminders[index] = updatedReminder
@@ -119,7 +119,7 @@ struct SetReminderView: View {
                                 snoozeUntil: nil // Set this if you have it
                             )
                             reminderStorage.saveReminder(newReminder)
-                            confirmationMessage = "Your Memory has been set."
+                            confirmationMessage = "Your Memo has been set."
                         }
                     }
                     .adaptiveFont(name: "Times New Roman", style: .headline)
@@ -133,7 +133,7 @@ struct SetReminderView: View {
                 }
             }
         }
-        .navigationTitle("Set a Memory")
+        .navigationTitle("Set a Memo")
         .navigationBarTitleDisplayMode(.inline)
         .alert(isPresented: Binding(
             get: { !confirmationMessage.isEmpty },
