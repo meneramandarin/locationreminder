@@ -30,6 +30,7 @@ struct MapView: UIViewRepresentable {
 }
 
 struct ContentView: View {
+  @State private var isAnimating = false // record button animation
   @State private var selectedReminderForEditing: Reminder?
   @ObservedObject private var voiceInputManager = VoiceInputManager.shared
   @EnvironmentObject var appLogic: AppLogic
@@ -59,24 +60,27 @@ struct ContentView: View {
                   .foregroundColor(Color(hex: "023020"))
                   .cornerRadius(110)
               }
-
                  */
                 
               // Record Button only
                 
                 Button(action: {
                             voiceInputManager.toggleRecording()
+                            withAnimation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+                                isAnimating = voiceInputManager.isRecording
+                            }
                         }) {
                             Text("Record Memo")
                                 .padding()
                                 .padding(.vertical, 10)
                                 .frame(width: UIScreen.main.bounds.width * 0.5)
                                 .adaptiveFont(name: "Times New Roman", style: .headline)
-                                .background(voiceInputManager.isRecording ? Color(hex: "#F4C2C2") : Color(hex: "FEEBCC")) // Change color based on isRecording - not visible
+                                .background(voiceInputManager.isRecording ? Color(hex: "#F4C2C2") : Color(hex: "FEEBCC"))
                                 .foregroundColor(Color(hex: "023020")) // Text color
                                 .cornerRadius(110)
+                                .scaleEffect(isAnimating ? 1.1 : 1.0)
                         }
-
+                
               Spacer().frame(height: geometry.size.height / 4)
 
               Text("Your Memos:")
