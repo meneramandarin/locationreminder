@@ -58,7 +58,6 @@ struct ContentView: View {
                   .cornerRadius(110)
               }
 
-              
               // Record Button
                 
                 Button(action: {
@@ -134,6 +133,12 @@ struct ContentView: View {
       .sheet(item: $selectedReminderForEditing) { reminder in
           SetReminderView(reminderToEdit: reminder, reminders: $reminders)
       }
+        // settings
+      .navigationBarItems(trailing:
+                  NavigationLink(destination: SettingsView(reminderStorage: reminderStorage)) {
+                      Text("Settings")
+                  }
+              )
     }
   }
 

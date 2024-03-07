@@ -109,5 +109,29 @@ class ReminderStorage {
         }
     }
     
+    // functions to save and fetch hotspots
+    
+    func saveHotspot(_ hotspot: Hotspot) {
+        let hotspotItem = hotspot.toHotspotItem(context: context)
+        do {
+            try context.save()
+            print("Hotspot '\(hotspot.name)' saved successfully.")
+        } catch {
+            print("Failed to save hotspot: \(error)")
+        }
+    }
+
+    func fetchHotspots() -> [Hotspot] {
+        let request: NSFetchRequest<HotspotItem> = HotspotItem.fetchRequest()
+        
+        do {
+            let results = try context.fetch(request)
+            return results.map { Hotspot(hotspotItem: $0) }
+        } catch {
+            print("Failed to fetch hotspots: \(error)")
+            return []
+        }
+    }
+    
 
 }
