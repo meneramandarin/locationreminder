@@ -148,5 +148,11 @@ class ReminderStorage {
             print("Failed to delete hotspot: \(error)")
         }
     }
+    
+    // for searching the right hotspot when saving a new memo
+    func findHotspot(with name: String) -> Hotspot? {
+        let hotspots = fetchHotspots()
+        return hotspots.first { $0.name.lowercased() == name.lowercased() }
+    }
 
 }

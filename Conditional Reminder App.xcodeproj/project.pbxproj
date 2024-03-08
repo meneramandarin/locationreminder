@@ -118,7 +118,6 @@
 		1A4245D42B55D4C7004157B5 = {
 			isa = PBXGroup;
 			children = (
-				1ABB64CC2B99363500706638 /* HotspotModel.swift */,
 				1AD547132B68916500284D3E /* ReminderItem +CoreDataClass.swift */,
 				1AD547142B68916500284D3E /* ReminderItem+CoreDataProperties.swift */,
 				1A4245DF2B55D4C7004157B5 /* Conditional Reminder App */,
@@ -146,6 +145,7 @@
 				1A6E885D2B8E83C500D6337A /* APIManager.swift */,
 				1A1E68702B915A5B00F53AF4 /* ChatgptAPImanager.swift */,
 				1A11C2352B9A874500843B74 /* ConceptOfTime.swift */,
+				1ABB64CC2B99363500706638 /* HotspotModel.swift */,
 				1A4245E22B55D4C7004157B5 /* ContentView.swift */,
 				1A78C4632B7EF50B00884E00 /* colorextension.swift */,
 				1A78C4672B7EFFF400884E00 /* FontExtension.swift */,

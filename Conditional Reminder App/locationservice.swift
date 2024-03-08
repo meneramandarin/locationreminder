@@ -65,8 +65,6 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         fatalError("Unhandled authorization status: \(status)")
     }
   }
-
-  // Implement other delegate methods as necessary
     
     // Add the searchLocation function
         func searchLocation(query: String, completion: @escaping (CLLocationCoordinate2D?) -> Void) {
