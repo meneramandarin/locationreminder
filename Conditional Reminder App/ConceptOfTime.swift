@@ -21,6 +21,8 @@ class ConceptOfTime {
         calendar = Calendar.current
     }
     
+    
+    //  TODO: refine definitions 
     func convertRelativeTime(_ relativeTime: String) -> Date? {
         let currentDate = Date()
         

@@ -104,7 +104,7 @@ struct SetReminderView: View {
                                 snoozeUntil: nil // Set this if you have it
                             )
                             reminderStorage.updateReminder(updatedReminder)
-                            confirmationMessage = "Your Memo has been updated."
+                            confirmationMessage = "We updated your Memo."
                             // Update the reminders array
                                     if let index = reminders.firstIndex(where: { $0.id == updatedReminder.id }) {
                                         reminders[index] = updatedReminder
@@ -119,7 +119,7 @@ struct SetReminderView: View {
                                 snoozeUntil: nil // Set this if you have it
                             )
                             reminderStorage.saveReminder(newReminder)
-                            confirmationMessage = "Your Memo has been set."
+                            confirmationMessage = "We set a new Memo."
                         }
                     }
                     .adaptiveFont(name: "Times New Roman", style: .headline)
@@ -133,7 +133,7 @@ struct SetReminderView: View {
                 }
             }
         }
-        .navigationTitle("Set a Memo")
+        .navigationTitle("Save Memo")
         .navigationBarTitleDisplayMode(.inline)
         .alert(isPresented: Binding(
             get: { !confirmationMessage.isEmpty },
@@ -141,7 +141,7 @@ struct SetReminderView: View {
         )) {
             Alert(
                 title: Text(confirmationMessage),
-                dismissButton: .default(Text("OK")) {
+                dismissButton: .default(Text("Oki, thx, bye.")) {
                     presentationMode.wrappedValue.dismiss() // Dismiss the view to go back
                 }
             )

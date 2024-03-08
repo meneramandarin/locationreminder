@@ -30,6 +30,7 @@ struct MapView: UIViewRepresentable {
 }
 
 struct ContentView: View {
+  @State private var showReminderAddedMessage = false // update + notification for reminder has been set
   @State private var isAnimating = false // record button animation
   @State private var selectedReminderForEditing: Reminder?
   @ObservedObject private var voiceInputManager = VoiceInputManager.shared
@@ -138,8 +139,19 @@ struct ContentView: View {
         appLogic.start()
         print("ContentView appeared")
       }
-      
-      // sheet to edit reminder 
+      // refresh for new memo set
+      .onReceive(NotificationCenter.default.publisher(for: .reminderAdded)) { _ in
+              showReminderAddedMessage = true
+              loadReminders()
+          }
+          .alert(isPresented: $showReminderAddedMessage) {
+              Alert(
+                  title: Text("Memo Added"),
+                  message: Text("We got your memo!"),
+                  dismissButton: .default(Text("Oki, thx, bye."))
+              )
+          }
+      // sheet to edit reminder
       .sheet(item: $selectedReminderForEditing) { reminder in
           SetReminderView(reminderToEdit: reminder, reminders: $reminders)
       }

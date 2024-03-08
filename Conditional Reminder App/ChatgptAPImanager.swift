@@ -15,7 +15,7 @@ class GPTapiManager {
   var reminderStorage: ReminderStorage?  // to save reminder
 
   private let openAIURL = "https://api.openai.com/v1/chat/completions"
-  private let apiKey = "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"
+  private let apiKey = ""
 
   private init() {}
 
@@ -135,7 +135,9 @@ class GPTapiManager {
             "messages": [
                 [
                     "role": "user",
-                    "content": "Please extract the following information from the provided instruction, providing the output in a specific format: \n*text of user's instruction*\n* Message:\n* Date (format: YYYY-MM-DD):\n* Location Coordinates: \(transcription)",
+                    "content": "Please extract the following information from the provided instruction, providing the output in a specific format: \n*text of user's instruction*\n* Message:\n* Date:\n* Location Coordinates: \(transcription)",
+                        
+                        // "Please extract the following information from the provided instruction, providing the output in a specific format: \n*text of user's instruction*\n* Message:\n* Date (format: YYYY-MM-DD):\n* Location Coordinates: \(transcription)",
                 ]
             ],
             "temperature": 0.5,
@@ -287,6 +289,12 @@ class GPTapiManager {
                                                 print("Error: Failed to retrieve location coordinates")
                                                 completion(.failure(APIError.incompleteData))
                                             }
+                                            
+                                            // notification that reminder has been saved
+                                            
+                                            NotificationCenter.default.post(name: .reminderAdded, object: nil)
+
+                                            
                                         }
                                     }
                                 }
@@ -313,4 +321,8 @@ class GPTapiManager {
     case coordinateParsingError // For potential issues with location coordinates
     case incompleteData // For when required components are missing
   }
+}
+
+extension Notification.Name {
+    static let reminderAdded = Notification.Name("ReminderAdded")
 }

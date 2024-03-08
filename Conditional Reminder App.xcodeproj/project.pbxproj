@@ -22,9 +22,7 @@
 		1A62B1A02B69CFF00037B695 /* AppLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A62B19F2B69CFF00037B695 /* AppLogic.swift */; };
 		1A62B1A22B69DDEA0037B695 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A62B1A12B69DDEA0037B695 /* PersistenceController.swift */; };
 		1A6E88572B8D70D100D6337A /* VoiceInputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6E88562B8D70D100D6337A /* VoiceInputManager.swift */; };
-		1A6E885C2B8E83AF00D6337A /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 1A6E885B2B8E83AF00D6337A /* Alamofire */; };
 		1A6E885E2B8E83C500D6337A /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6E885D2B8E83C500D6337A /* APIManager.swift */; };
-		1A6E88612B8E865A00D6337A /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1A6E88602B8E865A00D6337A /* KeychainSwift */; };
 		1A73407F2B6B0DC0005247B7 /* ReminderDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A73407E2B6B0DC0005247B7 /* ReminderDetailViewModel.swift */; };
 		1A78C4642B7EF50B00884E00 /* colorextension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A78C4632B7EF50B00884E00 /* colorextension.swift */; };
 		1A78C4682B7EFFF400884E00 /* FontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A78C4672B7EFFF400884E00 /* FontExtension.swift */; };
@@ -93,8 +91,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A6E88612B8E865A00D6337A /* KeychainSwift in Frameworks */,
-				1A6E885C2B8E83AF00D6337A /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,8 +205,6 @@
 			);
 			name = "Conditional Reminder App";
 			packageProductDependencies = (
-				1A6E885B2B8E83AF00D6337A /* Alamofire */,
-				1A6E88602B8E865A00D6337A /* KeychainSwift */,
 			);
 			productName = "Conditional Reminder App";
 			productReference = 1A4245DD2B55D4C7004157B5 /* Conditional Reminder App.app */;
@@ -285,8 +279,6 @@
 			);
 			mainGroup = 1A4245D42B55D4C7004157B5;
 			packageReferences = (
-				1A6E885A2B8E83AF00D6337A /* XCRemoteSwiftPackageReference "Alamofire" */,
-				1A6E885F2B8E865A00D6337A /* XCRemoteSwiftPackageReference "keychain-swift" */,
 			);
 			productRefGroup = 1A4245DE2B55D4C7004157B5 /* Products */;
 			projectDirPath = "";
@@ -733,38 +725,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		1A6E885A2B8E83AF00D6337A /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.8.1;
-			};
-		};
-		1A6E885F2B8E865A00D6337A /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/evgenyneu/keychain-swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 21.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		1A6E885B2B8E83AF00D6337A /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1A6E885A2B8E83AF00D6337A /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
-		1A6E88602B8E865A00D6337A /* KeychainSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1A6E885F2B8E865A00D6337A /* XCRemoteSwiftPackageReference "keychain-swift" */;
-			productName = KeychainSwift;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		1AD547102B688FAC00284D3E /* ReminderModel.xcdatamodeld */ = {
