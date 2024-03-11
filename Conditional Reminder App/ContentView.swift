@@ -30,6 +30,7 @@ struct MapView: UIViewRepresentable {
 }
 
 struct ContentView: View {
+  @StateObject private var notificationHandler = NotificationHandler.shared // new for sheet
   @State private var showReminderAddedMessage = false // update + notification for reminder has been set
   @State private var isAnimating = false // record button animation
   @State private var selectedReminderForEditing: Reminder?
@@ -155,6 +156,28 @@ struct ContentView: View {
       .sheet(item: $selectedReminderForEditing) { reminder in
           SetReminderView(reminderToEdit: reminder, reminders: $reminders)
       }
+        
+        // new sheet
+        
+      .sheet(isPresented: $notificationHandler.showReminderSheet) {
+                  VStack {
+                      Text("Yay!")
+                          .font(.largeTitle)
+                          .padding()
+                      
+                      if let reminder = notificationHandler.selectedReminder {
+                          Text("Reminder: \(reminder.message)")
+                              .font(.title)
+                              .padding()
+                      }
+                      
+                      Button("Close") {
+                          notificationHandler.showReminderSheet = false
+                      }
+                      .padding()
+                  }
+              }
+        
         // settings
       .navigationBarItems(trailing:
                   NavigationLink(destination: SettingsView(reminderStorage: reminderStorage)) {

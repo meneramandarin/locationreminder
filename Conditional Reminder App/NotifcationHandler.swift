@@ -13,7 +13,8 @@ class NotificationHandler: NSObject, ObservableObject {
     private let notificationCenter = UNUserNotificationCenter.current()
     private let reminderStorage = ReminderStorage(context: PersistenceController.shared.container.viewContext)
     
-    @Published var showReminderDetail = false
+    @Published var showReminderSheet = false
+    @Published var selectedReminder: Reminder?
     @Published var selectedReminderID: UUID? = nil
     
     override init() {
@@ -53,19 +54,18 @@ class NotificationHandler: NSObject, ObservableObject {
     }
     
     func handleNotificationResponse(with reminderID: UUID) {
-        print("Notification received for reminder with ID: \(reminderID)")
-        let reminders = reminderStorage.fetchReminders()
-        if let existingReminder = reminders.first(where: { $0.id == reminderID }) {
-            DispatchQueue.main.async {
-                self.selectedReminderID = reminderID
-                self.showReminderDetail = true
-                print("selectedReminderID is now: \(self.selectedReminderID)")
-                print("showReminderDetail set to: \(self.showReminderDetail)")
+            print("Notification received for reminder with ID: \(reminderID)")
+            let reminders = reminderStorage.fetchReminders()
+            if let existingReminder = reminders.first(where: { $0.id == reminderID }) {
+                DispatchQueue.main.async {
+                    self.selectedReminder = existingReminder
+                    self.showReminderSheet = true
+                    print("showReminderSheet set to: \(self.showReminderSheet)")
+                }
+            } else {
+                print("Reminder with ID \(reminderID) not found locally")
             }
-        } else {
-            print("Reminder with ID \(reminderID) not found locally")
         }
-    }
 }
     
     extension NotificationHandler: UNUserNotificationCenterDelegate {
