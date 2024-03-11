@@ -62,12 +62,13 @@ struct ReminderDetailView: View {
                 Spacer()
             }
         }
+        /*
         .onAppear {
             // Check if there's a selectedReminderID when the view appears
             if let selectedReminderID = appLogic.selectedReminderID {
                 viewModel.loadReminder(withId: selectedReminderID)
             }
-        }
+        } */
     }
 
     private func region(for reminder: Reminder) -> MKCoordinateRegion {

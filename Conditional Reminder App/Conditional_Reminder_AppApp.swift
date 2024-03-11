@@ -35,3 +35,30 @@ struct Conditional_Reminder_AppApp: App {
         }
     }
 }
+
+
+
+/* 
+ 
+ init alternative
+ 
+ init() {
+         // Initialize AppLogic with the PersistenceController's context and set it as a StateObject
+         _appLogic = StateObject(wrappedValue: AppLogic(reminderStorage: ReminderStorage(context: PersistenceController.shared.container.viewContext)))
+         
+         // Set the ReminderStorage instance for GPTapiManager
+         GPTapiManager.shared.reminderStorage = ReminderStorage(context: PersistenceController.shared.container.viewContext)
+     }
+ 
+ old initializer
+ 
+ init() {
+ // Initialize ReminderStorage with the PersistenceController's context
+ let reminderStorage = ReminderStorage(context: PersistenceController.shared.context)
+ 
+ // Set the ReminderStorage instance for GPTapiManager
+ GPTapiManager.shared.reminderStorage = reminderStorage
+ 
+ // Initialize AppLogic with ReminderStorage and set it as a StateObject
+ _appLogic = StateObject(wrappedValue: AppLogic(reminderStorage: reminderStorage))
+}*/
