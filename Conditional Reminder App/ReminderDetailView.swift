@@ -11,10 +11,8 @@ import SwiftUI
 
 struct ReminderDetailView: View {
     @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var appLogic: AppLogic // Add AppLogic as an EnvironmentObject
     @ObservedObject var viewModel: ReminderDetailViewModel
-    @State private var isEditing = false
-
+    
     var body: some View {
         ZStack {
             Color(hex: "023020").edgesIgnoringSafeArea(.all)
@@ -52,23 +50,17 @@ struct ReminderDetailView: View {
                 }
                 .buttonStyle(ActionButtonStyle())
 
-                Button("Edit") {
+                /* Button("Edit") {
                     // Set isEditing to true to navigate to SetReminderView
                     self.isEditing = true
                 }
                 .buttonStyle(ActionButtonStyle())
                 .padding(.bottom, 30)
+                 */
 
                 Spacer()
             }
         }
-        /*
-        .onAppear {
-            // Check if there's a selectedReminderID when the view appears
-            if let selectedReminderID = appLogic.selectedReminderID {
-                viewModel.loadReminder(withId: selectedReminderID)
-            }
-        } */
     }
 
     private func region(for reminder: Reminder) -> MKCoordinateRegion {
