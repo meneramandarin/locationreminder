@@ -33,18 +33,22 @@ struct SetReminderView: View {
     @State private var annotations = [MKPointAnnotation]()
     @State private var confirmationMessage: String = "" // to have different messages after saving / editing reminder
     @Binding var reminders: [Reminder]
+    @Binding var isShowingEditView: Bool
     @Environment(\.presentationMode) var presentationMode
 
     var reminderToEdit: Reminder?
     var isEditing: Bool
+    var dismissAction: () -> Void
 
-    init(reminderToEdit: Reminder? = nil, reminders: Binding<[Reminder]>) {
-        _reminderText = State(initialValue: reminderToEdit?.message ?? "")
-        _selectedDate = State(initialValue: reminderToEdit?.date ?? Date())
-        self.reminderToEdit = reminderToEdit
-        self.isEditing = (reminderToEdit != nil)
-        self._reminders = reminders
-    }
+    init(reminderToEdit: Reminder? = nil, reminders: Binding<[Reminder]>, isShowingEditView: Binding<Bool>, dismissAction: @escaping () -> Void) {
+            _reminderText = State(initialValue: reminderToEdit?.message ?? "")
+            _selectedDate = State(initialValue: reminderToEdit?.date ?? Date())
+            self.reminderToEdit = reminderToEdit
+            self.isEditing = (reminderToEdit != nil)
+            self._reminders = reminders
+            self._isShowingEditView = isShowingEditView
+            self.dismissAction = dismissAction
+        }
 
     var body: some View {
         ZStack {
@@ -92,36 +96,38 @@ struct SetReminderView: View {
                         .labelsHidden()
 
                     Button("Set Memo") {
-                        let selectedLocation = region.center
-                        
-                        if isEditing, let reminderToEdit = reminderToEdit {
-                            // Update the existing reminder
-                            let updatedReminder = Reminder(
-                                id: reminderToEdit.id,
-                                location: selectedLocation,
-                                message: reminderText,
-                                date: selectedDate,
-                                snoozeUntil: nil // Set this if you have it
-                            )
-                            reminderStorage.updateReminder(updatedReminder)
-                            confirmationMessage = "We updated your Memo."
-                            // Update the reminders array
+                                let selectedLocation = region.center
+                                
+                                if isEditing, let reminderToEdit = reminderToEdit {
+                                    // Update the existing reminder
+                                    let updatedReminder = Reminder(
+                                        id: reminderToEdit.id,
+                                        location: selectedLocation,
+                                        message: reminderText,
+                                        date: selectedDate,
+                                        snoozeUntil: nil // Set this if you have it
+                                    )
+                                    reminderStorage.updateReminder(updatedReminder)
+                                    confirmationMessage = "We updated your Memo."
+                                    // Update the reminders array
                                     if let index = reminders.firstIndex(where: { $0.id == updatedReminder.id }) {
                                         reminders[index] = updatedReminder
                                     }
-                        } else {
-                            // Create a new reminder
-                            let newReminder = Reminder(
-                                id: UUID(),
-                                location: selectedLocation,
-                                message: reminderText,
-                                date: selectedDate,
-                                snoozeUntil: nil // Set this if you have it
-                            )
-                            reminderStorage.saveReminder(newReminder)
-                            confirmationMessage = "We set a new Memo."
-                        }
-                    }
+                                } else {
+                                    // Create a new reminder
+                                    let newReminder = Reminder(
+                                        id: UUID(),
+                                        location: selectedLocation,
+                                        message: reminderText,
+                                        date: selectedDate,
+                                        snoozeUntil: nil // Set this if you have it
+                                    )
+                                    reminderStorage.saveReminder(newReminder)
+                                    confirmationMessage = "We set a new Memo."
+                                }
+                                showConfirmationAlert = true // Show the confirmation alert
+                                NotificationCenter.default.post(name: .reminderAdded, object: nil) // Notify ContentView to update
+                            }
                     .adaptiveFont(name: "Times New Roman", style: .headline)
                     .padding()
                     .frame(maxWidth: .infinity) // Make the button fill the width
@@ -135,14 +141,11 @@ struct SetReminderView: View {
         }
         .navigationTitle("Save Memo")
         .navigationBarTitleDisplayMode(.inline)
-        .alert(isPresented: Binding(
-            get: { !confirmationMessage.isEmpty },
-            set: { _ in confirmationMessage = "" }
-        )) {
+        .alert(isPresented: $showConfirmationAlert) {
             Alert(
                 title: Text(confirmationMessage),
                 dismissButton: .default(Text("Oki, thx, bye.")) {
-                    presentationMode.wrappedValue.dismiss() // Dismiss the view to go back
+                    dismissAction()
                 }
             )
         }
@@ -151,6 +154,10 @@ struct SetReminderView: View {
 
 struct SetReminderView_Previews: PreviewProvider {
     static var previews: some View {
-        SetReminderView(reminders: .constant([]))
+        SetReminderView(
+            reminders: .constant([]),
+            isShowingEditView: .constant(false),
+            dismissAction: {}
+        )
     }
 }

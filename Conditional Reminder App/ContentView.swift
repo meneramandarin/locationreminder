@@ -153,20 +153,28 @@ struct ContentView: View {
                   dismissButton: .default(Text("Oki, thx, bye."))
               )
           }
-      // sheet to edit reminder
-      .sheet(item: $selectedReminderForEditing) { reminder in
-          SetReminderView(reminderToEdit: reminder, reminders: $reminders)
-      }
         
+        // sheet to edit reminder
+        .sheet(item: $selectedReminderForEditing) { reminder in
+            SetReminderView(
+                reminderToEdit: reminder,
+                reminders: $reminders,
+                isShowingEditView: .constant(true),
+                dismissAction: {
+                    selectedReminderForEditing = nil
+                    NotificationCenter.default.post(name: .reminderAdded, object: nil)
+                }
+            )
+        }
+
         // new sheet
+        .sheet(isPresented: $notificationHandler.showReminderSheet) {
+            if let reminder = notificationHandler.selectedReminder {
+                ReminderDetailView(viewModel: ReminderDetailViewModel(reminder: reminder, context: PersistenceController.shared.container.viewContext))
+            }
+        }
         
-      .sheet(isPresented: $notificationHandler.showReminderSheet) {
-                  if let reminder = notificationHandler.selectedReminder {
-                      ReminderDetailView(viewModel: ReminderDetailViewModel(reminder: reminder, context: PersistenceController.shared.container.viewContext))
-                  }
-              }
-        
-        // settings
+        // Hotspots
       .navigationBarItems(trailing:
                   NavigationLink(destination: SettingsView(reminderStorage: reminderStorage)) {
                       Text("Hotspots")

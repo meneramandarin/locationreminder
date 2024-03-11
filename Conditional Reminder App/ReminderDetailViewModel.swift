@@ -31,8 +31,6 @@ public class ReminderDetailViewModel: ObservableObject {
   }
 
   func editReminder() {
-    // Implement edit logic
-    // This might involve navigating to SetReminderView with the current reminder details
   }
 
     func loadReminder(withId id: UUID) {

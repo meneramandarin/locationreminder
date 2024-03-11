@@ -50,7 +50,7 @@ class AppLogic: NSObject, ObservableObject {
             }
 
             let reminderLocation = CLLocation(latitude: reminder.location.latitude, longitude: reminder.location.longitude)
-            if currentLocation.distance(from: reminderLocation) <= 500 { // 500m range
+            if currentLocation.distance(from: reminderLocation) <= 1000 { // 1km range
                 sendNotification(for: reminder)
             }
         }

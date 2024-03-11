@@ -12,6 +12,7 @@ import SwiftUI
 struct ReminderDetailView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: ReminderDetailViewModel
+    @State private var isShowingEditView = false
     
     var body: some View {
         ZStack {
@@ -20,14 +21,16 @@ struct ReminderDetailView: View {
                 Button("Back") {
                     presentationMode.wrappedValue.dismiss()
                 }
+                .foregroundColor(Color(hex: "FEEBCC"))
                 .padding()
 
                 // Reminder details
                 VStack(alignment: .leading, spacing: 10) {
                     Text(viewModel.reminder.message)
-                        .font(.title)
+                        .font(.headline)
+                        .foregroundColor(Color(hex: "FEEBCC"))
                     Text(viewModel.reminder.date, style: .date)
-                    // Updated map view with annotation
+                        .foregroundColor(Color(hex: "FEEBCC"))
                     MapView(region: region(for: viewModel.reminder), annotations: [createAnnotation(for: viewModel.reminder)])
                         .frame(height: 200)
                         .cornerRadius(10)
@@ -37,29 +40,56 @@ struct ReminderDetailView: View {
                 .cornerRadius(10)
                 .padding(.horizontal)
 
-                // Action buttons
-                Button("Noted") {
-                    viewModel.acknowledgeReminder()
-                    presentationMode.wrappedValue.dismiss()
+                HStack {
+                    Button("Noted") {
+                        viewModel.acknowledgeReminder()
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    .adaptiveFont(name: "Times New Roman", style: .headline)
+                    .foregroundColor(Color(hex: "023020"))
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    .background(Color(hex: "FEEBCC"))
+                    .cornerRadius(40)
+                    
+                    Button("Snooze") {
+                        viewModel.snoozeReminder()
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    .adaptiveFont(name: "Times New Roman", style: .headline)
+                    .foregroundColor(Color(hex: "023020"))
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    .background(Color(hex: "FEEBCC"))
+                    .cornerRadius(40)
+                    
+                    Button("Edit") {
+                        presentationMode.wrappedValue.dismiss() // Dismiss the sheet
+                        self.isShowingEditView = true
+                    }
+                    .adaptiveFont(name: "Times New Roman", style: .headline)
+                    .foregroundColor(Color(hex: "023020"))
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    .background(Color(hex: "FEEBCC"))
+                    .cornerRadius(40)
                 }
-                .buttonStyle(ActionButtonStyle())
-
-                Button("Snooze") {
-                    viewModel.snoozeReminder()
-                    presentationMode.wrappedValue.dismiss()
-                }
-                .buttonStyle(ActionButtonStyle())
-
-                /* Button("Edit") {
-                    // Set isEditing to true to navigate to SetReminderView
-                    self.isEditing = true
-                }
-                .buttonStyle(ActionButtonStyle())
                 .padding(.bottom, 30)
-                 */
+                .frame(maxWidth: .infinity)
+                .padding(.bottom, 30)
 
                 Spacer()
             }
+        }
+        .sheet(isPresented: $isShowingEditView) {
+            SetReminderView(
+                reminderToEdit: viewModel.reminder,
+                reminders: .constant([]),
+                isShowingEditView: $isShowingEditView,
+                dismissAction: {
+                    self.isShowingEditView = false
+                }
+            )
         }
     }
 
