@@ -33,7 +33,6 @@ struct SettingsView: View {
             ScrollView {
                 VStack {
                     Text("Set a new Hotspot like your home or work")
-                        .adaptiveFont(name: "Times New Roman", style: .headline)
                         .foregroundColor(Color(hex: "FEEBCC"))
                     
                     VStack {
@@ -75,7 +74,6 @@ struct SettingsView: View {
                     .padding()
                     
                     Text("Your Hotspots")
-                        .adaptiveFont(name: "Times New Roman", style: .headline)
                         .foregroundColor(Color(hex: "FEEBCC"))
                     
                     ForEach(hotspots) { hotspot in
@@ -101,7 +99,6 @@ struct SettingsView: View {
                 .padding()
             }
         }
-        .navigationBarTitle("Settings")
         .onAppear {
             loadHotspots()
         }

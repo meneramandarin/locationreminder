@@ -55,8 +55,7 @@ struct SetReminderView: View {
             Color(hex: "023020").edgesIgnoringSafeArea(.all)
             ScrollView {
                 VStack(alignment: .leading, spacing: 15) {
-                    Text("Remind me:")
-                        .adaptiveFont(name: "Times New Roman", style: .headline)
+                    Text("What is your Memo about?")
                         .foregroundColor(Color(hex: "FEEBCC")) // beige
                         .padding()
                     TextField("Enter reminder details", text: $reminderText)
@@ -64,7 +63,6 @@ struct SetReminderView: View {
                         .padding()
 
                     Text("Where?")
-                        .adaptiveFont(name: "Times New Roman", style: .headline)
                         .foregroundColor(Color(hex: "FEEBCC")) // beige
                         .padding()
                     TextField(
@@ -87,11 +85,11 @@ struct SetReminderView: View {
                     ReminderMapView(region: $region, annotations: annotations)
                         .frame(height: 300)
                     Text("When?")
-                        .adaptiveFont(name: "Times New Roman", style: .headline)
                         .foregroundColor(Color(hex: "FEEBCC")) // beige
                         .padding()
                     DatePicker("", selection: $selectedDate, displayedComponents: .date)
                         .datePickerStyle(GraphicalDatePickerStyle())
+                        .accentColor(Color(hex: "#FFBF00")) // Amber color
                         .padding()
                         .labelsHidden()
 
@@ -140,6 +138,7 @@ struct SetReminderView: View {
             }
         }
         .navigationTitle("Save Memo")
+        .accentColor(Color(hex: "#FFBF00")) // Amber color for the back button
         .navigationBarTitleDisplayMode(.inline)
         .alert(isPresented: $showConfirmationAlert) {
             Alert(
