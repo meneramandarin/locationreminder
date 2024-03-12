@@ -15,7 +15,7 @@ class GPTapiManager {
   var reminderStorage: ReminderStorage?  // to save reminder
 
   private let openAIURL = "https://api.openai.com/v1/chat/completions"
-  private let apiKey = "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"
+  private let apiKey = "meow"
 
   private init() {}
 
@@ -135,7 +135,9 @@ class GPTapiManager {
             "messages": [
                 [
                     "role": "user",
-                    "content": "Please extract the following information from the provided instruction, providing the output in a specific format: \n*text of user's instruction*\n* Message:\n* Date:\n* Location Coordinates: \(transcription)",
+                    "content":"Please extract the following information from the provided instruction, focusing on the essence of the message and selecting the most relevant location. Provide the output in this format:\n\nMessage: (brief summary of the main task or reminder)\nWhen: (exact date or time reference from the transcription if available, otherwise YYYY-MM-DD format if date is known, or concise concepts like \"tomorrow\", \"tonight\", \"next week\")\nLocation: (most relevant location for the task, concisely stated without unnecessary words like \"close to\" or \"next to\")\n\nThe location should be the general area or context of the task, not a specific place like a restaurant or store, unless that is the only location mentioned. Focus on capturing the key information concisely, avoiding outputs such as \"Back home\", \"Later tonight\", \"Sometime next week\", \"Close to an IKEA\", or \"Next to a Trader Joe's\". Instead, use concise outputs like \"home\", \"tonight\", \"next week\", \"IKEA\", or \"Trader Joe's\".\n\nPlease process the following instructions:\n\n\(transcription)",
+                        
+                        // "Please extract the following information from the provided instruction, providing the output in a specific format: \n*text of user's instruction*\n* Message:\n* When:\n* Location: \(transcription)",
                         
                         // "Please extract the following information from the provided instruction, providing the output in a specific format: \n*text of user's instruction*\n* Message:\n* Date (format: YYYY-MM-DD):\n* Location Coordinates: \(transcription)",
                 ]
@@ -186,11 +188,11 @@ class GPTapiManager {
                             print("Raw content line: \(content)")
 
                             for line in lines {
-                                if line.starts(with: "* Message:") {
-                                    structuredMessage = String(line.dropFirst("* Message:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
+                                if line.starts(with: "Message:") {
+                                    structuredMessage = String(line.dropFirst("Message:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
                                     print("Extracted Message: \(structuredMessage ?? "nil")")
-                                } else if line.starts(with: "* Date:") {
-                                    let dateString = String(line.dropFirst("* Date:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
+                                } else if line.starts(with: "When:") {
+                                    let dateString = String(line.dropFirst("When:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
 
                                     // Use ConceptOfTime to handle different date formats
                                     if let parsedDate = ConceptOfTime.shared.convertRelativeTime(dateString) {
@@ -201,14 +203,14 @@ class GPTapiManager {
                                     } else {
                                         // Attempt to parse the date string using a common format
                                         let formatter = DateFormatter()
-                                        formatter.dateFormat = "MMMM yyyy"
+                                        formatter.dateFormat = "yyyy-MM-dd"
                                         date = formatter.date(from: dateString)
                                     }
 
                                     print("Extracted Date String: \(dateString)")
                                     print("Parsed Date: \(date != nil ? String(describing: date!) : "nil")")
-                                } else if line.starts(with: "* Location Coordinates:") {
-                                    let locationString = String(line.dropFirst("* Location Coordinates:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
+                                } else if line.starts(with: "Location:") {
+                                    let locationString = String(line.dropFirst("Location:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
 
                                     // Check if the parsed location matches any of the user-defined hotspots
                                     if let reminderStorage = self.reminderStorage,

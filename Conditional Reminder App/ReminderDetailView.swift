@@ -67,7 +67,6 @@ struct ReminderDetailView: View {
                     .cornerRadius(40)
                     
                     Button("Edit") {
-                        presentationMode.wrappedValue.dismiss() // Dismiss the sheet
                         self.isShowingEditView = true
                     }
                     .adaptiveFont(name: "Times New Roman", style: .headline)
@@ -91,6 +90,7 @@ struct ReminderDetailView: View {
                 isShowingEditView: $isShowingEditView,
                 dismissAction: {
                     self.isShowingEditView = false
+                    presentationMode.wrappedValue.dismiss()
                 }
             )
         }
