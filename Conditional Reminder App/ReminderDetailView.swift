@@ -18,11 +18,14 @@ struct ReminderDetailView: View {
         ZStack {
             Color(hex: "023020").edgesIgnoringSafeArea(.all)
             VStack(alignment: .leading, spacing: 20) {
-                Button("Back") {
-                    presentationMode.wrappedValue.dismiss()
-                }
-                .foregroundColor(Color(hex: "FEEBCC"))
-                .padding()
+                
+                Spacer()
+                
+                Text("We got a Memo for you:")
+                    .adaptiveFont(name: "Times New Roman", style: .headline)
+                    .foregroundColor(Color(hex: "FEEBCC"))
+                    .multilineTextAlignment(.center) // not sure if this actually works ... prolly would have to be in Hstack.
+                    .padding()
 
                 // Reminder details
                 VStack(alignment: .leading, spacing: 10) {

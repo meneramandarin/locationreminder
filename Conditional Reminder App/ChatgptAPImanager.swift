@@ -15,7 +15,7 @@ class GPTapiManager {
   var reminderStorage: ReminderStorage?  // to save reminder
 
   private let openAIURL = "https://api.openai.com/v1/chat/completions"
-  private let apiKey = "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"
+  private let apiKey = "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"
 
   private init() {}
 
