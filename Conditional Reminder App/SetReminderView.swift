@@ -27,7 +27,8 @@ struct SetReminderView: View {
         center: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
         span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))
     @State private var reminderText: String = ""
-    @State private var selectedDate = Date()
+    @State private var selectedStartDate: Date?
+    @State private var selectedEndDate: Date?
     @State private var locationQuery: String = ""
     @State private var showConfirmationAlert = false
     @State private var annotations = [MKPointAnnotation]()
@@ -42,7 +43,8 @@ struct SetReminderView: View {
 
     init(reminderToEdit: Reminder? = nil, reminders: Binding<[Reminder]>, isShowingEditView: Binding<Bool>, dismissAction: @escaping () -> Void) {
             _reminderText = State(initialValue: reminderToEdit?.message ?? "")
-            _selectedDate = State(initialValue: reminderToEdit?.date ?? Date())
+            _selectedStartDate = State(initialValue: reminderToEdit?.startDate)
+            _selectedEndDate = State(initialValue: reminderToEdit?.endDate)
             self.reminderToEdit = reminderToEdit
             self.isEditing = (reminderToEdit != nil)
             self._reminders = reminders
@@ -85,13 +87,29 @@ struct SetReminderView: View {
                     ReminderMapView(region: $region, annotations: annotations)
                         .frame(height: 300)
                     Text("When?")
-                        .foregroundColor(Color(hex: "FEEBCC")) // beige
-                        .padding()
-                    DatePicker("", selection: $selectedDate, displayedComponents: .date)
-                        .datePickerStyle(GraphicalDatePickerStyle())
-                        .accentColor(Color(hex: "#FFBF00")) // Amber color
-                        .padding()
-                        .labelsHidden()
+                                .foregroundColor(Color(hex: "FEEBCC"))
+                                .padding()
+                            
+                            DatePicker("Start Date", selection: Binding( // getting 2 date pickers??
+                                get: { selectedStartDate ?? Date() },
+                                set: { newValue in
+                                    selectedStartDate = newValue
+                                    if selectedEndDate == nil {
+                                        selectedEndDate = newValue
+                                    }
+                                }
+                            ), displayedComponents: .date)
+                            .datePickerStyle(GraphicalDatePickerStyle())
+                            .accentColor(Color(hex: "#FFBF00"))
+                            .padding()
+                            
+                            DatePicker("End Date", selection: Binding(
+                                get: { selectedEndDate ?? selectedStartDate ?? Date() },
+                                set: { selectedEndDate = $0 }
+                            ), displayedComponents: .date)
+                            .datePickerStyle(GraphicalDatePickerStyle())
+                            .accentColor(Color(hex: "#FFBF00"))
+                            .padding()
 
                     Button("Set Memo") {
                                 let selectedLocation = region.center
@@ -102,7 +120,8 @@ struct SetReminderView: View {
                                         id: reminderToEdit.id,
                                         location: selectedLocation,
                                         message: reminderText,
-                                        date: selectedDate,
+                                        startDate: selectedStartDate,
+                                        endDate: selectedEndDate ?? selectedStartDate,
                                         snoozeUntil: nil // Set this if you have it
                                     )
                                     reminderStorage.updateReminder(updatedReminder)
@@ -117,7 +136,8 @@ struct SetReminderView: View {
                                         id: UUID(),
                                         location: selectedLocation,
                                         message: reminderText,
-                                        date: selectedDate,
+                                        startDate: selectedStartDate,
+                                        endDate: selectedEndDate ?? selectedStartDate,
                                         snoozeUntil: nil // Set this if you have it
                                     )
                                     reminderStorage.saveReminder(newReminder)

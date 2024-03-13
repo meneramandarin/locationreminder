@@ -5,6 +5,8 @@
 //  Created by Marlene on 30.01.24.
 //
 
+// Currently only location based TODO: date based 
+
 import Foundation
 import CoreLocation
 import UserNotifications

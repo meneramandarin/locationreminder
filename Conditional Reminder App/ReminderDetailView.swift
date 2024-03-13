@@ -32,8 +32,26 @@ struct ReminderDetailView: View {
                     Text(viewModel.reminder.message)
                         .font(.headline)
                         .foregroundColor(Color(hex: "FEEBCC"))
-                    Text(viewModel.reminder.date, style: .date)
-                        .foregroundColor(Color(hex: "FEEBCC"))
+                    // accomodate for different dates
+                    if let startDate = viewModel.reminder.startDate,
+                                           let endDate = viewModel.reminder.endDate {
+                                            if startDate == endDate {
+                                                Text(formatDate(startDate))
+                                                    .foregroundColor(Color(hex: "FEEBCC"))
+                                            } else {
+                                                Text("\(formatDate(startDate)) - \(formatDate(endDate))")
+                                                    .foregroundColor(Color(hex: "FEEBCC"))
+                                            }
+                                        } else if let startDate = viewModel.reminder.startDate {
+                                            Text(formatDate(startDate))
+                                                .foregroundColor(Color(hex: "FEEBCC"))
+                                        } else if let endDate = viewModel.reminder.endDate {
+                                            Text(formatDate(endDate))
+                                                .foregroundColor(Color(hex: "FEEBCC"))
+                                        } else {
+                                            Text("No date")
+                                                .foregroundColor(Color(hex: "FEEBCC"))
+                                        }
                     MapView(region: region(for: viewModel.reminder), annotations: [createAnnotation(for: viewModel.reminder)])
                         .frame(height: 200)
                         .cornerRadius(10)
@@ -96,6 +114,12 @@ struct ReminderDetailView: View {
         }
     }
 
+    private func formatDate(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d, yyyy"
+        return dateFormatter.string(from: date)
+    }
+    
     private func region(for reminder: Reminder) -> MKCoordinateRegion {
         MKCoordinateRegion(
             center: reminder.location,

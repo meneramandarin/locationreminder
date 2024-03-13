@@ -38,7 +38,7 @@ class NotificationHandler: NSObject, ObservableObject {
     
     func sendNotification(for reminder: Reminder) {
         let content = UNMutableNotificationContent()
-        content.title = "Reminder"
+        content.title = "We got a Memo for you."
         content.body = reminder.message
         content.sound = UNNotificationSound.default
         content.userInfo = ["reminderId": reminder.id.uuidString]

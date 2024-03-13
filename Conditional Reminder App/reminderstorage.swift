@@ -24,12 +24,14 @@ class ReminderStorage {
     newReminder.locationLatitude = reminder.location.latitude
     newReminder.locationLongitude = reminder.location.longitude
     newReminder.message = reminder.message
-    newReminder.date = reminder.date
+    newReminder.startDate = reminder.startDate
+    newReminder.endDate = reminder.endDate
     newReminder.snoozeUntil = reminder.snoozeUntil
       
     print("Saving reminder:")
     print("- Message: \(reminder.message)")
-    print("- Date: \(reminder.date)")
+    print("- Start Date: \(reminder.startDate ?? Date())")
+    print("- End Date: \(reminder.endDate ?? Date())")
     print("- Location: \(reminder.location)")
     print("- Snooze Until: \(reminder.snoozeUntil ?? Date())")
 
@@ -51,9 +53,10 @@ class ReminderStorage {
           if let reminderToUpdate = results.first {
               // Update properties
               reminderToUpdate.message = reminder.message
-              reminderToUpdate.date = reminder.date
-              //reminderToUpdate.latitude = reminder.location.latitude
-              //reminderToUpdate.longitude = reminder.location.longitude
+              reminderToUpdate.startDate = reminder.startDate
+              reminderToUpdate.endDate = reminder.endDate
+             // reminderToUpdate.latitude = reminder.location.latitude TODO: make locations changable
+             // reminderToUpdate.longitude = reminder.location.longitude
               reminderToUpdate.snoozeUntil = reminder.snoozeUntil
               
               try context.save()
@@ -75,7 +78,8 @@ class ReminderStorage {
           location: CLLocationCoordinate2D(
             latitude: entity.locationLatitude, longitude: entity.locationLongitude),
           message: entity.message ?? "",
-          date: entity.date ?? Date())
+          startDate: entity.startDate,
+          endDate: entity.endDate)
       }
     } catch {
       print("Failed to fetch reminders: \(error)")

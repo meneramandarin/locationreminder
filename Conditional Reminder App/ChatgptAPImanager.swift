@@ -15,7 +15,7 @@ class GPTapiManager {
   var reminderStorage: ReminderStorage?  // to save reminder
 
   private let openAIURL = "https://api.openai.com/v1/chat/completions"
-  private let apiKey = "meow"
+  private let apiKey = "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"
 
   private init() {}
 
@@ -87,7 +87,7 @@ class GPTapiManager {
 
   struct StructuredChatResponse {
     let message: String?
-    let date: Date?
+    let startDate: Date?
     let location: CLLocationCoordinate2D?
   }
 
@@ -182,7 +182,8 @@ class GPTapiManager {
                            let content = message.content {
                             let lines = content.split(separator: "\n")
                             var structuredMessage: String?
-                            var date: Date?
+                            var startDate: Date?
+                            var endDate: Date?
                             var location: CLLocationCoordinate2D?
 
                             print("Raw content line: \(content)")
@@ -191,24 +192,37 @@ class GPTapiManager {
                                 if line.starts(with: "Message:") {
                                     structuredMessage = String(line.dropFirst("Message:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
                                     print("Extracted Message: \(structuredMessage ?? "nil")")
-                                } else if line.starts(with: "When:") {
+                                } else if line.starts(with: "When:") { // HERE
                                     let dateString = String(line.dropFirst("When:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
+                                    
+                                    var startDate: Date?
+                                    var endDate: Date?
 
                                     // Use ConceptOfTime to handle different date formats
-                                    if let parsedDate = ConceptOfTime.shared.convertRelativeTime(dateString) {
-                                        date = parsedDate
+                                    if let dates = ConceptOfTime.shared.convertRelativeTime(dateString) {
+                                        startDate = dates.0
+                                        endDate = dates.1
+                                        
+                                        print("Extracted Date String: \(dateString)")
+                                        print("Parsed Start Date: \(startDate ?? Date())")
+                                        print("Parsed End Date: \(endDate ?? Date())")
                                     } else if dateString.isEmpty {
-                                        // If date is empty, default to today's date
-                                        date = Date()
+                                        // If date is empty, set both start and end date to nil
+                                        startDate = nil
+                                        endDate = nil
                                     } else {
                                         // Attempt to parse the date string using a common format
                                         let formatter = DateFormatter()
                                         formatter.dateFormat = "yyyy-MM-dd"
-                                        date = formatter.date(from: dateString)
+                                        if let parsedDate = formatter.date(from: dateString) {
+                                            startDate = parsedDate
+                                            endDate = parsedDate
+                                        }
                                     }
 
                                     print("Extracted Date String: \(dateString)")
-                                    print("Parsed Date: \(date != nil ? String(describing: date!) : "nil")")
+                                    print("Parsed Start Date: \(startDate != nil ? String(describing: startDate!) : "nil")")
+                                    print("Parsed End Date: \(endDate != nil ? String(describing: endDate!) : "nil")")
                                 } else if line.starts(with: "Location:") {
                                     let locationString = String(line.dropFirst("Location:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
 
@@ -219,18 +233,19 @@ class GPTapiManager {
                                         print("Matched Hotspot: \(hotspot.name)")
 
                                         // Check if all components are successfully parsed and save the reminder
-                                        if let structuredMessage = structuredMessage, let date = date {
+                                        if let structuredMessage = structuredMessage,
+                                           let location = location {
                                             print("structuredMessage: \(structuredMessage)")
-                                            print("date: \(date)")
+                                            print("startDate: \(startDate ?? Date())")
+                                            print("endDate: \(endDate ?? Date())")
                                             print("location: \(location)")
 
-                                            guard let location = location else {
-                                                completion(.failure(APIError.incompleteData))
-                                                return
-                                            }
-
                                             let newReminder = Reminder(
-                                                id: UUID(), location: location, message: structuredMessage, date: date
+                                                id: UUID(),
+                                                location: location,
+                                                message: structuredMessage,
+                                                startDate: startDate,
+                                                endDate: endDate
                                             )
 
                                             if let reminderStorage = self.reminderStorage {
@@ -238,12 +253,12 @@ class GPTapiManager {
                                                 completion(
                                                     .success(
                                                         StructuredChatResponse(
-                                                            message: structuredMessage, date: date, location: location)))
+                                                            message: structuredMessage, startDate: startDate, location: location))) // CHECK IF THIS WORKS
                                             } else {
                                                 if structuredMessage == nil {
                                                     print("Error: Message not found in API response")
                                                 }
-                                                if date == nil {
+                                                if startDate == nil && endDate == nil { // CHECK IF WORKS BECAUSE NIL SHOULD JUST BE NO DATE
                                                     print("Error: Date not found or failed to parse")
                                                 }
                                                 completion(.failure(APIError.incompleteData))
@@ -257,18 +272,15 @@ class GPTapiManager {
                                                 print("Parsed Location: \(location)")
 
                                                 // Check if all components are successfully parsed and save the reminder
-                                                if let structuredMessage = structuredMessage, let date = date {
+                                                if let structuredMessage = structuredMessage,
+                                                   let location = location {
                                                     print("structuredMessage: \(structuredMessage)")
-                                                    print("date: \(date)")
+                                                    print("startDate: \(startDate ?? Date())")
+                                                    print("endDate: \(endDate ?? Date())")
                                                     print("location: \(location)")
 
-                                                    guard let location = location else {
-                                                        completion(.failure(APIError.incompleteData))
-                                                        return
-                                                    }
-
                                                     let newReminder = Reminder(
-                                                        id: UUID(), location: location, message: structuredMessage, date: date
+                                                        id: UUID(), location: location, message: structuredMessage, startDate: startDate, endDate: endDate
                                                     )
 
                                                     if let reminderStorage = self.reminderStorage {
@@ -276,12 +288,12 @@ class GPTapiManager {
                                                         completion(
                                                             .success(
                                                                 StructuredChatResponse(
-                                                                    message: structuredMessage, date: date, location: location)))
+                                                                    message: structuredMessage, startDate: startDate, location: location)))
                                                     } else {
                                                         if structuredMessage == nil {
                                                             print("Error: Message not found in API response")
                                                         }
-                                                        if date == nil {
+                                                        if startDate == nil {
                                                             print("Error: Date not found or failed to parse")
                                                         }
                                                         completion(.failure(APIError.incompleteData))

@@ -23,12 +23,23 @@ public class ReminderDetailViewModel: ObservableObject {
     // Additional logic if needed
   }
 
-  func snoozeReminder() {
-    let snoozeEndDate = Calendar.current.date(byAdding: .hour, value: 24, to: Date())
-    reminder.snoozeUntil = snoozeEndDate
-    // Update the reminder in the storage
-    reminderStorage.updateReminder(reminder)
-  }
+    func snoozeReminder() {
+        /*
+        let oneDayComponents = DateComponents(day: 1)
+                if let startDate = reminder.startDate {
+            reminder.startDate = Calendar.current.date(byAdding: oneDayComponents, to: startDate)
+        } else {
+            reminder.startDate = Calendar.current.date(byAdding: oneDayComponents, to: Date())
+        }
+                if let endDate = reminder.endDate {
+            reminder.endDate = Calendar.current.date(byAdding: oneDayComponents, to: endDate)
+        } else {
+            reminder.endDate = Calendar.current.date(byAdding: oneDayComponents, to: Date())
+        }
+            reminderStorage.updateReminder(reminder)
+         
+         */
+    }
 
   func editReminder() {
   }
