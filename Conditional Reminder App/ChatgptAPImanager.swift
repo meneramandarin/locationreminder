@@ -12,10 +12,10 @@ import Foundation
 
 class GPTapiManager {
   static let shared = GPTapiManager()
-  var reminderStorage: ReminderStorage?  // to save reminder
+  var reminderStorage: ReminderStorage?  
 
   private let openAIURL = "https://api.openai.com/v1/chat/completions"
-  private let apiKey = "meow"
+  private let apiKey = "meow" // TODO: solve this with AWS secret manager
 
   private init() {}
 
@@ -135,7 +135,7 @@ class GPTapiManager {
             "messages": [
                 [
                     "role": "user",
-                    "content": "Please extract the following information from the provided instruction, focusing on the essence of the message and selecting the most relevant location. Provide the output in this format:\n\nMessage: (brief summary of the main task or reminder)\nWhen: (exact date or time reference from the transcription if available, otherwise YYYY-MM-DD format if date is known, or concise concepts like \"tomorrow\", \"tonight\", \"next week\")\nLocation: (most relevant location for the task, concisely stated without unnecessary words like \"close to\" or \"next to\")\n\nThe location should be the general area or context of the task, not a specific place like a restaurant or store, unless that is the only location mentioned. Focus on capturing the key information concisely, avoiding outputs such as \"Back home\", \"Later tonight\", \"Sometime next week\", \"Close to an IKEA\", or \"Next to a Trader Joe's\". Instead, use concise outputs like \"home\", \"tonight\", \"next week\", \"IKEA\", or \"Trader Joe's\".\n\nPlease process the following instructions:\n\n\(transcription)",
+                    "content": "Please extract the following information from the provided instruction, focusing on the essence of the message and selecting the most relevant location. Provide the output in this format:\n\nMessage: (brief summary of the main task or reminder)\nWhen: (exact date or time reference from the transcription if available, otherwise YYYY-MM-DD format if date is known, or concise concepts like \"tomorrow\", \"tonight\", \"in one week\", \"next week\")\nLocation: (most relevant location for the task, concisely stated without unnecessary words like \"close to\" or \"next to\")\n\nThe location should be the general area or context of the task, not a specific place like a restaurant or store, unless that is the only location mentioned. Focus on capturing the key information concisely, avoiding outputs such as \"Back home\", \"Later tonight\", \"Sometime next week\", \"Close to an IKEA\", or \"Next to a Trader Joe's\". Instead, use concise outputs like \"home\", \"tonight\", \"in one week\", \"next week\", \"IKEA\", or \"Trader Joe's\".\n\nPlease process the following instructions:\n\n\(transcription)",
                 ]
             ],
             "temperature": 0.5,
