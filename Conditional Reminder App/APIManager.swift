@@ -13,7 +13,7 @@ class APIManager {
     static let shared = APIManager()
     
     private let openAIURL = "https://api.openai.com/v1" // "https://eofusffqsjbr92r.m.pipedream.net"
-    private let apiKey = "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"
+    private let apiKey = "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"
     
     private init() {}
     

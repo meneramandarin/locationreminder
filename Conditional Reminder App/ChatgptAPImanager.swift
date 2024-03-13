@@ -15,7 +15,7 @@ class GPTapiManager {
   var reminderStorage: ReminderStorage?  // to save reminder
 
   private let openAIURL = "https://api.openai.com/v1/chat/completions"
-  private let apiKey = "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"
+  private let apiKey = "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"
 
   private init() {}
 
@@ -135,11 +135,7 @@ class GPTapiManager {
             "messages": [
                 [
                     "role": "user",
-                    "content":"Please extract the following information from the provided instruction, focusing on the essence of the message and selecting the most relevant location. Provide the output in this format:\n\nMessage: (brief summary of the main task or reminder)\nWhen: (exact date or time reference from the transcription if available, otherwise YYYY-MM-DD format if date is known, or concise concepts like \"tomorrow\", \"tonight\", \"next week\")\nLocation: (most relevant location for the task, concisely stated without unnecessary words like \"close to\" or \"next to\")\n\nThe location should be the general area or context of the task, not a specific place like a restaurant or store, unless that is the only location mentioned. Focus on capturing the key information concisely, avoiding outputs such as \"Back home\", \"Later tonight\", \"Sometime next week\", \"Close to an IKEA\", or \"Next to a Trader Joe's\". Instead, use concise outputs like \"home\", \"tonight\", \"next week\", \"IKEA\", or \"Trader Joe's\".\n\nPlease process the following instructions:\n\n\(transcription)",
-                        
-                        // "Please extract the following information from the provided instruction, providing the output in a specific format: \n*text of user's instruction*\n* Message:\n* When:\n* Location: \(transcription)",
-                        
-                        // "Please extract the following information from the provided instruction, providing the output in a specific format: \n*text of user's instruction*\n* Message:\n* Date (format: YYYY-MM-DD):\n* Location Coordinates: \(transcription)",
+                    "content": "Please extract the following information from the provided instruction, focusing on the essence of the message and selecting the most relevant location. Provide the output in this format:\n\nMessage: (brief summary of the main task or reminder)\nWhen: (exact date or time reference from the transcription if available, otherwise YYYY-MM-DD format if date is known, or concise concepts like \"tomorrow\", \"tonight\", \"next week\")\nLocation: (most relevant location for the task, concisely stated without unnecessary words like \"close to\" or \"next to\")\n\nThe location should be the general area or context of the task, not a specific place like a restaurant or store, unless that is the only location mentioned. Focus on capturing the key information concisely, avoiding outputs such as \"Back home\", \"Later tonight\", \"Sometime next week\", \"Close to an IKEA\", or \"Next to a Trader Joe's\". Instead, use concise outputs like \"home\", \"tonight\", \"next week\", \"IKEA\", or \"Trader Joe's\".\n\nPlease process the following instructions:\n\n\(transcription)",
                 ]
             ],
             "temperature": 0.5,
@@ -152,7 +148,9 @@ class GPTapiManager {
         guard let url = URL(string: "\(openAIURL)") else {
             completion(
                 .failure(
-                    NSError(domain: "com.yourappdomain", code: -1, userInfo: ["message": "Invalid URL"])))
+                    NSError(domain: "com.yourappdomain", code: -1, userInfo: ["message": "Invalid URL"])
+                )
+            )
             return
         }
 
@@ -192,12 +190,9 @@ class GPTapiManager {
                                 if line.starts(with: "Message:") {
                                     structuredMessage = String(line.dropFirst("Message:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
                                     print("Extracted Message: \(structuredMessage ?? "nil")")
-                                } else if line.starts(with: "When:") { // HERE
+                                } else if line.starts(with: "When:") {
                                     let dateString = String(line.dropFirst("When:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
                                     
-                                    var startDate: Date?
-                                    var endDate: Date?
-
                                     // Use ConceptOfTime to handle different date formats
                                     if let dates = ConceptOfTime.shared.convertRelativeTime(dateString) {
                                         startDate = dates.0
@@ -225,93 +220,63 @@ class GPTapiManager {
                                     print("Parsed End Date: \(endDate != nil ? String(describing: endDate!) : "nil")")
                                 } else if line.starts(with: "Location:") {
                                     let locationString = String(line.dropFirst("Location:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
-
+                                    
                                     // Check if the parsed location matches any of the user-defined hotspots
                                     if let reminderStorage = self.reminderStorage,
-                                        let hotspot = reminderStorage.findHotspot(with: locationString) {
+                                       let hotspot = reminderStorage.findHotspot(with: locationString) {
                                         location = hotspot.location
                                         print("Matched Hotspot: \(hotspot.name)")
-
-                                        // Check if all components are successfully parsed and save the reminder
-                                        if let structuredMessage = structuredMessage,
-                                           let location = location {
-                                            print("structuredMessage: \(structuredMessage)")
-                                            print("startDate: \(startDate ?? Date())")
-                                            print("endDate: \(endDate ?? Date())")
-                                            print("location: \(location)")
-
-                                            let newReminder = Reminder(
-                                                id: UUID(),
-                                                location: location,
-                                                message: structuredMessage,
-                                                startDate: startDate,
-                                                endDate: endDate
-                                            )
-
-                                            if let reminderStorage = self.reminderStorage {
-                                                reminderStorage.saveReminder(newReminder)
-                                                completion(
-                                                    .success(
-                                                        StructuredChatResponse(
-                                                            message: structuredMessage, startDate: startDate, location: location))) // CHECK IF THIS WORKS
-                                            } else {
-                                                if structuredMessage == nil {
-                                                    print("Error: Message not found in API response")
-                                                }
-                                                if startDate == nil && endDate == nil { // CHECK IF WORKS BECAUSE NIL SHOULD JUST BE NO DATE
-                                                    print("Error: Date not found or failed to parse")
-                                                }
-                                                completion(.failure(APIError.incompleteData))
-                                            }
-                                        }
                                     } else {
                                         // If the location is not a hotspot, use the searchLocation function
                                         LocationService.shared.searchLocation(query: locationString) { coordinate in
                                             if let coordinate = coordinate {
                                                 location = coordinate
                                                 print("Parsed Location: \(location)")
-
-                                                // Check if all components are successfully parsed and save the reminder
-                                                if let structuredMessage = structuredMessage,
-                                                   let location = location {
-                                                    print("structuredMessage: \(structuredMessage)")
-                                                    print("startDate: \(startDate ?? Date())")
-                                                    print("endDate: \(endDate ?? Date())")
-                                                    print("location: \(location)")
-
-                                                    let newReminder = Reminder(
-                                                        id: UUID(), location: location, message: structuredMessage, startDate: startDate, endDate: endDate
-                                                    )
-
-                                                    if let reminderStorage = self.reminderStorage {
-                                                        reminderStorage.saveReminder(newReminder)
-                                                        completion(
-                                                            .success(
-                                                                StructuredChatResponse(
-                                                                    message: structuredMessage, startDate: startDate, location: location)))
-                                                    } else {
-                                                        if structuredMessage == nil {
-                                                            print("Error: Message not found in API response")
-                                                        }
-                                                        if startDate == nil {
-                                                            print("Error: Date not found or failed to parse")
-                                                        }
-                                                        completion(.failure(APIError.incompleteData))
-                                                    }
-                                                }
                                             } else {
                                                 print("Error: Failed to retrieve location coordinates")
                                                 completion(.failure(APIError.incompleteData))
                                             }
-                                            
-                                            // notification that reminder has been saved
-                                            
-                                            NotificationCenter.default.post(name: .reminderAdded, object: nil)
-
-                                            
                                         }
                                     }
                                 }
+                            }
+                            
+                            // Check if all components are successfully parsed and save the reminder
+                            if let structuredMessage = structuredMessage,
+                               let location = location {
+                                print("structuredMessage: \(structuredMessage)")
+                                print("startDate: \(startDate ?? Date())")
+                                print("endDate: \(endDate ?? Date())")
+                                print("location: \(location)")
+
+                                let newReminder = Reminder(
+                                    id: UUID(),
+                                    location: location,
+                                    message: structuredMessage,
+                                    startDate: startDate,
+                                    endDate: endDate
+                                )
+
+                                if let reminderStorage = self.reminderStorage {
+                                    reminderStorage.saveReminder(newReminder)
+                                    completion(
+                                        .success(
+                                            StructuredChatResponse(
+                                                message: structuredMessage, startDate: startDate, location: location)
+                                        )
+                                    )
+                                } else {
+                                    if structuredMessage == nil {
+                                        print("Error: Message not found in API response")
+                                    }
+                                    if startDate == nil && endDate == nil {
+                                        print("Error: Date not found or failed to parse")
+                                    }
+                                    completion(.failure(APIError.incompleteData))
+                                }
+                                
+                                // Notification that reminder has been saved
+                                NotificationCenter.default.post(name: .reminderAdded, object: nil)
                             }
                         } else {
                             completion(.failure(APIError.invalidResponse))
