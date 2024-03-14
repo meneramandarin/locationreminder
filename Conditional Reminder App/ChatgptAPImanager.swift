@@ -15,7 +15,6 @@ class GPTapiManager {
   var reminderStorage: ReminderStorage?  
 
   private let openAIURL = "https://api.openai.com/v1/chat/completions"
-  private let apiKey = "meow"
 
   private init() {}
 
@@ -127,9 +126,14 @@ class GPTapiManager {
   }
 
     func processInstruction(
-        text: String, transcription: String,
-        completion: @escaping (Result<StructuredChatResponse, Error>) -> Void
-    ) {
+            text: String, transcription: String,
+            completion: @escaping (Result<StructuredChatResponse, Error>) -> Void
+        ) {
+            guard let apiKey = APIKeyManager.shared.getAPIKey() else {
+                completion(.failure(NSError(domain: "com.yourappdomain", code: -1, userInfo: ["message": "API key not found"])))
+                return
+            }
+            
         let requestBody: [String: Any] = [
             "model": "gpt-3.5-turbo",
             "messages": [
@@ -219,8 +223,6 @@ class GPTapiManager {
                                     print("Parsed Start Date: \(startDate != nil ? String(describing: startDate!) : "nil")")
                                     print("Parsed End Date: \(endDate != nil ? String(describing: endDate!) : "nil")")
                                     
-                                    // new
-                                    
                                 } else if line.starts(with: "Location:") {
                                     let locationString = String(line.dropFirst("Location:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
                                     
@@ -248,8 +250,6 @@ class GPTapiManager {
                                         }
                                     }
                                 }
-                                
-                                //
                             }
                             
                             // Check if all components are successfully parsed and save the reminder
@@ -312,7 +312,6 @@ class GPTapiManager {
     case incompleteData // For when required components are missing
   }
     
-    // new
     
     // Helper function to save the reminder
     func saveReminder(structuredMessage: String?, startDate: Date?, endDate: Date?, location: CLLocationCoordinate2D?, completion: @escaping (Result<StructuredChatResponse, Error>) -> Void) {
