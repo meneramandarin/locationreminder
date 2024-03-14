@@ -13,7 +13,6 @@ class APIManager {
     static let shared = APIManager()
     
     private let openAIURL = "https://api.openai.com/v1"
-    private let apiKey = "meow"
     
     private init() {}
     
@@ -58,6 +57,11 @@ class APIManager {
     }
         
     func transcribeAudio(fileURL: URL, completion: @escaping (Result<String, Error>) -> Void) {
+            guard let apiKey = APIKeyManager.shared.getAPIKey() else {
+                completion(.failure(NSError(domain: "com.yourappdomain", code: -1, userInfo: ["message": "API key not found"])))
+                return
+            }
+        
         let headers: [String: String] = [
             "Authorization": "Bearer \(apiKey)"
         ]
@@ -126,6 +130,11 @@ class APIManager {
     }
     
     func chatAPI(prompt: String, completion: @escaping (Result<String, Error>) -> Void) {
+            guard let apiKey = APIKeyManager.shared.getAPIKey() else {
+                completion(.failure(NSError(domain: "com.yourappdomain", code: -2, userInfo: ["message": "API key not found"])))
+                return
+            }
+        
         let headers: [String: String] = [
             "Authorization": "Bearer \(apiKey)",
             "Content-Type": "application/json"
