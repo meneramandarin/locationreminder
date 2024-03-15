@@ -36,6 +36,7 @@
 		1AD547152B68916500284D3E /* ReminderItem +CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD547132B68916500284D3E /* ReminderItem +CoreDataClass.swift */; };
 		1AD547162B68916500284D3E /* ReminderItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD547142B68916500284D3E /* ReminderItem+CoreDataProperties.swift */; };
 		1AE25F0E2BA3B66600BFE66D /* APIKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE25F0D2BA3B66600BFE66D /* APIKeyManager.swift */; };
+		1AE25F102BA3D5F800BFE66D /* AWSKeyStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE25F0F2BA3D5F800BFE66D /* AWSKeyStorage.swift */; };
 		1AFCE90D2B9F86D0008D16CF /* NotifcationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFCE90C2B9F86D0008D16CF /* NotifcationHandler.swift */; };
 /* End PBXBuildFile section */
 
@@ -91,6 +92,7 @@
 		1AD547132B68916500284D3E /* ReminderItem +CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReminderItem +CoreDataClass.swift"; sourceTree = "<group>"; };
 		1AD547142B68916500284D3E /* ReminderItem+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReminderItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		1AE25F0D2BA3B66600BFE66D /* APIKeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeyManager.swift; sourceTree = "<group>"; };
+		1AE25F0F2BA3D5F800BFE66D /* AWSKeyStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSKeyStorage.swift; sourceTree = "<group>"; };
 		1AFCE90C2B9F86D0008D16CF /* NotifcationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifcationHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -151,6 +153,7 @@
 				1AE25F0D2BA3B66600BFE66D /* APIKeyManager.swift */,
 				1A3DB4CC2BA38E5400DC9362 /* KeychainHelper.swift */,
 				1A1E68702B915A5B00F53AF4 /* ChatgptAPImanager.swift */,
+				1AE25F0F2BA3D5F800BFE66D /* AWSKeyStorage.swift */,
 				1A11C2352B9A874500843B74 /* ConceptOfTime.swift */,
 				1ABB64CC2B99363500706638 /* HotspotModel.swift */,
 				1A4245E22B55D4C7004157B5 /* ContentView.swift */,
@@ -339,6 +342,7 @@
 				1AD547152B68916500284D3E /* ReminderItem +CoreDataClass.swift in Sources */,
 				1AD547122B688FAC00284D3E /* ReminderModel.xcdatamodeld in Sources */,
 				1A62B1A22B69DDEA0037B695 /* PersistenceController.swift in Sources */,
+				1AE25F102BA3D5F800BFE66D /* AWSKeyStorage.swift in Sources */,
 				1A78C4642B7EF50B00884E00 /* colorextension.swift in Sources */,
 				1A78C4682B7EFFF400884E00 /* FontExtension.swift in Sources */,
 				1AFCE90D2B9F86D0008D16CF /* NotifcationHandler.swift in Sources */,

@@ -8,5 +8,5 @@
 import Foundation
 
 struct TemporaryKeyStorage {
-    static let apiKey = ""
+    static let apiKey = "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"
 }
