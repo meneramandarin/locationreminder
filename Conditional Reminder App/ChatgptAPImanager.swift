@@ -11,129 +11,123 @@ import CoreLocation
 import Foundation
 
 class GPTapiManager {
-  static let shared = GPTapiManager()
-  var reminderStorage: ReminderStorage?  
+    static let shared = GPTapiManager()
+    var reminderStorage: ReminderStorage?
 
-  private let openAIURL = "https://api.openai.com/v1/chat/completions"
+    private let openAIURL = "https://api.openai.com/v1/chat/completions"
 
-  private init() {}
+    private init() {}
 
-  // Configuration for retries and delays
-  private let maxRetries = 3
-  private let initialDelay = 1.0
-  private let backoffFactor = 2.0
+    // Configuration for retries and delays
+    private let maxRetries = 3
+    private let initialDelay = 1.0
+    private let backoffFactor = 2.0
 
-  // Helper function to handle retries
-  private func performRequest(
-    with urlRequest: URLRequest, currentRetry: Int = 0,
-    completion: @escaping (Result<Data, Error>) -> Void
-  ) {
+    // Helper function to handle retries
+    private func performRequest(
+        with urlRequest: URLRequest, currentRetry: Int = 0,
+        completion: @escaping (Result<Data, Error>) -> Void
+    ) {
 
-    URLSession.shared.dataTask(with: urlRequest) { data, response, error in
-      if let error = error {
-        completion(.failure(error))
-        return
-      }
-
-      // Print Raw API Response (if successful)
-      if let data = data {  // Ensure data exists
-        print("Raw API Response: \(String(data: data, encoding: .utf8) ?? "No data")")
-      } else {
-        print("Raw API Response: No data received")
-      }
-
-      if let httpResponse = response as? HTTPURLResponse {
-        if httpResponse.statusCode == 429 {
-          if let retryAfterValue = httpResponse.value(forHTTPHeaderField: "Retry-After"),
-            let retryAfterSeconds = Double(retryAfterValue)
-          {
-            DispatchQueue.main.asyncAfter(deadline: .now() + retryAfterSeconds) {
-              self.performRequest(
-                with: urlRequest, currentRetry: currentRetry + 1, completion: completion)
-            }
-            return
-          } else {
-            // Handle missing Retry-After... use exponential backoff
-            let delay = self.initialDelay * pow(self.backoffFactor, Double(currentRetry))
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-              self.performRequest(
-                with: urlRequest, currentRetry: currentRetry + 1, completion: completion)
-            }
-            return
-          }
-        } else if (200...299).contains(httpResponse.statusCode) {
-          completion(.success(data ?? Data()))  // Handle successful response
-          return
-        }
-      }
-
-      // Handle other non-success error codes or unexpected scenarios
-      completion(
-        .failure(
-          NSError(
-            domain: "com.yourappdomain",
-            code: (response as? HTTPURLResponse)?.statusCode ?? -1,
-            userInfo: [
-              "message":
-                "Unexpected error (HTTP Status: \((response as? HTTPURLResponse)?.statusCode ?? -1))"
-            ]
-          )
-        )
-      )
-      print("Raw API Response: \(String(data: data ?? Data(), encoding: .utf8) ?? "No data")")  // Attempt to print as text
-    }.resume()
-  }
-
-  struct StructuredChatResponse {
-    let message: String?
-    let startDate: Date?
-    let location: CLLocationCoordinate2D?
-  }
-
-  struct ChatGPTResponse: Decodable {
-    let choices: [Choice]
-  }
-
-  struct ChatCompletionResponse: Decodable {  // Matches the overall API response
-    let choices: [Choice]  // Likely an array now
-  }
-
-  struct Choice: Decodable {
-    let message: Message  // Nested structure
-  }
-
-  struct Message: Decodable {
-    let role: String?
-    let content: String?
-  }
-
-  func parseCoordinates(from coordinatesString: String) -> CLLocationCoordinate2D? {
-    let components = coordinatesString.components(separatedBy: ",")
-    guard components.count == 2,
-      let latitude = Double(components[0].trimmingCharacters(in: .whitespaces)),
-      let longitude = Double(components[1].trimmingCharacters(in: .whitespaces))
-    else {
-      return nil  // Invalid coordinates format
-    }
-
-    return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-  }
-
-  func formatDate(from dateString: String) -> Date? {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "YYYY-MM-dd"
-    return dateFormatter.date(from: dateString)
-  }
-
-    func processInstruction(
-            text: String, transcription: String,
-            completion: @escaping (Result<StructuredChatResponse, Error>) -> Void
-        ) {
-            guard let apiKey = APIKeyManager.shared.getAPIKey() else {
-                completion(.failure(NSError(domain: "com.yourappdomain", code: -1, userInfo: ["message": "API key not found"])))
+        URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
                 return
             }
-            
+
+            // Print Raw API Response (if successful)
+            if let data = data {  // Ensure data exists
+                print("Raw API Response: \(String(data: data, encoding: .utf8) ?? "No data")")
+            } else {
+                print("Raw API Response: No data received")
+            }
+
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 429 {
+                    if let retryAfterValue = httpResponse.value(forHTTPHeaderField: "Retry-After"),
+                       let retryAfterSeconds = Double(retryAfterValue)
+                    {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + retryAfterSeconds) {
+                            self.performRequest(
+                                with: urlRequest, currentRetry: currentRetry + 1, completion: completion)
+                        }
+                        return
+                    } else {
+                        // Handle missing Retry-After... use exponential backoff
+                        let delay = self.initialDelay * pow(self.backoffFactor, Double(currentRetry))
+                        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                            self.performRequest(
+                                with: urlRequest, currentRetry: currentRetry + 1, completion: completion)
+                        }
+                        return
+                    }
+                } else if (200...299).contains(httpResponse.statusCode) {
+                    completion(.success(data ?? Data()))  // Handle successful response
+                    return
+                }
+            }
+
+            // Handle other non-success error codes or unexpected scenarios
+            completion(
+                .failure(
+                    NSError(
+                        domain: "com.yourappdomain",
+                        code: (response as? HTTPURLResponse)?.statusCode ?? -1,
+                        userInfo: [
+                            "message":
+                                "Unexpected error (HTTP Status: \((response as? HTTPURLResponse)?.statusCode ?? -1))"
+                        ]
+                    )
+                )
+            )
+            print("Raw API Response: \(String(data: data ?? Data(), encoding: .utf8) ?? "No data")")  // Attempt to print as text
+        }.resume()
+    }
+
+    struct StructuredChatResponse {
+        let message: String?
+        let startDate: Date?
+        let location: CLLocationCoordinate2D?
+    }
+
+    struct ChatGPTResponse: Decodable {
+        let choices: [Choice]
+    }
+
+    struct ChatCompletionResponse: Decodable {  // Matches the overall API response
+        let choices: [Choice]  // Likely an array now
+    }
+
+    struct Choice: Decodable {
+        let message: Message  // Nested structure
+    }
+
+    struct Message: Decodable {
+        let role: String?
+        let content: String?
+    }
+
+    func parseCoordinates(from coordinatesString: String) -> CLLocationCoordinate2D? {
+        let components = coordinatesString.components(separatedBy: ",")
+        guard components.count == 2,
+              let latitude = Double(components[0].trimmingCharacters(in: .whitespaces)),
+              let longitude = Double(components[1].trimmingCharacters(in: .whitespaces))
+        else {
+            return nil  // Invalid coordinates format
+        }
+
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+
+    func processInstruction(
+        text: String, transcription: String,
+        completion: @escaping (Result<StructuredChatResponse, Error>) -> Void
+    ) {
+        guard let apiKey = APIKeyManager.shared.getAPIKey() else {
+            completion(.failure(NSError(domain: "com.yourappdomain", code: -1, userInfo: ["message": "API key not found"])))
+            return
+        }
+        
         let requestBody: [String: Any] = [
             "model": "gpt-3.5-turbo",
             "messages": [
@@ -186,7 +180,7 @@ class GPTapiManager {
                             var structuredMessage: String?
                             var startDate: Date?
                             var endDate: Date?
-                            var location: CLLocationCoordinate2D?
+                            var locationString: String?
 
                             print("Raw content line: \(content)")
 
@@ -224,70 +218,57 @@ class GPTapiManager {
                                     print("Parsed End Date: \(endDate != nil ? String(describing: endDate!) : "nil")")
                                     
                                 } else if line.starts(with: "Location:") {
-                                    let locationString = String(line.dropFirst("Location:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
-                                    
-                                    // Check if the parsed location matches any of the user-defined hotspots
-                                    if let reminderStorage = self.reminderStorage,
-                                       let hotspot = reminderStorage.findHotspot(with: locationString) {
-                                        location = hotspot.location
-                                        print("Matched Hotspot: \(hotspot.name)")
-                                        
-                                        // Check if all components are successfully parsed and save the reminder
-                                        self.saveReminder(structuredMessage: structuredMessage, startDate: startDate, endDate: endDate, location: location, completion: completion)
-                                    } else {
-                                        // If the location is not a hotspot, use the searchLocation function
-                                        LocationService.shared.searchLocation(query: locationString) { coordinate in
-                                            if let coordinate = coordinate {
-                                                location = coordinate
-                                                print("Parsed Location: \(location)")
-                                                
-                                                // Check if all components are successfully parsed and save the reminder
-                                                self.saveReminder(structuredMessage: structuredMessage, startDate: startDate, endDate: endDate, location: location, completion: completion)
-                                            } else {
-                                                print("Error: Failed to retrieve location coordinates")
-                                                completion(.failure(APIError.incompleteData))
-                                            }
-                                        }
-                                    }
+                                    locationString = String(line.dropFirst("Location:".count)).trimmingCharacters(in: .whitespacesAndNewlines)
                                 }
                             }
                             
-                            // Check if all components are successfully parsed and save the reminder
                             if let structuredMessage = structuredMessage,
-                               let location = location {
-                                print("structuredMessage: \(structuredMessage)")
-                                print("startDate: \(startDate ?? Date())")
-                                print("endDate: \(endDate ?? Date())")
-                                print("location: \(location)")
-
-                                let newReminder = Reminder(
-                                    id: UUID(),
-                                    location: location,
-                                    message: structuredMessage,
-                                    startDate: startDate,
-                                    endDate: endDate
-                                )
-
-                                if let reminderStorage = self.reminderStorage {
-                                    reminderStorage.saveReminder(newReminder)
-                                    completion(
-                                        .success(
-                                            StructuredChatResponse(
-                                                message: structuredMessage, startDate: startDate, location: location)
-                                        )
-                                    )
-                                } else {
-                                    if structuredMessage == nil {
-                                        print("Error: Message not found in API response")
-                                    }
-                                    if startDate == nil && endDate == nil {
-                                        print("Error: Date not found or failed to parse")
-                                    }
-                                    completion(.failure(APIError.incompleteData))
-                                }
+                               let locationString = locationString {
                                 
-                                // Notification that reminder has been saved
-                                NotificationCenter.default.post(name: .reminderAdded, object: nil)
+                                self.processLocation(locationString: locationString) { result in
+                                    switch result {
+                                    case .success(let location):
+                                        if let location = location {
+                                            let newReminder = Reminder(
+                                                id: UUID(),
+                                                location: location,
+                                                message: structuredMessage,
+                                                startDate: startDate,
+                                                endDate: endDate
+                                            )
+                                            
+                                            if let reminderStorage = self.reminderStorage {
+                                                reminderStorage.saveReminder(newReminder) { result in
+                                                    switch result {
+                                                    case .success:
+                                                        completion(
+                                                            .success(
+                                                                StructuredChatResponse(
+                                                                    message: structuredMessage, startDate: startDate, location: location)
+                                                            )
+                                                        )
+                                                    case .failure(let error):
+                                                        completion(.failure(error))
+                                                    }
+                                                }
+                                            } else {
+                                                completion(.failure(APIError.incompleteData))
+                                            }
+                                        } else {
+                                            completion(.failure(APIError.locationNotFound))
+                                        }
+                                    case .failure(let error):
+                                        completion(.failure(error))
+                                    }
+                                }
+                            } else {
+                                if structuredMessage == nil {
+                                    print("Error: Message not found in API response")
+                                }
+                                if startDate == nil && endDate == nil {
+                                    print("Error: Date not found or failed to parse")
+                                }
+                                completion(.failure(APIError.incompleteData))
                             }
                         } else {
                             completion(.failure(APIError.invalidResponse))
@@ -305,57 +286,28 @@ class GPTapiManager {
         }
     }
 
-  enum APIError: Error {
-    case invalidResponse
-    case dateParsingError // For potential issues with the date
-    case coordinateParsingError // For potential issues with location coordinates
-    case incompleteData // For when required components are missing
-  }
-    
-    
-    // Helper function to save the reminder
-    func saveReminder(structuredMessage: String?, startDate: Date?, endDate: Date?, location: CLLocationCoordinate2D?, completion: @escaping (Result<StructuredChatResponse, Error>) -> Void) {
-        // Check if all components are successfully parsed and save the reminder
-        if let structuredMessage = structuredMessage,
-           let location = location {
-            print("structuredMessage: \(structuredMessage)")
-            print("startDate: \(startDate ?? Date())")
-            print("endDate: \(endDate ?? Date())")
-            print("location: \(location)")
-
-            let newReminder = Reminder(
-                id: UUID(),
-                location: location,
-                message: structuredMessage,
-                startDate: startDate,
-                endDate: endDate
-            )
-
-            if let reminderStorage = self.reminderStorage {
-                reminderStorage.saveReminder(newReminder)
-                completion(
-                    .success(
-                        StructuredChatResponse(
-                            message: structuredMessage, startDate: startDate, location: location)
-                    )
-                )
-            } else {
-                if structuredMessage == nil {
-                    print("Error: Message not found in API response")
-                }
-                if startDate == nil && endDate == nil {
-                    print("Error: Date not found or failed to parse")
-                }
-                completion(.failure(APIError.incompleteData))
-            }
-            
-            // Notification that reminder has been saved
-            NotificationCenter.default.post(name: .reminderAdded, object: nil)
-        }
+    enum APIError: Error {
+        case invalidResponse
+        case dateParsingError // For potential issues with the date
+        case coordinateParsingError // For potential issues with location coordinates
+        case incompleteData // For when required components are missing
+        case locationNotFound
     }
     
-}
-
-extension Notification.Name {
-    static let reminderAdded = Notification.Name("ReminderAdded")
+    func processLocation(locationString: String, completion: @escaping (Result<CLLocationCoordinate2D?, Error>) -> Void) {
+        // Check if the parsed location matches any of the user-defined hotspots
+        if let reminderStorage = self.reminderStorage,
+           let hotspot = reminderStorage.findHotspot(with: locationString) {
+            completion(.success(hotspot.location))
+        } else {
+            // If the location is not a hotspot, use the searchLocation function
+            LocationService.shared.searchLocation(query: locationString) { coordinate in
+                if let coordinate = coordinate {
+                    completion(.success(coordinate))
+                } else {
+                    completion(.success(nil))
+                }
+            }
+        }
+    }
 }

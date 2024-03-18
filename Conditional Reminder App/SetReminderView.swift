@@ -111,41 +111,52 @@ struct SetReminderView: View {
                             .accentColor(Color(hex: "#FFBF00"))
                             .padding()
 
-                    Button("Set Memo") {
-                                let selectedLocation = region.center
-                                
-                                if isEditing, let reminderToEdit = reminderToEdit {
-                                    // Update the existing reminder
-                                    let updatedReminder = Reminder(
-                                        id: reminderToEdit.id,
-                                        location: selectedLocation,
-                                        message: reminderText,
-                                        startDate: selectedStartDate,
-                                        endDate: selectedEndDate ?? selectedStartDate,
-                                        snoozeUntil: nil // Set this if you have it
-                                    )
-                                    reminderStorage.updateReminder(updatedReminder)
-                                    confirmationMessage = "We updated your Memo."
-                                    // Update the reminders array
-                                    if let index = reminders.firstIndex(where: { $0.id == updatedReminder.id }) {
-                                        reminders[index] = updatedReminder
-                                    }
-                                } else {
-                                    // Create a new reminder
-                                    let newReminder = Reminder(
-                                        id: UUID(),
-                                        location: selectedLocation,
-                                        message: reminderText,
-                                        startDate: selectedStartDate,
-                                        endDate: selectedEndDate ?? selectedStartDate,
-                                        snoozeUntil: nil // Set this if you have it
-                                    )
-                                    reminderStorage.saveReminder(newReminder)
-                                    confirmationMessage = "We set a new Memo."
-                                }
-                                showConfirmationAlert = true // Show the confirmation alert
-                                NotificationCenter.default.post(name: .reminderAdded, object: nil) // Notify ContentView to update
+                    Button(action: {
+                        let selectedLocation = region.center
+                        
+                        if isEditing, let reminderToEdit = reminderToEdit {
+                            // Update the existing reminder
+                            let updatedReminder = Reminder(
+                                id: reminderToEdit.id,
+                                location: selectedLocation,
+                                message: reminderText,
+                                startDate: selectedStartDate,
+                                endDate: selectedEndDate ?? selectedStartDate,
+                                snoozeUntil: nil // Set this if you have it
+                            )
+                            reminderStorage.updateReminder(updatedReminder)
+                            confirmationMessage = "We updated your Memo."
+                            
+                            // Update the reminders array
+                            if let index = reminders.firstIndex(where: { $0.id == updatedReminder.id }) {
+                                reminders[index] = updatedReminder
                             }
+                        } else {
+                            // Create a new reminder
+                            let newReminder = Reminder(
+                                id: UUID(),
+                                location: selectedLocation,
+                                message: reminderText,
+                                startDate: selectedStartDate,
+                                endDate: selectedEndDate ?? selectedStartDate,
+                                snoozeUntil: nil // Set this if you have it
+                            )
+                            reminderStorage.saveReminder(newReminder) { result in
+                                switch result {
+                                case .success:
+                                    print("Reminder saved successfully")
+                                case .failure(let error):
+                                    print("Failed to save reminder: \(error)")
+                                }
+                            }
+                            confirmationMessage = "We set a new Memo."
+                        }
+                        
+                        showConfirmationAlert = true // Show the confirmation alert
+                        NotificationCenter.default.post(name: .reminderAdded, object: nil) // Notify ContentView to update
+                    }) {
+                        Text("Set Memo")
+                    }
                     .adaptiveFont(name: "Times New Roman", style: .headline)
                     .padding()
                     .frame(maxWidth: .infinity) // Make the button fill the width
@@ -179,4 +190,8 @@ struct SetReminderView_Previews: PreviewProvider {
             dismissAction: {}
         )
     }
+}
+
+extension Notification.Name {
+    static let reminderAdded = Notification.Name("ReminderAdded")
 }

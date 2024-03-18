@@ -18,30 +18,35 @@ class ReminderStorage {
   }
 
   // Function to save a new reminder
-  func saveReminder(_ reminder: Reminder) {
-    let newReminder = ReminderItem(context: context)
-    newReminder.uuid = UUID()
-    newReminder.locationLatitude = reminder.location.latitude
-    newReminder.locationLongitude = reminder.location.longitude
-    newReminder.message = reminder.message
-    newReminder.startDate = reminder.startDate
-    newReminder.endDate = reminder.endDate
-    newReminder.snoozeUntil = reminder.snoozeUntil
-      
-    print("Saving reminder:")
-    print("- Message: \(reminder.message)")
-    print("- Start Date: \(reminder.startDate ?? Date())")
-    print("- End Date: \(reminder.endDate ?? Date())")
-    print("- Location: \(reminder.location)")
-    print("- Snooze Until: \(reminder.snoozeUntil ?? Date())")
+    func saveReminder(_ reminder: Reminder, completion: @escaping (Result<Void, Error>) -> Void) {
+        let newReminder = ReminderItem(context: context)
+        newReminder.uuid = reminder.id
+        newReminder.locationLatitude = reminder.location.latitude
+        newReminder.locationLongitude = reminder.location.longitude
+        newReminder.message = reminder.message
+        newReminder.startDate = reminder.startDate
+        newReminder.endDate = reminder.endDate
+        newReminder.snoozeUntil = reminder.snoozeUntil
+          
+        print("Saving reminder:")
+        print("- Message: \(reminder.message)")
+        print("- Start Date: \(reminder.startDate ?? Date())")
+        print("- End Date: \(reminder.endDate ?? Date())")
+        print("- Location: \(reminder.location)")
+        print("- Snooze Until: \(reminder.snoozeUntil ?? Date())")
 
-    do {
-      try context.save()
-      print("Reminder with message '\(reminder.message)' saved successfully.")
-    } catch let error as NSError {
-      print("Failed to save reminder: \(error), \(error.userInfo)")
+        do {
+            try context.save()
+            print("Reminder with message '\(reminder.message)' saved successfully.")
+            completion(.success(()))
+            
+            // Notification that reminder has been saved
+            NotificationCenter.default.post(name: .reminderAdded, object: nil)
+        } catch let error as NSError {
+            print("Failed to save reminder: \(error), \(error.userInfo)")
+            completion(.failure(error))
+        }
     }
-  }
     
   func updateReminder(_ reminder: Reminder) {
       // Fetch the ReminderItem from Core Data
