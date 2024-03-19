@@ -15,7 +15,7 @@ struct Reminder: Identifiable {
   let startDate: Date?
   let endDate: Date?
   var snoozeUntil: Date?
-  let hotspotName: String
+  let hotspotName: String?
 
   // Custom initializer
     init(

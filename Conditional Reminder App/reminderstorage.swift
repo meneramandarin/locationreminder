@@ -27,6 +27,7 @@ class ReminderStorage {
         newReminder.startDate = reminder.startDate
         newReminder.endDate = reminder.endDate
         newReminder.snoozeUntil = reminder.snoozeUntil
+        newReminder.hotspotName = reminder.hotspotName
           
         print("Saving reminder:")
         print("- Message: \(reminder.message)")
@@ -34,6 +35,7 @@ class ReminderStorage {
         print("- End Date: \(reminder.endDate ?? Date())")
         print("- Location: \(reminder.location)")
         print("- Snooze Until: \(reminder.snoozeUntil ?? Date())")
+        print("- Hotspot Name: \(reminder.hotspotName ?? "None")")
 
         do {
             try context.save()
@@ -84,7 +86,9 @@ class ReminderStorage {
             latitude: entity.locationLatitude, longitude: entity.locationLongitude),
           message: entity.message ?? "",
           startDate: entity.startDate,
-          endDate: entity.endDate)
+          endDate: entity.endDate,
+          hotspotName: entity.hotspotName ?? ""
+        )
       }
     } catch {
       print("Failed to fetch reminders: \(error)")

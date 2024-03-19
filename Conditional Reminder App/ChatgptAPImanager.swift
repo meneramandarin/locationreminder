@@ -88,6 +88,7 @@ class GPTapiManager {
         let message: String?
         let startDate: Date?
         let location: CLLocationCoordinate2D?
+        let hotspotName: String?
     }
 
     struct ChatGPTResponse: Decodable {
@@ -227,16 +228,16 @@ class GPTapiManager {
                                 
                                 self.processLocation(locationString: locationString) { result in
                                     switch result {
-                                    case .success(let location):
+                                    case .success(let (location, hotspotName)):
                                         if let location = location {
                                             let newReminder = Reminder(
                                                 id: UUID(),
                                                 location: location,
                                                 message: structuredMessage,
                                                 startDate: startDate,
-                                                endDate: endDate
+                                                endDate: endDate,
+                                                hotspotName: hotspotName ?? ""
                                             )
-                                            
                                             if let reminderStorage = self.reminderStorage {
                                                 reminderStorage.saveReminder(newReminder) { result in
                                                     switch result {
@@ -244,7 +245,11 @@ class GPTapiManager {
                                                         completion(
                                                             .success(
                                                                 StructuredChatResponse(
-                                                                    message: structuredMessage, startDate: startDate, location: location)
+                                                                    message: structuredMessage,
+                                                                    startDate: startDate,
+                                                                    location: location,
+                                                                    hotspotName: hotspotName
+                                                                )
                                                             )
                                                         )
                                                     case .failure(let error):
@@ -294,18 +299,16 @@ class GPTapiManager {
         case locationNotFound
     }
     
-    func processLocation(locationString: String, completion: @escaping (Result<CLLocationCoordinate2D?, Error>) -> Void) {
-        // Check if the parsed location matches any of the user-defined hotspots
+    func processLocation(locationString: String, completion: @escaping (Result<(CLLocationCoordinate2D?, String?), Error>) -> Void) {
         if let reminderStorage = self.reminderStorage,
            let hotspot = reminderStorage.findHotspot(with: locationString) {
-            completion(.success(hotspot.location))
+            completion(.success((hotspot.location, hotspot.name)))
         } else {
-            // If the location is not a hotspot, use the searchLocation function
             LocationService.shared.searchLocation(query: locationString) { coordinate in
                 if let coordinate = coordinate {
-                    completion(.success(coordinate))
+                    completion(.success((coordinate, nil)))
                 } else {
-                    completion(.success(nil))
+                    completion(.success((nil, nil)))
                 }
             }
         }

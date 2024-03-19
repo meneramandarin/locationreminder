@@ -122,7 +122,8 @@ struct SetReminderView: View {
                                 message: reminderText,
                                 startDate: selectedStartDate,
                                 endDate: selectedEndDate ?? selectedStartDate,
-                                snoozeUntil: nil // Set this if you have it
+                                snoozeUntil: nil, // Set this if you have it
+                                hotspotName: "" // Set this if you have it, currently just empty
                             )
                             reminderStorage.updateReminder(updatedReminder)
                             confirmationMessage = "We updated your Memo."
@@ -139,7 +140,8 @@ struct SetReminderView: View {
                                 message: reminderText,
                                 startDate: selectedStartDate,
                                 endDate: selectedEndDate ?? selectedStartDate,
-                                snoozeUntil: nil // Set this if you have it
+                                snoozeUntil: nil, // Set this if you have it
+                                hotspotName: "" // empty string now
                             )
                             reminderStorage.saveReminder(newReminder) { result in
                                 switch result {
