@@ -15,6 +15,7 @@ struct Reminder: Identifiable {
   let startDate: Date?
   let endDate: Date?
   var snoozeUntil: Date?
+  let hotspotName: String
 
   // Custom initializer
     init(
@@ -23,7 +24,8 @@ struct Reminder: Identifiable {
         message: String,
         startDate: Date? = nil,
         endDate: Date? = nil,
-        snoozeUntil: Date? = nil
+        snoozeUntil: Date? = nil,
+        hotspotName: String
       ) {
         self.id = id // Use the passed-in UUID
         self.location = location
@@ -31,5 +33,6 @@ struct Reminder: Identifiable {
         self.startDate = startDate
         self.endDate = endDate
         self.snoozeUntil = snoozeUntil
+        self.hotspotName = hotspotName
       }
     }

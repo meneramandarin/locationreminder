@@ -23,6 +23,7 @@ extension ReminderItem {
     @NSManaged public var snoozeUntil: Date?
     @NSManaged public var startDate: Date?
     @NSManaged public var uuid: UUID?
+    @NSManaged public var hotspotName: String?
 
 }
 
