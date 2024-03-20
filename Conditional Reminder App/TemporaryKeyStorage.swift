@@ -8,6 +8,6 @@
 import Foundation
 
 struct TemporaryKeyStorage {
-    static let apiKey = "meow"
+    static let apiKey = ""
 }
 
