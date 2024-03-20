@@ -34,13 +34,36 @@ struct HotspotGroup {
   let reminders: [Reminder]
 }
 
+struct RecordButtonView: View {
+
+  @ObservedObject private var voiceInputManager = VoiceInputManager.shared
+  @State private var isAnimating = false
+
+  var body: some View {
+    Button(action: {
+      voiceInputManager.toggleRecording()
+      withAnimation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+        isAnimating = voiceInputManager.isRecording
+      }
+    }) {
+      Text("Record Memo")
+        .padding()
+        .padding(.vertical, 10)
+        .frame(width: UIScreen.main.bounds.width * 0.5)
+        .adaptiveFont(name: "Times New Roman", style: .headline)
+        .background(voiceInputManager.isRecording ? Color(hex: "#F4C2C2") : Color(hex: "FEEBCC"))
+        .foregroundColor(Color(hex: "023020"))
+        .cornerRadius(110)
+        .scaleEffect(isAnimating ? 1.1 : 1.0)
+    }
+  }
+}
+
 struct ContentView: View {
   @StateObject private var notificationHandler = NotificationHandler.shared  // new for sheet
   @State private var reminderDetailViewModel: ReminderDetailViewModel?
   @State private var showReminderAddedMessage = false  // update + notification for reminder has been set
-  @State private var isAnimating = false  // record button animation
   @State private var selectedReminderForEditing: Reminder?
-  @ObservedObject private var voiceInputManager = VoiceInputManager.shared
   @EnvironmentObject var appLogic: AppLogic
   @State private var showLocalAlert: Bool = false
   @State private var reminders: [Reminder] = []  // State variable for reminders
@@ -59,117 +82,92 @@ struct ContentView: View {
 
         GeometryReader { geometry in
           ScrollView {
-              
-              // button vstack
-              
-              VStack {
-                  Spacer().frame(height: geometry.size.height / 5)
 
-                  VStack {
-                      Button(action: {
-                          voiceInputManager.toggleRecording()
-                          withAnimation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
-                              isAnimating = voiceInputManager.isRecording
-                          }
-                      }) {
-                          Text("Record Memo")
-                              .padding()
-                              .padding(.vertical, 10)
-                              .frame(width: UIScreen.main.bounds.width * 0.5)
-                              .adaptiveFont(name: "Times New Roman", style: .headline)
-                              .background(
-                                  voiceInputManager.isRecording ? Color(hex: "#F4C2C2") : Color(hex: "FEEBCC")
-                              )
-                              .foregroundColor(Color(hex: "023020"))
-                              .cornerRadius(110)
-                              .scaleEffect(isAnimating ? 1.1 : 1.0)
-                      }
-                  }
-                  
-                  Spacer().frame(height: geometry.size.height / 4)
-              }
-              
-              // reminder list vstack
-              
-              VStack {
-                  Text("Your Memos:")
+            VStack {
+              Spacer().frame(height: geometry.size.height / 5)
+
+              RecordButtonView()
+
+              Spacer().frame(height: geometry.size.height / 4)
+
+              Text("Your Memos:")
+                .adaptiveFont(name: "Times New Roman", style: .headline)
+                .foregroundColor(Color(hex: "FEEBCC"))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
+              ForEach(hotspotGroups, id: \.name) { group in
+                Section(
+                  header: Text(group.name)
                     .adaptiveFont(name: "Times New Roman", style: .headline)
                     .foregroundColor(Color(hex: "FEEBCC"))
-                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
-                  ForEach(hotspotGroups, id: \.name) { group in
-                    Section(
-                      header: Text(group.name)
-                        .adaptiveFont(name: "Times New Roman", style: .headline)
-                        .foregroundColor(Color(hex: "FEEBCC"))
-                        .padding(.horizontal)
-                    ) {
-                      ForEach(group.reminders, id: \.id) { reminder in
+                ) {
+                  ForEach(group.reminders, id: \.id) { reminder in
+                    VStack(alignment: .leading) {
+                      HStack {
                         VStack(alignment: .leading) {
-                          HStack {
-                            VStack(alignment: .leading) {
-                              Text(reminder.message)
-                                .font(.headline)
-                                .foregroundColor(Color(hex: "FEEBCC"))
+                          Text(reminder.message)
+                            .font(.headline)
+                            .foregroundColor(Color(hex: "FEEBCC"))
 
-                              // date
-                              if let startDate = reminder.startDate {
-                                if let endDate = reminder.endDate {
-                                  if startDate == endDate {
-                                    Text(formatDate(startDate))
-                                      .font(.subheadline)
-                                      .foregroundColor(Color(hex: "FEEBCC"))
-                                  } else {
-                                    Text("\(formatDate(startDate)) - \(formatDate(endDate))")
-                                      .font(.subheadline)
-                                      .foregroundColor(Color(hex: "FEEBCC"))
-                                  }
-                                } else {
-                                  Text(formatDate(startDate))
-                                    .font(.subheadline)
-                                    .foregroundColor(Color(hex: "FEEBCC"))
-                                }
-                              } else if let endDate = reminder.endDate {
-                                Text(formatDate(endDate))
+                          // date
+                          if let startDate = reminder.startDate {
+                            if let endDate = reminder.endDate {
+                              if startDate == endDate {
+                                Text(formatDate(startDate))
                                   .font(.subheadline)
                                   .foregroundColor(Color(hex: "FEEBCC"))
                               } else {
-                                Text("Whenever 🤷")
+                                Text("\(formatDate(startDate)) - \(formatDate(endDate))")
                                   .font(.subheadline)
                                   .foregroundColor(Color(hex: "FEEBCC"))
                               }
+                            } else {
+                              Text(formatDate(startDate))
+                                .font(.subheadline)
+                                .foregroundColor(Color(hex: "FEEBCC"))
                             }
-
-                            Spacer()
-
-                            Button(action: {
-                              reminderStorage.deleteReminder(reminder)
-                              loadReminders()
-                            }) {
-                              Image(systemName: "xmark.circle")
-                                .foregroundColor(Color(hex: "#F4C2C2"))
-                            }
+                          } else if let endDate = reminder.endDate {
+                            Text(formatDate(endDate))
+                              .font(.subheadline)
+                              .foregroundColor(Color(hex: "FEEBCC"))
+                          } else {
+                            Text("Whenever 🤷")
+                              .font(.subheadline)
+                              .foregroundColor(Color(hex: "FEEBCC"))
                           }
+                        }
 
-                          MapView(
-                            region: region(for: reminder),
-                            annotations: [createAnnotation(for: reminder)],
-                            gestures: false
-                          )
-                          .frame(height: 200)
-                          .cornerRadius(10)
+                        Spacer()
+
+                        Button(action: {
+                          reminderStorage.deleteReminder(reminder)
+                          loadReminders()
+                        }) {
+                          Image(systemName: "xmark.circle")
+                            .foregroundColor(Color(hex: "#F4C2C2"))
                         }
-                        .onTapGesture(count: 2) {
-                          selectedReminderForEditing = reminder
-                        }
-                        .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(10)
-                        .padding(.horizontal)
                       }
+
+                      MapView(
+                        region: region(for: reminder),
+                        annotations: [createAnnotation(for: reminder)],
+                        gestures: false
+                      )
+                      .frame(height: 200)
+                      .cornerRadius(10)
                     }
+                    .onTapGesture(count: 2) {
+                      selectedReminderForEditing = reminder
+                    }
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+                    .padding(.horizontal)
                   }
                 }
+              }
+            }
           }
         }
       }
@@ -255,3 +253,4 @@ struct ContentView_Previews: PreviewProvider {
     ContentView()
   }
 }
+
