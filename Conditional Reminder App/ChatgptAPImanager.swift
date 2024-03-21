@@ -306,9 +306,9 @@ class GPTapiManager {
         } else {
             LocationService.shared.searchLocation(query: locationString) { coordinate in
                 if let coordinate = coordinate {
-                    completion(.success((coordinate, nil)))
+                    completion(.success((coordinate, "Other Memos")))
                 } else {
-                    completion(.success((nil, nil)))
+                    completion(.success((nil, "No Location Selected")))
                 }
             }
         }
