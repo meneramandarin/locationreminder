@@ -59,7 +59,7 @@ class AppLogic: NSObject, ObservableObject {
         }
     }
     
-    // checks time - this can turn into a whole rabbit hole in and of itself wrt optimization, because in should reasonably only check if the date is close and otherwise pause, kinda like nested geofencing ... and well opening hours of stores *cries*
+    // checks time - this can turn into a whole rabbit hole in and of itself wrt optimization, because in should reasonably only check if the date is close and otherwise pause, kinda like nested geofencing ... and well opening hours of stores *cries* - here
     private func whatTime(_ reminder: Reminder) -> Bool {
             let currentDate = Date()
 
