@@ -195,7 +195,7 @@ class ConceptOfTime {
                 }
             }
             
-            // Check for "in x days" not working cos it takes in five days and then doesn't understand five
+            // Check for "in x days"
             if relativeTime.lowercased().hasPrefix("in ") && relativeTime.lowercased().hasSuffix(" days") {
                 if let daysString = relativeTime.lowercased().components(separatedBy: " ").dropFirst().dropLast().first,
                    let days = Int(daysString) {
@@ -203,7 +203,23 @@ class ConceptOfTime {
                     return (futureDate, futureDate)
                 }
             }
+            
+            // Check for "in x days" - hardcoded numbers
+            if relativeTime.lowercased().hasPrefix("in ") && relativeTime.lowercased().hasSuffix(" days") {
+                if let daysString = relativeTime.lowercased().components(separatedBy: " ").dropFirst().dropLast().first {
+                    let numberWords = [
+                        "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
+                        "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+                        "eleven": 11, "twelve": 12, "fourteen": 14, "hundred": 100
+                    ]
 
+                    if let days = numberWords[daysString] {
+                        let futureDate = calendar.date(byAdding: .day, value: days, to: currentDate)
+                        return (futureDate, futureDate)
+                    }
+                }
+            }
+            
             // Check for "in a couple of days"
             if relativeTime.lowercased() == "in a couple of days" {
                 let startDate = calendar.date(byAdding: .day, value: 2, to: currentDate)

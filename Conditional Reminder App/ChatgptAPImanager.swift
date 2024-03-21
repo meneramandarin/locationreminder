@@ -306,7 +306,7 @@ class GPTapiManager {
         } else {
             LocationService.shared.searchLocation(query: locationString) { coordinate in
                 if let coordinate = coordinate {
-                    completion(.success((coordinate, "Other Memos")))
+                    completion(.success((coordinate, "Miscellaneous Memos"))) // TODO: at some point come up with a logic that auto groups memos and auto assigns hotspots like "Germany", "Japan" etc. 
                 } else {
                     completion(.success((nil, "No Location Selected")))
                 }
