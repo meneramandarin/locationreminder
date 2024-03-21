@@ -5,6 +5,7 @@
 //  Created by Marlene on 07.03.24.
 //
 
+// TODO: add "this weekend" "next weekend"
 // TODO: Implement short-circuit evaluation or early termination conditions to stop the parsing process as soon as a match is found, rather than continuing to iterate through the remaining concepts unnecessarily.
 
 import Foundation
@@ -68,6 +69,27 @@ class ConceptOfTime {
             let startOfNextWeek = calendar.date(byAdding: .day, value: daysToNextMonday, to: calendar.startOfDay(for: currentDate))
             let endOfNextWeek = calendar.date(byAdding: .day, value: 6, to: startOfNextWeek!)
             return (startOfNextWeek, endOfNextWeek)
+            
+        case "this weekend", "next weekend":
+            let currentWeekday = calendar.component(.weekday, from: currentDate)
+            let isThursdayOrLater = currentWeekday >= 5 // Thursday is weekday 5
+            
+            var startDate: Date?
+            var endDate: Date?
+            
+            if relativeTime.lowercased() == "this weekend" || (relativeTime.lowercased() == "next weekend" && !isThursdayOrLater) {
+                // If it's "this weekend" or "next weekend" on Monday, Tuesday, or Wednesday
+                let components = DateComponents(weekday: 7) // Saturday is weekday 7
+                startDate = calendar.nextDate(after: currentDate, matching: components, matchingPolicy: .nextTime)
+                endDate = calendar.date(byAdding: .day, value: 1, to: startDate!)
+            } else if relativeTime.lowercased() == "next weekend" && isThursdayOrLater {
+                // If it's "next weekend" on Thursday, Friday, Saturday, or Sunday
+                let components = DateComponents(weekday: 7) // Saturday is weekday 7
+                startDate = calendar.nextDate(after: calendar.date(byAdding: .day, value: 7, to: currentDate)!, matching: components, matchingPolicy: .nextTime)
+                endDate = calendar.date(byAdding: .day, value: 1, to: startDate!)
+            }
+            
+            return (startDate, endDate)
             
         case "in a week", "in one week", "one week", "a week":
             let futureDate = calendar.date(byAdding: .day, value: 7, to: currentDate)
