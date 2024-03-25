@@ -98,6 +98,7 @@ struct ReminderDateView: View {
   }
 
 struct ContentView: View {
+    @State private var isOnboardingCompleted = UserDefaults.standard.bool(forKey: "isOnboardingCompleted") // Onboarding flow
     @StateObject private var notificationHandler = NotificationHandler.shared  // new for sheet
     @State private var reminderDetailViewModel: ReminderDetailViewModel?
     @State private var showReminderAddedMessage = false  // update + notification for reminder has been set
@@ -114,7 +115,8 @@ struct ContentView: View {
      }
     
     var body: some View {
-        NavigationView {
+      if isOnboardingCompleted {
+        NavigationView { // TODO: wrap into MainAppView()
           ZStack {
             Color(hex: "023020").edgesIgnoringSafeArea(.all)
             
@@ -233,6 +235,13 @@ struct ContentView: View {
                     .accentColor(Color(hex: "#FEEBCC"))
                 )
               }
+      } else {
+          // Show the onboarding view
+          OnboardingView(isOnboardingCompleted: $isOnboardingCompleted)
+              .onDisappear {
+                  UserDefaults.standard.set(true, forKey: "isOnboardingCompleted")
+              }
+             }
             }
 
             private func loadReminders() {
