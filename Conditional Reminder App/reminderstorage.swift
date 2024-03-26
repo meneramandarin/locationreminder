@@ -195,8 +195,8 @@ class ReminderStorage {
                 location: CLLocationCoordinate2D(latitude: 41.249612, longitude: -72.751862),
                 message: "Withdraw Cash",
                 startDate: Date(),
-                endDate: Date().addingTimeInterval(3600),
-                hotspotName: " "
+                endDate: Date().addingTimeInterval(360000),
+                hotspotName: "Miscellaneous Memos"
             )
         ]
         

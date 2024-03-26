@@ -42,15 +42,19 @@ struct RecordButtonView: View {
   var body: some View {
     Button(action: {
       voiceInputManager.toggleRecording()
-      withAnimation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+      withAnimation(Animation.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) {
         isAnimating = voiceInputManager.isRecording
       }
     }) {
-      Text("Record Memo")
+        HStack {
+                Image(systemName: "mic") // SF Symbol for microphone
+                    .font(.title) // Adjust the size of the icon as needed
+                Text("Memo")
+                .adaptiveFont(name: "Times New Roman", style: .title1)
+            }
         .padding()
         .padding(.vertical, 10)
         .frame(width: UIScreen.main.bounds.width * 0.5)
-        .adaptiveFont(name: "Times New Roman", style: .headline)
         .background(voiceInputManager.isRecording ? Color(hex: "#F4C2C2") : Color(hex: "FEEBCC"))
         .foregroundColor(Color(hex: "023020"))
         .cornerRadius(110)
@@ -129,11 +133,11 @@ struct ContentView: View {
                   
                   Spacer().frame(height: geometry.size.height / 4)
                   
-                  Text("Your Memos:")
+                 /* Text("Your Memos:")
                     .font(.headline)
                     .foregroundColor(Color(hex: "FEEBCC"))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal)
+                    .padding(.horizontal) */
                   
                   ForEach(hotspotGroups, id: \.name) { group in
                     Section(header: Text(group.name)
