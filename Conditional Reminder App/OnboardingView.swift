@@ -39,29 +39,22 @@ struct OnboardingView: View {
                     .padding()
                 
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
-                        OnboardingCard(text: "Record Memos:\nTell Memo AI what it\nshould remind you about\n and where or when.")
-                            .foregroundColor(DarkGreen)
-                        OnboardingCard(text: "For example:\nRemind me to buy\ncandles, when I'm close\nto IKEA.")
-                            .foregroundColor(DarkGreen)
-                        OnboardingCard(text: "Set Hotspots:\n Define your Home or\nWork place for easier\ninstructions.")
-                            .foregroundColor(DarkGreen)
-                        OnboardingCard(text: "This unlocks:\nWhen I'm at Work next\nweek I need to buy office\nsupplies.")
-                            .foregroundColor(DarkGreen)
-                        OnboardingCard(text: "Use natural language:\nRemind me next Week.\nOr, in August, when I’m\nin Spain.")
-                            .foregroundColor(DarkGreen)
+                    HStack(spacing: 20) {
+                        OnboardingCard(icon: "mic", text: "Record Memos:\nTell Memo AI what it\nshould remind you about,\n and where to do so.")
+                        OnboardingCard(icon: "building.2", text: "For example:\nRemind me to buy\ncandles, when I'm close\nto an IKEA.")
+                        OnboardingCard(icon: "pin", text: "Set Hotspots:\n Define your Home or\nWork place for easier\ninstructions.")
+                        OnboardingCard(icon: "bolt", text: "This unlocks:\n'When I'm at Work next\nweek, I need to buy office\nsupplies.'")
+                        OnboardingCard(icon: "person.wave.2", text: "Use natural language:\n'Remind me in a couple\n of days.' Or, 'in August, when\nI’m in Spain.'")
+                        
                         Button(action: {
                             isOnboardingCompleted = true
                         }) {
-                            Text("Record your first Memo")
-                                .font(.headline)
-                                       .foregroundColor(Color(hex: "023020"))
-                                       .padding()
-                                       .frame(minWidth: 0, maxWidth: .infinity)
-                                       .padding(.horizontal, 20)
-                                       .padding(.vertical, 10)
-                                       .background(Color(hex: "FEEBCC"))
-                                       .cornerRadius(25)
+                            HStack {
+                                Text("Record your first Memo")
+                                Image(systemName: "arrow.right")
+                            }
+                            .font(.headline)
+                            .foregroundColor(Amber)
                         }
                     }
                     .foregroundColor(DarkGreen)
@@ -76,17 +69,26 @@ struct OnboardingView: View {
 }
 
 struct OnboardingCard: View {
+    let icon: String
     let text: String
-    let cardColor = Color(hex: "FEEBCC")
+    let DarkGreen = Color(hex: "023020")
+    let Beige = Color(hex: "FEEBCC")
+    let Amber = Color(hex: "FFBF00")
     
     var body: some View {
         VStack {
+            Image(systemName: icon)
+                .font(.largeTitle)
+                .foregroundColor(DarkGreen)
+                .padding()
+            
             Text(text)
-                .foregroundColor(.black)
+                .foregroundColor(DarkGreen)
                 .multilineTextAlignment(.center)
+                .lineSpacing(5)
         }
-        .frame(width: 200, height: 300)
-        .background(cardColor)
+        .frame(width: 300, height: 200)
+        .background(Beige)
         .cornerRadius(10)
     }
 }
