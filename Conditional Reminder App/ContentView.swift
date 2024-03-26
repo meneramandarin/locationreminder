@@ -196,6 +196,7 @@ struct ContentView: View {
                       let userDefaults = UserDefaults.standard
                       if !userDefaults.bool(forKey: "exampleRemindersLoaded") {
                           reminderStorage.saveExampleReminders()
+                          loadReminders()
                       }
                   }
               

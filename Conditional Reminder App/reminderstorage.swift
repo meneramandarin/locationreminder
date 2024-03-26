@@ -201,7 +201,7 @@ class ReminderStorage {
         ]
         
         for reminder in exampleReminders {
-            saveReminder(reminder) { result in
+            saveReminderWithoutNotification(reminder) { result in
                 switch result {
                 case .success:
                     print("Example reminder saved successfully.")
@@ -216,7 +216,7 @@ class ReminderStorage {
         userDefaults.set(false, forKey: "exampleRemindersDeleted")
     }
     
-    /*
+
      func saveReminderWithoutNotification(_ reminder: Reminder, completion: @escaping (Result<Void, Error>) -> Void) {
          let newReminder = ReminderItem(context: context)
          newReminder.uuid = reminder.id
@@ -237,6 +237,5 @@ class ReminderStorage {
              completion(.failure(error))
          }
      }
-     */
 
 }
