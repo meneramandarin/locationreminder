@@ -190,6 +190,15 @@ struct ContentView: View {
                   LocationService.shared.startMonitoringLocation()
                   appLogic.start()
                   print("ContentView appeared")
+              
+              // example reminders
+              if reminderStorage.shouldLoadExampleReminders() {
+                      let userDefaults = UserDefaults.standard
+                      if !userDefaults.bool(forKey: "exampleRemindersLoaded") {
+                          reminderStorage.saveExampleReminders()
+                      }
+                  }
+              
                 }
                 // refresh for new memo set
                 .onReceive(NotificationCenter.default.publisher(for: .reminderAdded)) { _ in

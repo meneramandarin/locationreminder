@@ -96,7 +96,6 @@ class ReminderStorage {
     }
   }
     
-  // Function to delete a reminder
     func deleteReminder(_ reminder: Reminder) {
         let request: NSFetchRequest<ReminderItem> = ReminderItem.fetchRequest()
         request.predicate = NSPredicate(format: "uuid == %@", reminder.id as CVarArg)
@@ -116,10 +115,17 @@ class ReminderStorage {
         } catch let error as NSError {
             print("Failed to delete reminder: \(error), \(error.userInfo)")
         }
-        // Function to delete a reminder after it's done its duty
-        func autoDeleteReminder(_ reminder: Reminder) {
-          deleteReminder(reminder)
+
+        // Check if there are no more reminders
+        if fetchReminders().isEmpty {
+            let userDefaults = UserDefaults.standard
+            userDefaults.set(true, forKey: "exampleRemindersDeleted")
         }
+    }
+
+    // Function to delete a reminder after it's done its duty
+    func autoDeleteReminder(_ reminder: Reminder) {
+        deleteReminder(reminder)
     }
     
     // functions to save and fetch hotspots
@@ -167,5 +173,70 @@ class ReminderStorage {
         let hotspots = fetchHotspots()
         return hotspots.first { $0.name.lowercased() == name.lowercased() }
     }
+    
+    // Example Reminders
+    func shouldLoadExampleReminders() -> Bool {
+        let userDefaults = UserDefaults.standard
+        return !userDefaults.bool(forKey: "exampleRemindersDeleted")
+    }
+    
+    func saveExampleReminders() {
+        let exampleReminders = [
+            Reminder(
+                id: UUID(),
+                location: CLLocationCoordinate2D(latitude: -37.29846, longitude: -12.67989),
+                message: "Checkout Nachtglas Bar",
+                startDate: nil,
+                endDate: nil,
+                hotspotName: "Travel"
+            ),
+            Reminder(
+                id: UUID(),
+                location: CLLocationCoordinate2D(latitude: 41.249612, longitude: -72.751862),
+                message: "Withdraw Cash",
+                startDate: Date(),
+                endDate: Date().addingTimeInterval(3600),
+                hotspotName: " "
+            )
+        ]
+        
+        for reminder in exampleReminders {
+            saveReminder(reminder) { result in
+                switch result {
+                case .success:
+                    print("Example reminder saved successfully.")
+                case .failure(let error):
+                    print("Failed to save example reminder: \(error)")
+                }
+            }
+        }
+        
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(true, forKey: "exampleRemindersLoaded")
+        userDefaults.set(false, forKey: "exampleRemindersDeleted")
+    }
+    
+    /*
+     func saveReminderWithoutNotification(_ reminder: Reminder, completion: @escaping (Result<Void, Error>) -> Void) {
+         let newReminder = ReminderItem(context: context)
+         newReminder.uuid = reminder.id
+         newReminder.locationLatitude = reminder.location.latitude
+         newReminder.locationLongitude = reminder.location.longitude
+         newReminder.message = reminder.message
+         newReminder.startDate = reminder.startDate
+         newReminder.endDate = reminder.endDate
+         newReminder.snoozeUntil = reminder.snoozeUntil
+         newReminder.hotspotName = reminder.hotspotName
+         
+         do {
+             try context.save()
+             print("Reminder with message '\(reminder.message)' saved successfully.")
+             completion(.success(()))
+         } catch let error as NSError {
+             print("Failed to save reminder: \(error), \(error.userInfo)")
+             completion(.failure(error))
+         }
+     }
+     */
 
 }
