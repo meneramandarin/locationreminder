@@ -130,14 +130,14 @@ struct ContentView: View {
                   Spacer().frame(height: geometry.size.height / 4)
                   
                   Text("Your Memos:")
-                    .adaptiveFont(name: "Times New Roman", style: .headline)
+                    .font(.headline)
                     .foregroundColor(Color(hex: "FEEBCC"))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
                   
                   ForEach(hotspotGroups, id: \.name) { group in
                     Section(header: Text(group.name)
-                      .adaptiveFont(name: "Times New Roman", style: .headline)
+                      .font(.headline)
                       .foregroundColor(Color(hex: "FEEBCC"))
                       .padding(.horizontal)
                     ) {
@@ -232,7 +232,7 @@ struct ContentView: View {
                     NavigationLink(destination: SettingsView(reminderStorage: reminderStorage)) {
                       Text("Hotspots")
                     }
-                    .accentColor(Color(hex: "#FEEBCC"))
+                    .accentColor(Color(hex: "#FFBF00"))
                 )
               }
       } else {
