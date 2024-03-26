@@ -10,38 +10,66 @@ import SwiftUI
 
 struct OnboardingView: View {
     @Binding var isOnboardingCompleted: Bool
-    let backgroundColor = Color(hex: "023020")
-    let cardColor = Color(hex: "FEEBCC")
-    let skipButtonColor = Color(hex: "FFBF00")
+    let DarkGreen = Color(hex: "023020")
+    let Beige = Color(hex: "FEEBCC")
+    let Amber = Color(hex: "FFBF00")
     
     var body: some View {
         ZStack {
-            backgroundColor.edgesIgnoringSafeArea(.all)
+            DarkGreen.edgesIgnoringSafeArea(.all)
             
             VStack {
+                
+                HStack {
+                        Spacer()  // Push the button to the right
+                        Button(action: {
+                            isOnboardingCompleted = true
+                        }) {
+                            Text("Skip")
+                                .foregroundColor(Amber)
+                        }
+                        .padding()
+                    }
+                
+                Spacer()
+                
                 Text("Memo")
-                    .adaptiveFont(name: "Times New Roman", style: .headline)
-                    .foregroundColor(cardColor)
+                    .font(.custom("Times New Roman", size: 100))
+                    .foregroundColor(Beige)
                     .padding()
                 
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 20) {
-                        OnboardingCard(text: "Record memos\nTell Memo AI what\nit should remind\nyou about & when.")
-                        OnboardingCard(text: "For example:\nRemind me to\nbuy candles when\nI'm close to IKEA.")
-                        OnboardingCard(text: "Set Hotspots:\n Define your Home or Work place\nfor easier instructions.")
-                        OnboardingCard(text: "This unlocks:\nWhen I'm at Work\nnext week\nI need to buy office supplies.")
+                    HStack(spacing: 10) {
+                        OnboardingCard(text: "Record Memos:\nTell Memo AI what it\nshould remind you about\n and where or when.")
+                            .foregroundColor(DarkGreen)
+                        OnboardingCard(text: "For example:\nRemind me to buy\ncandles, when I'm close\nto IKEA.")
+                            .foregroundColor(DarkGreen)
+                        OnboardingCard(text: "Set Hotspots:\n Define your Home or\nWork place for easier\ninstructions.")
+                            .foregroundColor(DarkGreen)
+                        OnboardingCard(text: "This unlocks:\nWhen I'm at Work next\nweek I need to buy office\nsupplies.")
+                            .foregroundColor(DarkGreen)
+                        OnboardingCard(text: "Use natural language:\nRemind me next Week.\nOr, in August, when I’m\nin Spain.")
+                            .foregroundColor(DarkGreen)
+                        Button(action: {
+                            isOnboardingCompleted = true
+                        }) {
+                            Text("Record your first Memo")
+                                .font(.headline)
+                                       .foregroundColor(Color(hex: "023020"))
+                                       .padding()
+                                       .frame(minWidth: 0, maxWidth: .infinity)
+                                       .padding(.horizontal, 20)
+                                       .padding(.vertical, 10)
+                                       .background(Color(hex: "FEEBCC"))
+                                       .cornerRadius(25)
+                        }
                     }
+                    .foregroundColor(DarkGreen)
                     .padding()
                 }
                 
-                Button(action: {
-                    isOnboardingCompleted = true // THIS IS NOT THE RIGHT WAY TO HANDLE THIS
-                    // Handle skip button action
-                }) {
-                    Text("Skip")
-                        .foregroundColor(skipButtonColor)
-                }
-                .padding()
+                Spacer()
+                
             }
         }
     }
@@ -62,6 +90,3 @@ struct OnboardingCard: View {
         .cornerRadius(10)
     }
 }
-
- // TODO: use the @AppStorage property wrapper to store a boolean value indicating whether the onboarding has been completed.
-
