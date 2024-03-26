@@ -5,7 +5,6 @@
 //  Created by Marlene on 07.03.24.
 //
 
-// TODO: add "this weekend" "next weekend"
 // TODO: Implement short-circuit evaluation or early termination conditions to stop the parsing process as soon as a match is found, rather than continuing to iterate through the remaining concepts unnecessarily.
 
 import Foundation
@@ -296,6 +295,31 @@ class ConceptOfTime {
                 let endDate = calendar.date(byAdding: .year, value: 1, to: startDate!)?.addingTimeInterval(-1)
                 return (startDate, endDate)
             }
+                
+                // Check for "spring"
+                        if relativeTime.lowercased() == "in spring" || relativeTime.lowercased() == "next spring" {
+                            let (startDate, endDate) = getNextSeasonDates(for: "in spring", from: currentDate)
+                            return (startDate, endDate)
+                        }
+                        
+                        // Check for "summer"
+                        if relativeTime.lowercased() == "in summer" || relativeTime.lowercased() == "next summer" {
+                            let (startDate, endDate) = getNextSeasonDates(for: "in summer", from: currentDate)
+                            return (startDate, endDate)
+                        }
+                        
+                // Check for "autumn" or "fall"
+                if relativeTime.lowercased() == "in autumn" || relativeTime.lowercased() == "in fall" ||
+                   relativeTime.lowercased() == "next autumn" || relativeTime.lowercased() == "next fall" {
+                    let (startDate, endDate) = getNextSeasonDates(for: "autumn", from: currentDate)
+                    return (startDate, endDate)
+                }
+                        
+                        // Check for "winter"
+                        if relativeTime.lowercased() == "in winter" || relativeTime.lowercased() == "next winter" {
+                            let (startDate, endDate) = getNextSeasonDates(for: "in winter", from: currentDate)
+                            return (startDate, endDate)
+                        }
             
             return nil
         }
@@ -319,4 +343,49 @@ class ConceptOfTime {
             let endDateString = getFormattedDate(from: endDate)
             return "\(startDateString) - \(endDateString)"
         }
+    
+    private func getNextSeasonDates(for season: String, from currentDate: Date) -> (Date, Date) {
+            let currentYear = calendar.component(.year, from: currentDate)
+            let currentMonth = calendar.component(.month, from: currentDate)
+            let currentDay = calendar.component(.day, from: currentDate)
+            
+            var startDate: Date
+            var endDate: Date
+            
+            switch season.lowercased() {
+            case "in spring":
+                if currentMonth >= 3 && currentDay >= 20 {
+                    startDate = DateComponents(calendar: calendar, year: currentYear + 1, month: 3, day: 20).date!
+                } else {
+                    startDate = DateComponents(calendar: calendar, year: currentYear, month: 3, day: 20).date!
+                }
+                endDate = DateComponents(calendar: calendar, year: calendar.component(.year, from: startDate), month: 6, day: 19).date!
+            case "in summer":
+                if currentMonth >= 6 && currentDay >= 20 {
+                    startDate = DateComponents(calendar: calendar, year: currentYear + 1, month: 6, day: 20).date!
+                } else {
+                    startDate = DateComponents(calendar: calendar, year: currentYear, month: 6, day: 20).date!
+                }
+                endDate = DateComponents(calendar: calendar, year: calendar.component(.year, from: startDate), month: 9, day: 21).date!
+            case "in autumn":
+                if currentMonth >= 9 && currentDay >= 22 {
+                    startDate = DateComponents(calendar: calendar, year: currentYear + 1, month: 9, day: 22).date!
+                } else {
+                    startDate = DateComponents(calendar: calendar, year: currentYear, month: 9, day: 22).date!
+                }
+                endDate = DateComponents(calendar: calendar, year: calendar.component(.year, from: startDate), month: 12, day: 20).date!
+            case "in winter":
+                if currentMonth == 12 && currentDay >= 21 {
+                    startDate = DateComponents(calendar: calendar, year: currentYear + 1, month: 12, day: 21).date!
+                } else {
+                    startDate = DateComponents(calendar: calendar, year: currentYear, month: 12, day: 21).date!
+                }
+                endDate = DateComponents(calendar: calendar, year: calendar.component(.year, from: startDate) + 1, month: 3, day: 19).date!
+            default:
+                fatalError("Invalid season")
+            }
+            
+            return (startDate, endDate)
+        }
+    
 }

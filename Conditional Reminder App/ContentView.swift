@@ -210,9 +210,11 @@ struct ContentView: View {
                   Alert(
                     title: Text("Memo Added"),
                     message: Text("We got your memo!"),
-                    dismissButton: .default(Text("Oki, thx, bye."))
+                    dismissButton: 
+                        .default(Text("Oki, thx, bye."))
                   )
                 }
+                  .accentColor(Color(hex: "#FFBF00"))
 
                 // sheet to edit reminder
                 .sheet(item: $selectedReminderForEditing) { reminder in
