@@ -36,9 +36,14 @@ struct SettingsView: View {
                         .foregroundColor(Color(hex: "FEEBCC"))
                     
                     VStack {
+                        Text("Hotspot Name")
+                          .foregroundColor(Color(hex: "FEEBCC"))  // beige
+                          .padding([.leading, .trailing, .top])
                         TextField("Hotspot Name", text: $hotspotName)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                        
+                            .textFieldStyle(CustomTextFieldStyle())
+                        Text("Where?")
+                          .foregroundColor(Color(hex: "FEEBCC"))  // beige
+                          .padding([.leading, .trailing, .top])
                         TextField(
                             "Search Location", text: $locationQuery,
                             onCommit: {
@@ -53,23 +58,29 @@ struct SettingsView: View {
                                 }
                             }
                         )
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .textFieldStyle(CustomTextFieldStyle())
                         
                         ReminderMapView(region: $region, annotations: annotations)
                             .frame(height: 300)
+                            .cornerRadius(8)
                         
-                        Button("Save") {
-                            let hotspot = Hotspot(name: hotspotName, location: region.center)
-                            reminderStorage.saveHotspot(hotspot)
-                            hotspotName = ""
-                            locationQuery = ""
-                            annotations = []
+                        Button(action: {
+                          let hotspot = Hotspot(name: hotspotName, location: region.center)
+                          reminderStorage.saveHotspot(hotspot)
+                          hotspotName = ""
+                          locationQuery = ""
+                          annotations = []
+                        }) {
+                          HStack {
+                            Text("Save Hotspot")
+                            Image(systemName: "arrow.right")
+                          }
+                          .font(.headline)
+                          .foregroundColor(Color(hex: "#FFBF00"))
+                          .padding(.horizontal)
+                          .frame(maxWidth: .infinity, alignment: .center)
                         }
-                        .adaptiveFont(name: "Times New Roman", style: .headline)
-                        .foregroundColor(Color(hex: "023020"))
-                        .padding()
-                        .background(Color(hex: "FEEBCC"))
-                        .cornerRadius(40)
+                        
                     }
                     .padding()
                     
