@@ -30,10 +30,10 @@
             filePath = "Conditional Reminder App/ReminderModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "20"
-            endingLineNumber = "20"
-            landmarkName = "Reminder"
-            landmarkType = "14">
+            startingLineNumber = "21"
+            endingLineNumber = "21"
+            landmarkName = "init(id:location:message:startDate:endDate:snoozeUntil:hotspotName:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
