@@ -2,7 +2,7 @@
 //  ReminderItem+CoreDataClass.swift
 //  Conditional Reminder App
 //
-//  Created by Marlene on 19.03.24.
+//  Created by Marlene on 27.03.24.
 //
 //
 

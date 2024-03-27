@@ -16,6 +16,7 @@ struct Reminder: Identifiable {
   let endDate: Date?
   var snoozeUntil: Date?
   let hotspotName: String?
+  let locationName: String? // TODO: ? because if hotspotName location name can stay empty
 
   // Custom initializer
     init(
@@ -25,7 +26,8 @@ struct Reminder: Identifiable {
         startDate: Date? = nil,
         endDate: Date? = nil,
         snoozeUntil: Date? = nil,
-        hotspotName: String
+        hotspotName: String? = nil,
+        locationName: String? = nil // change from just String no questions asked lol 
       ) {
         self.id = id // Use the passed-in UUID
         self.location = location
@@ -33,6 +35,7 @@ struct Reminder: Identifiable {
         self.startDate = startDate
         self.endDate = endDate
         self.snoozeUntil = snoozeUntil
-        self.hotspotName = hotspotName
+        self.hotspotName = hotspotName ?? ""
+        self.locationName = locationName ?? "" // change from just locationName
       }
     }

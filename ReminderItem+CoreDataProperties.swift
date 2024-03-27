@@ -2,7 +2,7 @@
 //  ReminderItem+CoreDataProperties.swift
 //  Conditional Reminder App
 //
-//  Created by Marlene on 19.03.24.
+//  Created by Marlene on 27.03.24.
 //
 //
 
@@ -24,6 +24,7 @@ extension ReminderItem {
     @NSManaged public var snoozeUntil: Date?
     @NSManaged public var startDate: Date?
     @NSManaged public var uuid: UUID?
+    @NSManaged public var locationName: String?
 
 }
 

@@ -28,6 +28,7 @@ class ReminderStorage {
         newReminder.endDate = reminder.endDate
         newReminder.snoozeUntil = reminder.snoozeUntil
         newReminder.hotspotName = reminder.hotspotName
+        newReminder.locationName = reminder.locationName
           
         print("Saving reminder:")
         print("- Message: \(reminder.message)")
@@ -36,6 +37,7 @@ class ReminderStorage {
         print("- Location: \(reminder.location)")
         print("- Snooze Until: \(reminder.snoozeUntil ?? Date())")
         print("- Hotspot Name: \(reminder.hotspotName ?? "None")")
+        print("- Location Name: \(reminder.locationName ?? "None")")
 
         do {
             try context.save()
@@ -62,6 +64,7 @@ class ReminderStorage {
               reminderToUpdate.message = reminder.message
               reminderToUpdate.startDate = reminder.startDate
               reminderToUpdate.endDate = reminder.endDate
+              // reminderToUpdate.locationName = reminder.locationName
              // reminderToUpdate.latitude = reminder.location.latitude TODO: make locations changable
              // reminderToUpdate.longitude = reminder.location.longitude
               reminderToUpdate.snoozeUntil = reminder.snoozeUntil
@@ -87,7 +90,8 @@ class ReminderStorage {
           message: entity.message ?? "",
           startDate: entity.startDate,
           endDate: entity.endDate,
-          hotspotName: entity.hotspotName ?? ""
+          hotspotName: entity.hotspotName ?? "",
+          locationName: entity.locationName ?? ""
         )
       }
     } catch {
@@ -188,7 +192,8 @@ class ReminderStorage {
                 message: "Checkout Nachtglas Bar",
                 startDate: nil,
                 endDate: nil,
-                hotspotName: "Travel"
+                hotspotName: "Travel",
+                locationName: "TODO" // TODO: make this work in front ent
             ),
             Reminder(
                 id: UUID(),
@@ -196,7 +201,8 @@ class ReminderStorage {
                 message: "Withdraw Cash",
                 startDate: Date(),
                 endDate: Date().addingTimeInterval(360000),
-                hotspotName: "Miscellaneous Memos"
+                hotspotName: "Miscellaneous Memos",
+                locationName: "TODO" // TODO: make this work in front ent
             )
         ]
         

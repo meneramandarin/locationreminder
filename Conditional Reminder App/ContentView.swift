@@ -19,10 +19,6 @@ struct BulletMenuView: View {
                     Text("Hotspots")
                         .foregroundColor(Color(hex: "FEEBCC"))
                 }
-                NavigationLink(destination: OnboardingView) {
-                    Text("Hotspots")
-                        .foregroundColor(Color(hex: "FEEBCC"))
-                }
                 .listRowBackground(Color(hex: "023020"))
             }
             .listStyle(PlainListStyle())

@@ -32,8 +32,13 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "21"
             endingLineNumber = "21"
+<<<<<<< Updated upstream
             landmarkName = "init(id:location:message:startDate:endDate:snoozeUntil:hotspotName:)"
             landmarkType = "7">
+=======
+            landmarkName = "Reminder"
+            landmarkType = "14">
+>>>>>>> Stashed changes
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -80,4 +80,40 @@ class LocationService: NSObject, CLLocationManagerDelegate {
                 completion(coordinate)
             }
         }
+    
+    // look up locationName
+    func reverseGeocode(location: CLLocation, completion: @escaping (String?) -> Void) {
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+            guard let placemark = placemarks?.first, error == nil else {
+                completion(nil)
+                return
+            }
+            
+            var locationName = ""
+            if let name = placemark.name {
+                locationName += name
+            }
+            if let locality = placemark.locality {
+                if !locationName.isEmpty {
+                    locationName += ", "
+                }
+                locationName += locality
+            }
+            if let administrativeArea = placemark.administrativeArea {
+                if !locationName.isEmpty {
+                    locationName += ", "
+                }
+                locationName += administrativeArea
+            }
+            if let country = placemark.country {
+                if !locationName.isEmpty {
+                    locationName += ", "
+                }
+                locationName += country
+            }
+            
+            completion(locationName.isEmpty ? nil : locationName)
+        }
+    }
 }
