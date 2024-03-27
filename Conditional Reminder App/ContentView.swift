@@ -8,6 +8,39 @@
 import MapKit
 import SwiftUI
 
+struct BulletMenuView: View {
+    private let reminderStorage = ReminderStorage(
+        context: PersistenceController.shared.container.viewContext)
+    
+    var body: some View {
+        NavigationView {
+            List {
+                NavigationLink(destination: SettingsView(reminderStorage: reminderStorage)) {
+                    Text("Hotspots")
+                        .foregroundColor(Color(hex: "FEEBCC"))
+                }
+                NavigationLink(destination: OnboardingView) {
+                    Text("Hotspots")
+                        .foregroundColor(Color(hex: "FEEBCC"))
+                }
+                .listRowBackground(Color(hex: "023020"))
+            }
+            .listStyle(PlainListStyle())
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Menu")
+                        .font(.largeTitle)
+                        .foregroundColor(Color(hex: "FEEBCC"))
+                }
+            }
+            .background(Color(hex: "023020"))
+            .scrollContentBackground(.hidden)
+        }
+        .accentColor(Color(hex: "FEEBCC"))
+    }
+}
+
 struct MapView: UIViewRepresentable {
   var region: MKCoordinateRegion
   var annotations: [MKPointAnnotation]
@@ -102,6 +135,7 @@ struct ReminderDateView: View {
   }
 
 struct ContentView: View {
+    @State private var showMenu = false // for bullet menu
     @State private var isOnboardingCompleted = UserDefaults.standard.bool(forKey: "isOnboardingCompleted") // Onboarding flow
     @StateObject private var notificationHandler = NotificationHandler.shared  // new for sheet
     @State private var reminderDetailViewModel: ReminderDetailViewModel?
@@ -132,12 +166,6 @@ struct ContentView: View {
                   RecordButtonView()
                   
                   Spacer().frame(height: geometry.size.height / 4)
-                  
-                 /* Text("Your Memos:")
-                    .font(.headline)
-                    .foregroundColor(Color(hex: "FEEBCC"))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal) */
                   
                   ForEach(hotspotGroups, id: \.name) { group in
                     Section(header: Text(group.name)
@@ -241,16 +269,20 @@ struct ContentView: View {
                         reminder: reminder, context: PersistenceController.shared.container.viewContext))
                   }
                 }
-
-                // Hotspots
                 .navigationBarItems(
-                  trailing:
-                    NavigationLink(destination: SettingsView(reminderStorage: reminderStorage)) {
-                      Text("Hotspots")
-                    }
-                    .accentColor(Color(hex: "#FFBF00"))
-                )
-              }
+                                trailing:
+                                    Button(action: {
+                                        showMenu.toggle()
+                                    }) {
+                                        Image(systemName: "ellipsis")
+                                    }
+                                    .accentColor(Color(hex: "#FFBF00"))
+                            )
+                        }
+                        .sheet(isPresented: $showMenu) {
+                            BulletMenuView()
+                        }
+            
       } else {
           // Show the onboarding view
           OnboardingView(isOnboardingCompleted: $isOnboardingCompleted)
