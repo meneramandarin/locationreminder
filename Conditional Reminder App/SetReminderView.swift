@@ -18,6 +18,16 @@ struct ReminderMapView: UIViewRepresentable {
     }
 }
 
+struct CustomTextFieldStyle: TextFieldStyle {
+func _body(configuration: TextField<Self._Label>) -> some View {
+configuration
+.padding()
+.background(Color(hex: "FEEBCC"))
+.foregroundColor(Color(hex: "023020"))
+.cornerRadius(8)
+}
+}
+
 struct SetReminderView: View {
     @Environment(\.managedObjectContext) private var viewContext
     private var reminderStorage: ReminderStorage {
@@ -61,7 +71,7 @@ struct SetReminderView: View {
                         .foregroundColor(Color(hex: "FEEBCC")) // beige
                         .padding()
                     TextField("Enter reminder details", text: $reminderText)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .textFieldStyle(CustomTextFieldStyle())
                         .padding()
 
                     Text("Where?")
@@ -82,7 +92,7 @@ struct SetReminderView: View {
                             }
                         }
                     )
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .textFieldStyle(CustomTextFieldStyle())
                     .padding()
                     ReminderMapView(region: $region, annotations: annotations)
                         .frame(height: 300)
