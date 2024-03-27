@@ -176,6 +176,10 @@ struct ContentView: View {
                               Text(reminder.message)
                                 .font(.headline)
                                 .foregroundColor(Color(hex: "FEEBCC"))
+                                
+                                Text(reminder.locationName ?? "")
+                                    .font(.subheadline)
+                                    .foregroundColor(Color(hex: "FEEBCC"))
                               
                               ReminderDateView(reminder: reminder)
                             }

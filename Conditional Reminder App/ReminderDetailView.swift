@@ -32,6 +32,9 @@ struct ReminderDetailView: View {
                     Text(viewModel.reminder.message)
                         .font(.headline)
                         .foregroundColor(Color(hex: "FEEBCC"))
+                    Text(viewModel.reminder.locationName ?? "")
+                            .font(.subheadline)
+                            .foregroundColor(Color(hex: "FEEBCC"))
                     // accomodate for different dates
                     if let startDate = viewModel.reminder.startDate,
                                            let endDate = viewModel.reminder.endDate {
@@ -49,7 +52,7 @@ struct ReminderDetailView: View {
                                             Text(formatDate(endDate))
                                                 .foregroundColor(Color(hex: "FEEBCC"))
                                         } else {
-                                            Text("No date")
+                                            Text("Whenever 🤷")
                                                 .foregroundColor(Color(hex: "FEEBCC"))
                                         }
                     MapView(region: region(for: viewModel.reminder), annotations: [createAnnotation(for: viewModel.reminder)])

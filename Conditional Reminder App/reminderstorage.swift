@@ -193,7 +193,7 @@ class ReminderStorage {
                 startDate: nil,
                 endDate: nil,
                 hotspotName: "Travel",
-                locationName: "TODO" // TODO: make this work in front ent
+                locationName: "Inaccessible Island"
             ),
             Reminder(
                 id: UUID(),
@@ -202,7 +202,7 @@ class ReminderStorage {
                 startDate: Date(),
                 endDate: Date().addingTimeInterval(360000),
                 hotspotName: "Miscellaneous Memos",
-                locationName: "TODO" // TODO: make this work in front ent
+                locationName: "Money Island" 
             )
         ]
         
@@ -222,7 +222,7 @@ class ReminderStorage {
         userDefaults.set(false, forKey: "exampleRemindersDeleted")
     }
     
-
+    // TODO: fuck these functions are a huge libality because when i mame any major DB changes they need to change too
      func saveReminderWithoutNotification(_ reminder: Reminder, completion: @escaping (Result<Void, Error>) -> Void) {
          let newReminder = ReminderItem(context: context)
          newReminder.uuid = reminder.id
@@ -233,6 +233,7 @@ class ReminderStorage {
          newReminder.endDate = reminder.endDate
          newReminder.snoozeUntil = reminder.snoozeUntil
          newReminder.hotspotName = reminder.hotspotName
+         newReminder.locationName = reminder.locationName
          
          do {
              try context.save()
