@@ -1,7 +1,3 @@
-
-// LOCATION SAVING NOT WORKING - easy fix but too tired rn 
-
-
 import MapKit
 import SwiftUI
 
@@ -165,7 +161,8 @@ struct SetReminderView: View {
                 message: reminderText,
                 startDate: selectedStartDate,
                 endDate: selectedEndDate ?? selectedStartDate,
-                snoozeUntil: nil  // Set this if you have it
+                snoozeUntil: nil,  // Set this if you have it
+                locationName: selectedLocationName
               )
               reminderStorage.updateReminder(updatedReminder)
               confirmationMessage = "We updated your Memo."
