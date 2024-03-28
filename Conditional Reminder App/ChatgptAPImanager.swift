@@ -302,27 +302,6 @@ class GPTapiManager {
         case locationNotFound
     }
     
-    
-    /*
-    func processLocation(locationString: String, completion: @escaping (Result<(CLLocationCoordinate2D?, String?), Error>) -> Void) {
-        if let reminderStorage = self.reminderStorage,
-           let hotspot = reminderStorage.findHotspot(with: locationString) {
-            completion(.success((hotspot.location, hotspot.name)))
-        } else {
-            LocationService.shared.searchLocation(query: locationString) { coordinate in
-                if let coordinate = coordinate {
-                    completion(.success((coordinate, "Miscellaneous Memos"))) // TODO: at some point come up with a logic that auto groups memos and auto assigns hotspots like "Germany", "Japan" etc. 
-                } else {
-                    completion(.success((nil, "No Location Selected")))
-                }
-            }
-        }
-    }
-     
-     */
-    
-    // NEW
-    
     func processLocation(locationString: String, completion: @escaping (Result<(CLLocationCoordinate2D?, String?, String?), Error>) -> Void) {
         if let reminderStorage = self.reminderStorage,
            let hotspot = reminderStorage.findHotspot(with: locationString) {
@@ -340,9 +319,4 @@ class GPTapiManager {
             }
         }
     }
-    
-    // ENDS
-    
-    
-    
 }

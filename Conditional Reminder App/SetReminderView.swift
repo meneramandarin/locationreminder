@@ -1,3 +1,7 @@
+
+// LOCATION SAVING NOT WORKING - easy fix but too tired rn 
+
+
 import MapKit
 import SwiftUI
 
@@ -41,7 +45,8 @@ struct SetReminderView: View {
   @State private var reminderText: String = ""
   @State private var selectedStartDate: Date?
   @State private var selectedEndDate: Date?
-  @State private var locationQuery: String = ""
+  @State private var locationQuery: String = "" // am I using this??
+  @State private var locationName: String = ""
   @State private var showConfirmationAlert = false
   @State private var annotations = [MKPointAnnotation]()
   @State private var confirmationMessage: String = ""  // to have different messages after saving / editing reminder
@@ -60,11 +65,22 @@ struct SetReminderView: View {
     _reminderText = State(initialValue: reminderToEdit?.message ?? "")
     _selectedStartDate = State(initialValue: reminderToEdit?.startDate)
     _selectedEndDate = State(initialValue: reminderToEdit?.endDate)
+    _locationName = State(initialValue: reminderToEdit?.locationName ?? "")
     self.reminderToEdit = reminderToEdit
     self.isEditing = (reminderToEdit != nil)
     self._reminders = reminders
     self._isShowingEditView = isShowingEditView
     self.dismissAction = dismissAction
+      
+      // Set the initial region and annotations if editing an existing reminder
+              if let reminderToEdit = reminderToEdit {
+                  _region = State(initialValue: MKCoordinateRegion(
+                      center: reminderToEdit.location,
+                      span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)
+                  ))
+                  _annotations = State(initialValue: [createAnnotation(for: reminderToEdit)])
+              }
+      
   }
 
   var body: some View {
@@ -86,9 +102,9 @@ struct SetReminderView: View {
             .foregroundColor(Color(hex: "FEEBCC"))  // beige
             .padding([.leading, .trailing, .top])
           TextField(
-            "Search", text: $locationQuery,
+            "Search", text: $locationName,
             onCommit: {
-              LocationService.shared.searchLocation(query: locationQuery) { coordinate in
+              LocationService.shared.searchLocation(query: locationName) { coordinate in
                 if let coordinate = coordinate {
                   self.region.center = coordinate
 
@@ -139,6 +155,7 @@ struct SetReminderView: View {
 
           Button(action: {
             let selectedLocation = region.center
+            let selectedLocationName = locationName
 
             if isEditing, let reminderToEdit = reminderToEdit {
               // Update the existing reminder
@@ -166,7 +183,8 @@ struct SetReminderView: View {
                 startDate: selectedStartDate,
                 endDate: selectedEndDate ?? selectedStartDate,
                 snoozeUntil: nil,  // Set this if you have it
-                hotspotName: ""  // empty string now
+                hotspotName: "",  // empty string now TODO: needs to be passed on here, too, and changable or just fed into same field as locationName
+                locationName: selectedLocationName
               )
               reminderStorage.saveReminder(newReminder) { result in
                 switch result {
@@ -208,6 +226,14 @@ struct SetReminderView: View {
       )
     }
   }
+    
+    private func createAnnotation(for reminder: Reminder) -> MKPointAnnotation {
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = reminder.location
+            annotation.title = reminder.message
+            return annotation
+        }
+    
 }
 
 struct SetReminderView_Previews: PreviewProvider {
