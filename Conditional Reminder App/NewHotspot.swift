@@ -9,6 +9,7 @@ import SwiftUI
 import MapKit
 
 struct NewHotspot: View {
+    @Environment(\.managedObjectContext) private var viewContext
     @State private var locationQuery: String = ""
     @State private var hotspotName: String = ""
     @State private var hotspots: [Hotspot] = []
@@ -88,7 +89,8 @@ struct NewHotspot: View {
                 .padding()
             }
         }
-        .navigationBarBackButtonHidden(true)
+        .navigationBarTitle("New Hotspot", displayMode: .inline)
+        .navigationTitle("< Hotspots")
     }
     
     private func loadHotspots() {

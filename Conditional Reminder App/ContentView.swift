@@ -13,20 +13,34 @@ struct BulletMenuView: View {
         context: PersistenceController.shared.container.viewContext)
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 NavigationLink(destination: HotspotView(reminderStorage: reminderStorage)) {
                     Text("Hotspots")
                         .foregroundColor(Color(hex: "FEEBCC"))
                 }
                 .listRowBackground(Color(hex: "023020"))
+                .navigationTitle("Menu")
+                
+                NavigationLink(destination: AboutView()) {
+                    Text("About")
+                        .foregroundColor(Color(hex: "FEEBCC"))
+                }
+                .listRowBackground(Color(hex: "023020"))
+                .navigationTitle("Menu")
+        
+
+                Text("More Stuff Coming Soon")
+                    .foregroundColor(Color(hex: "FEEBCC"))
+                    .listRowBackground(Color(hex: "023020"))
+
             }
             .listStyle(PlainListStyle())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("Menu")
-                        .font(.largeTitle)
+                        .font(.title)
                         .foregroundColor(Color(hex: "FEEBCC"))
                 }
             }

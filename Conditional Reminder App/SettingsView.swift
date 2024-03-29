@@ -10,7 +10,6 @@ import SwiftUI
 
 struct HotspotView: View {
   @Environment(\.managedObjectContext) private var viewContext
-  @Environment(\.presentationMode) var presentationMode
   @State private var hotspotName: String = ""
   @State private var hotspots: [Hotspot] = []
   let reminderStorage: ReminderStorage
@@ -23,7 +22,6 @@ struct HotspotView: View {
   }
 
   var body: some View {
-    NavigationStack {
       ZStack {
         Color(hex: "023020").edgesIgnoringSafeArea(.all)
 
@@ -91,22 +89,8 @@ struct HotspotView: View {
         }
         .padding()
       }
-    }
-    .navigationBarTitle("Hotspots", displayMode: .inline)  // Set the title
-    .navigationBarBackButtonHidden(true)
-    .toolbar {
-      ToolbarItem(placement: .navigationBarLeading) {
-        Button(action: {
-          presentationMode.wrappedValue.dismiss()
-        }) {
-          HStack(spacing: 4) {
-            Image(systemName: "chevron.left")  // Back arrow for visual clarity
-            Text("Menu")
-          }
-          .foregroundColor(Color(hex: "#FFBF00"))  // Customize Menu color
-        }
-      }
-    }
+      .navigationBarTitle("Hotspots", displayMode: .inline)  // Set the title
+      .navigationTitle("< Menu")
     .onAppear {
       loadHotspots()
       UINavigationBar.appearance().titleTextAttributes = [
