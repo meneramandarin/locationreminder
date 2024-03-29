@@ -39,6 +39,7 @@ struct NewHotspot: View {
                         
                         TextField("Hotspot Name", text: $hotspotName)
                             .textFieldStyle(CustomTextFieldStyle())
+                            .accentColor(Color(hex: "#FFBF00"))
                             .padding(.horizontal)
 
                         Text("Where?")
