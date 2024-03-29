@@ -28,15 +28,22 @@ struct NewHotspot: View {
         ZStack {
             Color(hex: "023020").edgesIgnoringSafeArea(.all)
             ScrollView {
-                    VStack {
+                    VStack(alignment: .leading) {
+                        
+                        Spacer()
+                        
                         Text("Hotspot Name")
                           .foregroundColor(Color(hex: "FEEBCC"))  // beige
                           .padding([.leading, .trailing, .top])
+                        
                         TextField("Hotspot Name", text: $hotspotName)
                             .textFieldStyle(CustomTextFieldStyle())
+                            .padding(.horizontal)
+
                         Text("Where?")
                           .foregroundColor(Color(hex: "FEEBCC"))  // beige
                           .padding([.leading, .trailing, .top])
+                        
                         TextField(
                             "Search Location", text: $locationQuery,
                             onCommit: {
@@ -52,10 +59,14 @@ struct NewHotspot: View {
                             }
                         )
                         .textFieldStyle(CustomTextFieldStyle())
+                        .padding(.horizontal)
+
                         
                         ReminderMapView(region: $region, annotations: annotations)
                             .frame(height: 300)
                             .cornerRadius(8)
+                            .padding(.horizontal)
+
                         
                         Button(action: {
                           let hotspot = Hotspot(name: hotspotName, location: region.center)
@@ -70,13 +81,14 @@ struct NewHotspot: View {
                           }
                           .font(.headline)
                           .foregroundColor(Color(hex: "#FFBF00"))
-                          .padding(.horizontal)
+                          .padding([.horizontal, .top])
                           .frame(maxWidth: .infinity, alignment: .center)
                         }
                 }
                 .padding()
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
     
     private func loadHotspots() {
