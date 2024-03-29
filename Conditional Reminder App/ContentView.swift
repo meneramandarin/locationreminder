@@ -15,7 +15,7 @@ struct BulletMenuView: View {
     var body: some View {
         NavigationView {
             List {
-                NavigationLink(destination: SettingsView(reminderStorage: reminderStorage)) {
+                NavigationLink(destination: HotspotView(reminderStorage: reminderStorage)) {
                     Text("Hotspots")
                         .foregroundColor(Color(hex: "FEEBCC"))
                 }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1A11C2362B9A874500843B74 /* ConceptOfTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A11C2352B9A874500843B74 /* ConceptOfTime.swift */; };
 		1A1E68712B915A5B00F53AF4 /* ChatgptAPImanager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1E68702B915A5B00F53AF4 /* ChatgptAPImanager.swift */; };
+		1A331FE32BB6366400944084 /* NewHotspot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A331FE22BB6366400944084 /* NewHotspot.swift */; };
 		1A3DB4CD2BA38E5400DC9362 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DB4CC2BA38E5400DC9362 /* KeychainHelper.swift */; };
 		1A3DB4CF2BA396AD00DC9362 /* TemporaryKeyStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DB4CE2BA396AD00DC9362 /* TemporaryKeyStorage.swift */; };
 		1A421D772B58E455008040CA /* SetReminderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A421D762B58E455008040CA /* SetReminderView.swift */; };
@@ -61,6 +62,7 @@
 		1A01FEDB2B84321F006E8C72 /* Conditional-Reminder-App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Conditional-Reminder-App-Info.plist"; sourceTree = SOURCE_ROOT; };
 		1A11C2352B9A874500843B74 /* ConceptOfTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConceptOfTime.swift; sourceTree = "<group>"; };
 		1A1E68702B915A5B00F53AF4 /* ChatgptAPImanager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatgptAPImanager.swift; sourceTree = "<group>"; };
+		1A331FE22BB6366400944084 /* NewHotspot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHotspot.swift; sourceTree = "<group>"; };
 		1A3DB4CC2BA38E5400DC9362 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		1A3DB4CE2BA396AD00DC9362 /* TemporaryKeyStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryKeyStorage.swift; sourceTree = "<group>"; };
 		1A421D762B58E455008040CA /* SetReminderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetReminderView.swift; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 				1A3DB4CC2BA38E5400DC9362 /* KeychainHelper.swift */,
 				1A1E68702B915A5B00F53AF4 /* ChatgptAPImanager.swift */,
 				1A11C2352B9A874500843B74 /* ConceptOfTime.swift */,
+				1A331FE22BB6366400944084 /* NewHotspot.swift */,
 				1ABB64CC2B99363500706638 /* HotspotModel.swift */,
 				1A4245E22B55D4C7004157B5 /* ContentView.swift */,
 				1A78C4632B7EF50B00884E00 /* colorextension.swift */,
@@ -360,6 +363,7 @@
 				1A6E88572B8D70D100D6337A /* VoiceInputManager.swift in Sources */,
 				1A421D792B59008E008040CA /* ReminderDetailView.swift in Sources */,
 				1AD5470D2B688A3F00284D3E /* ReminderModel.swift in Sources */,
+				1A331FE32BB6366400944084 /* NewHotspot.swift in Sources */,
 				1A3DB4CF2BA396AD00DC9362 /* TemporaryKeyStorage.swift in Sources */,
 				1A3DB4CD2BA38E5400DC9362 /* KeychainHelper.swift in Sources */,
 				1ABB64CB2B99345F00706638 /* SettingsView.swift in Sources */,
