@@ -61,6 +61,7 @@ struct NewHotspot: View {
                             }
                         )
                         .textFieldStyle(CustomTextFieldStyle())
+                        .accentColor(Color(hex: "#FFBF00"))
                         .padding(.horizontal)
 
                         

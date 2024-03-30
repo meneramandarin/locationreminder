@@ -157,6 +157,10 @@ struct ContentView: View {
     private let reminderStorage = ReminderStorage(
         context: PersistenceController.shared.container.viewContext)
     
+    init() {
+        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor(Color(hex: "FFBF00"))
+        }
+    
     var hotspotGroups: [HotspotGroup] {
        let groupedReminders = Dictionary(grouping: reminders, by: { $0.hotspotName ?? "No Hotspot" })
        return groupedReminders.map { HotspotGroup(name: $0.key, reminders: $0.value) }
@@ -260,7 +264,6 @@ struct ContentView: View {
                         .default(Text("Oki, thx, bye."))
                   )
                 }
-                  .accentColor(Color(hex: "#FFBF00"))
 
                 // sheet to edit reminder
                 .sheet(item: $selectedReminderForEditing) { reminder in
