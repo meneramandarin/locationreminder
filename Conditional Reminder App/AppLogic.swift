@@ -62,12 +62,16 @@ class AppLogic: NSObject, ObservableObject {
     // checks time - this can turn into a whole rabbit hole in and of itself wrt optimization, because in should reasonably only check if the date is close and otherwise pause, kinda like nested geofencing ... and well opening hours of stores *cries* - here
     private func whatTime(_ reminder: Reminder) -> Bool {
             let currentDate = Date()
+            let calendar = Calendar.current
 
             // Check if start and end dates are defined
-            if let startDate = reminder.startDate, let endDate = reminder.endDate {
-                return startDate <= currentDate && currentDate <= endDate
-            } else if let startDate = reminder.startDate { // Single date check
-                return Calendar.current.isDate(currentDate, inSameDayAs: startDate)
+        if let startDate = reminder.startDate, let endDate = reminder.endDate {
+            // Compare dates directly
+            let startDateWithoutTime = calendar.startOfDay(for: startDate)
+            let endDateWithoutTime = calendar.startOfDay(for: endDate)
+            let currentDateWithoutTime = calendar.startOfDay(for: currentDate)
+            
+            return startDateWithoutTime <= currentDateWithoutTime && currentDateWithoutTime <= endDateWithoutTime
             } else {
                 return true // No time restriction, trigger always
             }
