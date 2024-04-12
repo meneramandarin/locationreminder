@@ -16,7 +16,7 @@ struct Reminder: Identifiable {
   let endDate: Date?
   var snoozeUntil: Date?
   let hotspotName: String?
-  let locationName: String? // TODO: ? because if hotspotName location name can stay empty
+  let locationName: String?
 
   // Custom initializer
     init(

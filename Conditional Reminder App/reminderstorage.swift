@@ -238,7 +238,7 @@ class ReminderStorage {
         userDefaults.set(false, forKey: "exampleRemindersDeleted")
     }
     
-    // TODO: fuck these functions are a huge libality because when i mame any major DB changes they need to change too
+    // TODO: fuck these functions are a huge libality because when i make any major DB changes they need to change too
     func saveReminderWithoutNotification(_ reminder: Reminder, completion: @escaping (Result<Void, Error>) -> Void) {
         let newReminder = ReminderItem(context: context)
         newReminder.uuid = reminder.id

@@ -13,6 +13,8 @@ struct ReminderDetailView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: ReminderDetailViewModel
     @State private var isShowingEditView = false
+    @State private var showConfirmationAlert = false
+    @State private var confirmationMessage: String = "" 
     
     var body: some View {
         ZStack {
@@ -24,7 +26,7 @@ struct ReminderDetailView: View {
                 Text("We got a Memo for you:")
                     .adaptiveFont(name: "Times New Roman", style: .headline)
                     .foregroundColor(Color(hex: "FEEBCC"))
-                    .multilineTextAlignment(.center) // not sure if this actually works ... prolly would have to be in Hstack.
+                    .multilineTextAlignment(.center)
                     .padding()
 
                 // Reminder details
@@ -78,6 +80,9 @@ struct ReminderDetailView: View {
                     
                     Button("Snooze") {
                         viewModel.snoozeReminder()
+                        confirmationMessage = "We snoozed your Memo."
+                        showConfirmationAlert = true
+                        NotificationCenter.default.post(name: .reminderAdded, object: nil)
                         presentationMode.wrappedValue.dismiss()
                     }
                     .adaptiveFont(name: "Times New Roman", style: .headline)

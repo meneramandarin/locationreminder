@@ -8,142 +8,6 @@
 import MapKit
 import SwiftUI
 
-struct BulletMenuView: View {
-    private let reminderStorage = ReminderStorage(
-        context: PersistenceController.shared.container.viewContext)
-    
-    var body: some View {
-        NavigationStack {
-            List {
-                NavigationLink(destination: HotspotView(reminderStorage: reminderStorage)) {
-                    Text("Hotspots")
-                        .foregroundColor(Color(hex: "FEEBCC"))
-                }
-                .listRowBackground(Color(hex: "023020"))
-                .navigationTitle("Menu")
-                
-                NavigationLink(destination: AboutView()) {
-                    Text("About")
-                        .foregroundColor(Color(hex: "FEEBCC"))
-                }
-                .listRowBackground(Color(hex: "023020"))
-                .navigationTitle("Menu")
-        
-
-                Text("More Stuff Coming Soon")
-                    .foregroundColor(Color(hex: "FEEBCC"))
-                    .listRowBackground(Color(hex: "023020"))
-
-            }
-            .listStyle(PlainListStyle())
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("Menu")
-                        .font(.title)
-                        .foregroundColor(Color(hex: "FEEBCC"))
-                }
-            }
-            .background(Color(hex: "023020"))
-            .scrollContentBackground(.hidden)
-        }
-        .accentColor(Color(hex: "FEEBCC"))
-    }
-}
-
-struct MapView: UIViewRepresentable {
-  var region: MKCoordinateRegion
-  var annotations: [MKPointAnnotation]
-  var gestures: Bool = false
-
-  func makeUIView(context: Context) -> MKMapView {
-    let mapView = MKMapView()
-    mapView.setRegion(region, animated: false)
-    mapView.isZoomEnabled = gestures
-    mapView.isScrollEnabled = gestures
-    mapView.isRotateEnabled = gestures
-    return mapView
-  }
-
-  func updateUIView(_ uiView: MKMapView, context: Context) {
-    uiView.setRegion(region, animated: true)
-    uiView.removeAnnotations(uiView.annotations)
-    uiView.addAnnotations(annotations)
-  }
-}
-
-struct HotspotGroup {
-  let name: String
-  let reminders: [Reminder]
-}
-
-struct RecordButtonView: View {
-
-  @ObservedObject private var voiceInputManager = VoiceInputManager.shared
-  @State private var isAnimating = false
-
-  var body: some View {
-    Button(action: {
-      voiceInputManager.toggleRecording()
-      withAnimation(Animation.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) {
-        isAnimating = voiceInputManager.isRecording
-      }
-    }) {
-        HStack {
-                Image(systemName: "mic") // SF Symbol for microphone
-                    .font(.title) // Adjust the size of the icon as needed
-                Text("Memo")
-                .adaptiveFont(name: "Times New Roman", style: .title1)
-            }
-        .padding()
-        .padding(.vertical, 10)
-        .frame(width: UIScreen.main.bounds.width * 0.5)
-        .background(voiceInputManager.isRecording ? Color(hex: "#F4C2C2") : Color(hex: "FEEBCC"))
-        .foregroundColor(Color(hex: "023020"))
-        .cornerRadius(110)
-        .scaleEffect(isAnimating ? 1.1 : 1.0)
-    }
-  }
-}
-
-struct ReminderDateView: View {
-  let reminder: Reminder
-  
-  var body: some View {
-    if let startDate = reminder.startDate {
-      if let endDate = reminder.endDate {
-        if startDate == endDate {
-          Text(formatDate(startDate))
-            .font(.subheadline)
-            .foregroundColor(Color(hex: "FEEBCC"))
-        } else {
-          Text("\(formatDate(startDate)) - \(formatDate(endDate))")
-            .font(.subheadline)
-            .foregroundColor(Color(hex: "FEEBCC"))
-        }
-      } else {
-        Text(formatDate(startDate))
-          .font(.subheadline)
-          .foregroundColor(Color(hex: "FEEBCC"))
-      }
-    } else if let endDate = reminder.endDate {
-      Text(formatDate(endDate))
-        .font(.subheadline)
-        .foregroundColor(Color(hex: "FEEBCC"))
-    } else {
-      Text("Whenever 🤷")
-        .font(.subheadline)
-        .foregroundColor(Color(hex: "FEEBCC"))
-    }
-  }
-    
-    private func formatDate(_ date: Date) -> String {
-      let dateFormatter = DateFormatter()
-      dateFormatter.dateFormat = "MMM d, yyyy"
-      return dateFormatter.string(from: date)
-    }
-  }
-
 struct ContentView: View {
     @State private var showMenu = false // for bullet menu
     @State private var isOnboardingCompleted = UserDefaults.standard.bool(forKey: "isOnboardingCompleted") // Onboarding flow
@@ -333,3 +197,136 @@ struct ContentView: View {
             }
           }
     }
+
+// additional structs
+
+struct BulletMenuView: View {
+    private let reminderStorage = ReminderStorage(
+        context: PersistenceController.shared.container.viewContext)
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                NavigationLink(destination: HotspotView(reminderStorage: reminderStorage)) {
+                    Text("Hotspots")
+                        .foregroundColor(Color(hex: "FEEBCC"))
+                }
+                .listRowBackground(Color(hex: "023020"))
+                .navigationTitle("Menu")
+                
+                NavigationLink(destination: AboutView()) {
+                    Text("About")
+                        .foregroundColor(Color(hex: "FEEBCC"))
+                }
+                .listRowBackground(Color(hex: "023020"))
+                .navigationTitle("Menu")
+
+            }
+            .listStyle(PlainListStyle())
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Menu")
+                        .font(.title)
+                        .foregroundColor(Color(hex: "FEEBCC"))
+                }
+            }
+            .background(Color(hex: "023020"))
+            .scrollContentBackground(.hidden)
+        }
+        .accentColor(Color(hex: "FEEBCC"))
+    }
+}
+
+struct MapView: UIViewRepresentable {
+  var region: MKCoordinateRegion
+  var annotations: [MKPointAnnotation]
+  var gestures: Bool = false
+
+  func makeUIView(context: Context) -> MKMapView {
+    let mapView = MKMapView()
+    mapView.setRegion(region, animated: false)
+    mapView.isZoomEnabled = gestures
+    mapView.isScrollEnabled = gestures
+    mapView.isRotateEnabled = gestures
+    return mapView
+  }
+
+  func updateUIView(_ uiView: MKMapView, context: Context) {
+    uiView.setRegion(region, animated: true)
+    uiView.removeAnnotations(uiView.annotations)
+    uiView.addAnnotations(annotations)
+  }
+}
+
+struct HotspotGroup {
+  let name: String
+  let reminders: [Reminder]
+}
+
+struct RecordButtonView: View {
+
+  @ObservedObject private var voiceInputManager = VoiceInputManager.shared
+  @State private var isAnimating = false
+
+  var body: some View {
+    Button(action: {
+      voiceInputManager.toggleRecording()
+      withAnimation(Animation.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) {
+        isAnimating = voiceInputManager.isRecording
+      }
+    }) {
+        HStack {
+                Image(systemName: "mic") // SF Symbol for microphone
+                    .font(.title) // Adjust the size of the icon as needed
+                Text("Memo")
+                .adaptiveFont(name: "Times New Roman", style: .title1)
+            }
+        .padding()
+        .padding(.vertical, 10)
+        .frame(width: UIScreen.main.bounds.width * 0.5)
+        .background(voiceInputManager.isRecording ? Color(hex: "#F4C2C2") : Color(hex: "FEEBCC"))
+        .foregroundColor(Color(hex: "023020"))
+        .cornerRadius(110)
+        .scaleEffect(isAnimating ? 1.1 : 1.0)
+    }
+  }
+}
+
+struct ReminderDateView: View {
+  let reminder: Reminder
+  
+  var body: some View {
+    if let startDate = reminder.startDate {
+      if let endDate = reminder.endDate {
+        if startDate == endDate {
+          Text(formatDate(startDate))
+            .font(.subheadline)
+            .foregroundColor(Color(hex: "FEEBCC"))
+        } else {
+          Text("\(formatDate(startDate)) - \(formatDate(endDate))")
+            .font(.subheadline)
+            .foregroundColor(Color(hex: "FEEBCC"))
+        }
+      } else {
+        Text(formatDate(startDate))
+          .font(.subheadline)
+          .foregroundColor(Color(hex: "FEEBCC"))
+      }
+    } else if let endDate = reminder.endDate {
+      Text(formatDate(endDate))
+        .font(.subheadline)
+        .foregroundColor(Color(hex: "FEEBCC"))
+    } else {
+      Text("Whenever 🤷")
+        .font(.subheadline)
+        .foregroundColor(Color(hex: "FEEBCC"))
+    }
+  }
+    
+    private func formatDate(_ date: Date) -> String {
+      let dateFormatter = DateFormatter()
+      dateFormatter.dateFormat = "MMM d, yyyy"
+      return dateFormatter.string(from: date)
+    }
+  }
