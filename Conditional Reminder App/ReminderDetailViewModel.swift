@@ -20,7 +20,6 @@ public class ReminderDetailViewModel: ObservableObject {
 
   func acknowledgeReminder() {
     reminderStorage.deleteReminder(reminder)
-    // Additional logic if needed
   }
 
     func snoozeReminder() {

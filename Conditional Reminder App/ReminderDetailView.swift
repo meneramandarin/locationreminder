@@ -14,7 +14,7 @@ struct ReminderDetailView: View {
     @ObservedObject var viewModel: ReminderDetailViewModel
     @State private var isShowingEditView = false
     @State private var showConfirmationAlert = false
-    @State private var confirmationMessage: String = "" 
+    @State private var confirmationMessage: String = ""
     
     var body: some View {
         ZStack {
@@ -69,6 +69,9 @@ struct ReminderDetailView: View {
                 HStack {
                     Button("Noted") {
                         viewModel.acknowledgeReminder()
+                        confirmationMessage = "Memo deleted."
+                        showConfirmationAlert = true
+                        NotificationCenter.default.post(name: .reminderAdded, object: nil)
                         presentationMode.wrappedValue.dismiss()
                     }
                     .adaptiveFont(name: "Times New Roman", style: .headline)
