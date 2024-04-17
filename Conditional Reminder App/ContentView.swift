@@ -9,6 +9,8 @@ import MapKit
 import SwiftUI
 
 struct ContentView: View {
+    @State private var isShowingEditView = false // manual input button
+    @State private var isToggleOn = false // for toggle
     @State private var showMenu = false // for bullet menu
     @State private var isOnboardingCompleted = UserDefaults.standard.bool(forKey: "isOnboardingCompleted") // Onboarding flow
     @StateObject private var notificationHandler = NotificationHandler.shared  // new for sheet
@@ -40,8 +42,45 @@ struct ContentView: View {
               ScrollView {
                 VStack {
                   Spacer().frame(height: geometry.size.height / 5)
-                  
-                  RecordButtonView()
+                    
+                    VStack {
+                        
+                        if isToggleOn {
+                            
+                            RecordButtonView()
+                            
+                        } else  {
+                            
+                            NavigationLink(destination: SetReminderView(reminders: $reminders, isShowingEditView: $isShowingEditView, dismissAction: {
+                                // Perform any necessary actions when the view is dismissed
+                            })) {
+                                HStack {
+                                        Image(systemName: "square.and.pencil") // SF Symbol for microphone
+                                            .font(.title) // Adjust the size of the icon as needed
+                                        Text("Memo")
+                                        .adaptiveFont(name: "Times New Roman", style: .title1)
+                                    }
+                                .padding(.vertical, 10)
+                                .padding(.horizontal)
+                                .frame(width: UIScreen.main.bounds.width * 0.5, height: 100)
+                                .background(Color(hex: "FEEBCC"))
+                                .foregroundColor(Color(hex: "023020"))
+                                .cornerRadius(110)
+                            }
+
+                            
+                        }
+                        HStack(spacing: 4) {  // Adjust the spacing to control how tight the text and toggle are squeezed together
+                            Text("Memo AI")
+                            Toggle("", isOn: $isToggleOn)
+                                .toggleStyle(SwitchToggleStyle(tint: Color(hex: "FEEBCC")))
+                                .labelsHidden()  // This ensures there's no extra padding for a non-existent label
+                            Text("")
+                                
+                        }
+                        .padding()
+                    }
+                    
                   
                   Spacer().frame(height: geometry.size.height / 4)
                   
@@ -282,9 +321,9 @@ struct RecordButtonView: View {
                 Text("Memo")
                 .adaptiveFont(name: "Times New Roman", style: .title1)
             }
-        .padding()
         .padding(.vertical, 10)
-        .frame(width: UIScreen.main.bounds.width * 0.5)
+        .padding(.horizontal)
+        .frame(width: UIScreen.main.bounds.width * 0.5, height: 100)
         .background(voiceInputManager.isRecording ? Color(hex: "#F4C2C2") : Color(hex: "FEEBCC"))
         .foregroundColor(Color(hex: "023020"))
         .cornerRadius(110)
